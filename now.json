@@ -1,9 +1,9 @@
 {
     "version": 2,
-    "name": "express-now",
+    "name": "trees-express-now",
     "builds": [{
         "src": "index.js",
-        "use": "@now/node-server"
+        "use": "@now/node"
     }],
     "routes": [{
         "headers": {
@@ -15,6 +15,10 @@
         "dest": "/index.js"
     }],
     "env": {
-        "VERSION": "@version"
+        "user": "@user",
+        "database": "@database",
+        "password": "@password",
+        "port": "@port",
+        "host": "@host"
     }
 }
