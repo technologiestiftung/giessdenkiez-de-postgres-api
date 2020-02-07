@@ -20,7 +20,7 @@ module.exports = async (req, res, next) => {
       AND trees.pflanzjahr < $2;`
     , [Number(start), Number(end)]);
 
-    res.json(result));
+    res.json(result);
   } catch (error) {
     console.error(error);
     res.json({

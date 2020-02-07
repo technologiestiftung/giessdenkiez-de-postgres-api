@@ -1,6 +1,6 @@
 const express = require('express');
 
-const checkJwt = require('./auth/';)
+const checkJwt = require('./auth/');
 
 const getWateredTrees = require('./requests/get-watered-trees');
 const getAdoptedTrees = require('./requests/get-adopted-trees')
@@ -53,7 +53,6 @@ app.get("/private/adopt-tree", checkJwt, adoptTree);
 app.get("/private/unadopt-tree", checkJwt, unadoptTree);
 
 app.get("/private/get-adopted-trees", checkJwt, getAdoptedTrees);
-
 
 app.post('/post', function(request, response) {
     response.send(request.body);
