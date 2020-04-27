@@ -12,14 +12,14 @@ var pool = new pg.Pool(config);
 
 module.exports = async (req, res, next) => {
   try {
-    const { uuid } = req.query;
+    const { tree_ids } = req.query;
+    console.log(tree_ids)
     const result = await pool.query(`
-        SELECT tree_id
-        FROM trees_adopted
-        WHERE trees_adopted.uuid = $1;
-    `, [uuid]);
+      SELECT * FROM trees
+      WHERE id = ANY ($1);
+    `, [tree_ids]);
 
-    res.json(result.rows.map(item => item.tree_id));
+    res.json(result.rows);
   } catch (error) {
     console.error(error);
     res.json({

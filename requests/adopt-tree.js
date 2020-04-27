@@ -12,13 +12,12 @@ var pool = new pg.Pool(config);
 
 module.exports = async (req, res, next) => {
   try {
-    const { id, mail } = req.query;
+    const { tree_id, uuid } = req.query;
 
     const result = await pool.query(`
-      UPDATE trees
-      SET adopted = $2
-      WHERE id = $1;
-    `, [id, mail]);
+      INSERT INTO trees_adopted (tree_id, uuid)
+      VALUES ($1, $2);
+    `, [tree_id, uuid]);
     res.json({
         "result": 'tree adopted '
     });

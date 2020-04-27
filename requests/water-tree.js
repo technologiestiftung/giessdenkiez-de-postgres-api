@@ -13,13 +13,13 @@ var pool = new pg.Pool(config);
 
 module.exports = async (req, res, next) => {
   try {
-    const { id, timestamp } = req.query;
+    const { id, time, uuid, amount } = req.query;
 
     const result = await pool.query(`
-      UPDATE trees
-      SET watered = $2
-      WHERE id = $1;
-    `, [id, timestamp]);
+      INSERT INTO trees_watered (tree_id, time, uuid, amount)
+      VALUES ($1, $2, $3, $4)
+    `, [id, time, uuid, amount]);
+
     res.json({
         "result": 'tree watered'
     });

@@ -14,12 +14,11 @@ module.exports = async (req, res, next) => {
   try {
     const { uuid } = req.query;
     const result = await pool.query(`
-        SELECT tree_id
-        FROM trees_adopted
-        WHERE trees_adopted.uuid = $1;
-    `, [uuid]);
-
-    res.json(result.rows.map(item => item.tree_id));
+      SELECT *
+      FROM trees_watered
+      WHERE trees_watered.uuid = $1`
+    , [uuid]);
+    res.json(result.rows);
   } catch (error) {
     console.error(error);
     res.json({

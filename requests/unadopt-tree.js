@@ -13,13 +13,12 @@ var pool = new pg.Pool(config);
 
 module.exports = async (req, res, next) => {
   try {
-    const { id } = req.query;
+    const { tree_id, uuid } = req.query;
 
     const result = await pool.query(`
-      UPDATE trees
-      SET adopted = ''
-      WHERE id = $1;
-    `, [id]);
+      DELETE FROM trees_adopted
+      WHERE tree_id = $1 AND uuid = $2;
+    `, [tree_id, uuid]);
     res.json({
         "result": 'tree un-adopted '
     });

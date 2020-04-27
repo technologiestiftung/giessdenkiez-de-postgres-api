@@ -14,8 +14,8 @@ module.exports = async (req, res, next) => {
   try {
     const { id } = req.query;
     const result = await pool.query(`
-      SELECT * 
-      FROM trees 
+      SELECT *
+      FROM trees
       WHERE trees.id = $1`
     , [id]);
 

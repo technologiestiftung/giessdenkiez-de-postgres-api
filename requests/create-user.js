@@ -1,4 +1,5 @@
 const pg = require('pg');
+const uuid = require('uuid');
 
 var config = {
   user: process.env.user,
@@ -12,14 +13,16 @@ var pool = new pg.Pool(config);
 
 module.exports = async (req, res, next) => {
   try {
-    const { uuid } = req.query;
+    const { mail, uuid } = req.query;
     const result = await pool.query(`
-        SELECT tree_id
-        FROM trees_adopted
-        WHERE trees_adopted.uuid = $1;
-    `, [uuid]);
-
-    res.json(result.rows.map(item => item.tree_id));
+      INSERT INTO users (email, uuid)
+      VALUES ($1, $2)
+      ON CONFLICT (email)
+      DO NOTHING;
+    `, [mail, uuid]);
+    res.json({
+        "result": 'user added'
+    });
   } catch (error) {
     console.error(error);
     res.json({
