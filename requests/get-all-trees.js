@@ -17,6 +17,7 @@ module.exports = async (req, res, next) => {
     const result = await pool.query(`
       SELECT (id, lat, lng, radolan_sum)
       FROM trees
+      ORDER BY id ASC
       OFFSET $1 LIMIT $2;
     `, [offset, limit]);
     res.json({
