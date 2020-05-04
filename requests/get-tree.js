@@ -13,11 +13,14 @@ var pool = new pg.Pool(config);
 module.exports = async (req, res, next) => {
   try {
     const { id } = req.query;
+
+    console.log(id)
     const result = await pool.query(`
       SELECT *
       FROM trees
       WHERE trees.id = $1`
     , [id]);
+
 
     res.json(result.rows[0]);
   } catch (error) {

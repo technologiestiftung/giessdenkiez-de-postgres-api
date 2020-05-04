@@ -6,6 +6,7 @@ const getWateredTrees = require('./requests/get-watered-trees');
 const getAdoptedTrees = require('./requests/get-adopted-trees')
 const getAdoptedTreesDetails = require('./requests/get-adopted-trees-details')
 const getTree = require('./requests/get-tree')
+const getAllTrees = require('./requests/get-all-trees')
 const getTreeLastWatered = require('./requests/get-tree-last-watered')
 const getWateredTreesByUser = require('./requests/get-watered-trees-by-user')
 const adoptTree = require('./requests/adopt-tree')
@@ -47,6 +48,8 @@ app.get("/get-tree-last-watered", getTreeLastWatered);
 app.get("/count-tree-by-age", countTreeByAge);
 
 app.get("/get-tree-by-age", getTreeByAge);
+
+app.get("/get-all-trees", getAllTrees);
 
 app.get("/private/water-tree", checkJwt, waterTree);
 
