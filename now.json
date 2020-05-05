@@ -19,6 +19,9 @@
         "database": "@database",
         "password": "@password",
         "port": "@port",
-        "host": "@host"
+        "host": "@host",
+        "jwksuri":"@jwksuri",
+        "audience":"@audience",
+        "issuer":"@issuer"
     }
 }
