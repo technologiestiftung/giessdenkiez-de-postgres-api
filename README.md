@@ -17,4 +17,8 @@ password=dbUserPassword
 port=dbPort
 host=dbUrl
 jwt_secret=jwtAuthentificationSecret
+# you can find the values below in your auth0 api settings
+jwksUri=
+audience=
+issuer=
 ```
