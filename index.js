@@ -63,8 +63,6 @@ app.get('/private/create-user', checkJwt, createUser);
 
 app.get('/private/get-is-tree-adopted', checkJwt, getIsTreeAdopted);
 
-// app.get("/private/water-tree-arr", checkJwt, waterTreeArr);
-
 app.get('/get-watered-trees', getWateredTrees);
 
 app.get('/private/adopt-tree', checkJwt, adoptTree);
@@ -75,6 +73,6 @@ app.get('/private/get-adopted-trees', checkJwt, getAdoptedTrees);
 
 app.get('/private/get-adopted-trees-details', checkJwt, getAdoptedTreesDetails);
 
-app.post('/post', function (request, response) {
-  response.send(request.body);
-});
+// app.post('/post', function (request, response) {
+//   response.send(request.body);
+// });
