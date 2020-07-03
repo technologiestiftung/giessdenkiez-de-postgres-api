@@ -1,14 +1,14 @@
 # How to Deploy Express on Now.sh
 
-In this post I'm going to share how to setup express API endpoints to run on version 2 of [Now.sh][now_v2]. You will get a free https endpoints and run in serverless! Isn't it cool?
+In this notes I'm going to share how to setup express API endpoints to run on version 2 of [Now.sh][now_v2]. You will get a free https endpoints and run in serverless! Isn't it cool?
 
 You can find full source code at [github][github_repo].
 
 ## Prerequisite
 
--   Now CLI (12.1.9)
--   Node (v10.10.0)
--   express (4.16.4)
+- Now CLI (12.1.9)
+- Node (v10.10.0)
+- express (4.16.4)
 
 ## Add Endpoints to express
 
@@ -22,9 +22,9 @@ Edit `index.js`
 
 ```js
 app.get("/get", (req, res, next) => {
-    res.json({
-        "version": process.env.VERSION
-    });
+  res.json({
+    version: process.env.VERSION,
+  });
 });
 ```
 
@@ -35,8 +35,8 @@ Echo back JSON content being posted.
 Edit `index.js`
 
 ```js
-app.post('/post', function(request, response) {
-    response.send(request.body);
+app.post("/post", function (request, response) {
+  response.send(request.body);
 });
 ```
 
@@ -157,11 +157,7 @@ Note: You can replace `localhost` with the now.sh instance url.
 Perhaps due to the nature of serverless sometime the endpoint returns `502` error. To tackle that please add retry mechanism to your service callers.
 
 [github_repo]: https://github.com/warenix/express-now
-
 [now_v2]: https://zeit.co/docs/v2/getting-started/introduction-to-now
-
 [doc_build]: https://zeit.co/docs/v2/deployments/official-builders/node-js-server-now-node-server/
-
 [doc_secret]: https://zeit.co/docs/v2/deployments/environment-variables-and-secrets/
-
 [doc_headers]: https://zeit.co/docs/v2/deployments/configuration/#routes
