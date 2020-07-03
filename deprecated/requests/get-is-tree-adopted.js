@@ -1,4 +1,4 @@
-const pg = require('pg');
+const pg = require("pg");
 
 var config = {
   user: process.env.user,
@@ -12,17 +12,17 @@ var pool = new pg.Pool(config);
 
 module.exports = async (req, res, next) => {
   try {
-    const { tree_id, uuid } = req.query;
+    const { uuid, treeid } = req.query;
+
     const result = await pool.query(
       `
-      INSERT INTO trees_adopted (tree_id, uuid)
-      VALUES ($1, $2);
-    `,
-      [tree_id, uuid]
+      SELECT *
+      FROM trees_adopted
+      WHERE trees_adopted.uuid = $1 AND trees_adopted.tree_id = $2
+      `,
+      [uuid, treeid],
     );
-    res.json({
-      result: 'tree adopted ',
-    });
+    res.json(result.rows.length > 0);
   } catch (error) {
     console.error(error);
     res.json({

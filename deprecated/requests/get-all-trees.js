@@ -1,4 +1,4 @@
-const pg = require('pg');
+const pg = require("pg");
 
 var config = {
   user: process.env.user,
@@ -20,11 +20,11 @@ module.exports = async (req, res, next) => {
       ORDER BY id ASC
       OFFSET $1 LIMIT $2;
     `,
-      [offset, limit]
+      [offset, limit],
     );
 
     res.json({
-      watered: result.rows.map(item => {
+      watered: result.rows.map((item) => {
         const regExId = /(?<=\()(.*?)(?=\,)/;
 
         const regExLat = /(?<=\,)(.*?)(?=\,)/;

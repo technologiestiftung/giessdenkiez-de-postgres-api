@@ -1,4 +1,4 @@
-const pg = require('pg');
+const pg = require("pg");
 
 var config = {
   user: process.env.user,
@@ -18,11 +18,11 @@ module.exports = async (req, res, next) => {
       UNION ALL
       SELECT tree_id, 0 AS adopted, 1 AS watered FROM trees_watered WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days') SELECT tree_id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY tree_id;
       `,
-      []
+      [],
     );
 
     res.json(
-      result.rows.map(item => [item.tree_id, +item.adopted, +item.watered])
+      result.rows.map((item) => [item.tree_id, +item.adopted, +item.watered]),
     );
   } catch (error) {
     console.error(error);

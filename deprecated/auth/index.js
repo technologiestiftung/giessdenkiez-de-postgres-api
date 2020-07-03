@@ -1,5 +1,5 @@
-var jwt = require('express-jwt');
-var jwks = require('jwks-rsa');
+var jwt = require("express-jwt");
+var jwks = require("jwks-rsa");
 
 var jwtCheck = jwt({
   secret: jwks.expressJwtSecret({
@@ -10,7 +10,7 @@ var jwtCheck = jwt({
   }),
   audience: process.env.audience,
   issuer: process.env.issuer,
-  algorithms: ['RS256'],
+  algorithms: ["RS256"],
 });
 
 module.exports = jwtCheck;

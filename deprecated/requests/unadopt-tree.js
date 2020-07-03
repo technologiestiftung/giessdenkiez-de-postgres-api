@@ -1,4 +1,5 @@
-const pg = require('pg');
+const pg = require("pg");
+
 delete pg.native;
 
 var config = {
@@ -9,30 +10,28 @@ var config = {
   host: process.env.host,
 };
 var pool = new pg.Pool(config);
+
 module.exports = async (req, res, next) => {
   try {
-    const { id, uuid, amount, username } = req.query;
+    const { tree_id, uuid } = req.query;
     const result = await pool.query(
       `
-      INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
-      VALUES ($1, clock_timestamp(), $2, $3, clock_timestamp(), $4)
+      DELETE FROM trees_adopted
+      WHERE tree_id = $1 AND uuid = $2;
     `,
-      [id, uuid, amount, username]
+      [tree_id, uuid],
     );
     res.json({
-      result: 'tree watered',
+      result: "tree un-adopted ",
     });
   } catch (error) {
     console.error(error);
+
     res.json({
       error: error,
     });
   }
 };
-
-// INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp)
-
-// VALUES (${0}, timestamp 'now', ${1}, ${2}, timestamp 'now');
 // const pg = require('pg');
 // delete pg.native;
 
@@ -48,15 +47,14 @@ module.exports = async (req, res, next) => {
 
 // module.exports = async (req, res, next) => {
 //   try {
-//     const { id, time, uuid, amount } = req.query;
+//     const { tree_id, uuid } = req.query;
 
 //     const result = await pool.query(`
-//       INSERT INTO trees_watered (tree_id, time, uuid, amount)
-//       VALUES ($1, $2, $3, $4)
-//     `, [id, time, uuid, amount]);
-
+//       DELETE FROM trees_adopted
+//       WHERE tree_id = $1 AND uuid = $2;
+//     `, [tree_id, uuid]);
 //     res.json({
-//         "result": 'tree watered'
+//         "result": 'tree un-adopted '
 //     });
 //   } catch (error) {
 //     console.error(error);
