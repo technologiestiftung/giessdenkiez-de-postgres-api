@@ -1,19 +1,40 @@
 {
-  "name": "nodejs-express",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@technologiestiftung/giessdenkiez-de-db-api",
+  "version": "2.0.0",
+  "private": true,
   "license": "MIT",
   "dependencies": {
+    "@vercel/node": "1.7.1",
     "express": "^4.16.4",
     "express-jwt": "^5.3.1",
     "jwks-rsa": "^1.6.2",
+    "micro": "9.3.4",
     "pg": "7.17.1",
     "uuid": "^7.0.3"
   },
   "scripts": {
-    "start": "node ."
+    "test": "inpyjamas-scripts test"
   },
   "engines": {
     "node": ">=10"
-  }
+  },
+  "devDependencies": {
+    "@inpyjamas/scripts": "0.1.5-alpha",
+    "@types/micro": "7.3.3",
+    "vercel": "19.1.1"
+  },
+  "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
+  "main": "\"\"",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/technologiestiftung/tsb-tree-api-now-express.git"
+  },
+  "keywords": [
+    "giessdenkiez.de"
+  ],
+  "author": "@fdnklg",
+  "bugs": {
+    "url": "https://github.com/technologiestiftung/tsb-tree-api-now-express/issues"
+  },
+  "homepage": "https://github.com/technologiestiftung/tsb-tree-api-now-express#readme"
 }
