@@ -1,5 +1,10 @@
 interface Envs {
-  [key: string]: string;
+  // [key: string]: string;
+  PG_USER: string;
+  PG_DATABASE: string;
+  PG_PASSWORD: string;
+  PG_PORT: number;
+  PG_HOST: string;
   // jwksUri: string;
   // audience: string;
   // issuer: string;
@@ -11,6 +16,12 @@ interface Envs {
   // auth0ManagementApiUrl: string;
 }
 export function getEnvs(): Envs {
+  const PG_USER = process.env.user ? process.env.user : "fangorn";
+  const PG_DATABASE = process.env.database ? process.env.database : "trees";
+  const PG_PASSWORD = process.env.password ? process.env.password : "ent";
+  const PG_PORT = process.env.port ? parseInt(process.env.port, 10) : 5432;
+  const PG_HOST = process.env.host ? process.env.host : "localhost";
+
   // const jwksUri = process.env.JWKS_URI;
   // const audienceFrontend = process.env.AUTH0_AUDIENCE_FRONTEND;
   // const audience = process.env.AUTH0_AUDIENCE;
@@ -41,6 +52,11 @@ export function getEnvs(): Envs {
   //   throw new Error("Could not find auth0ManagementApiUrl");
 
   return {
+    PG_USER,
+    PG_DATABASE,
+    PG_PASSWORD,
+    PG_PORT,
+    PG_HOST,
     // audienceFrontend,
     // audience,
     // issuer,

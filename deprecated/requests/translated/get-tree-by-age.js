@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
       SELECT id
       FROM trees
       WHERE trees.pflanzjahr >= $1
-      AND trees.pflanzjahr >= $2;`,
+      AND trees.pflanzjahr <= $2;`,
       [Number(start), Number(end)],
     );
 

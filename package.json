@@ -21,7 +21,7 @@
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
     "@types/micro": "7.3.3",
-    "vercel": "19.1.1"
+    "@types/pg": "7.14.4"
   },
   "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
   "main": "\"\"",
