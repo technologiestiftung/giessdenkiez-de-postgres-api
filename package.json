@@ -13,7 +13,7 @@
     "uuid": "^7.0.3"
   },
   "scripts": {
-    "test": "inpyjamas-scripts test"
+    "test": "inpyjamas-scripts test --runInBand"
   },
   "engines": {
     "node": ">=10"
@@ -21,7 +21,11 @@
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
     "@types/micro": "7.3.3",
-    "@types/pg": "7.14.4"
+    "@types/pg": "7.14.4",
+    "@types/pg-format": "1.0.0",
+    "cross-spawn": "7.0.3",
+    "pg-format": "1.0.4",
+    "wait-on": "5.1.0"
   },
   "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
   "main": "\"\"",

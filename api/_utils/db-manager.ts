@@ -114,15 +114,21 @@ export async function getAllTrees(
 
     const sum = item.row.match(regExSum);
 
+    // This below is dirty work
     if (sum) {
       return [
         id[0] as string,
-        parseFloat(lat[0]),
-        parseFloat(lng[2]),
-        parseFloat(sum[2]),
+        lat ? parseFloat(lat[0]) : 0,
+        lng ? parseFloat(lng[2]) : 0,
+        sum ? parseFloat(sum[2]) : 0,
       ];
     } else {
-      return [id[0] as string, parseFloat(lat[0]), parseFloat(lng[2]), 0];
+      return [
+        id[0] as string,
+        lat ? parseFloat(lat[0]) : 0,
+        lng ? parseFloat(lng[2]) : 0,
+        0,
+      ];
     }
   });
 
