@@ -1,6 +1,6 @@
 /* eslint-disable jest/no-hooks */
 import * as manager from "./db-manager";
-import getTrees from "../get-trees";
+import getTrees from "../get";
 import * as micro from "micro";
 import { Tree, TreeWatered, TreeReduced } from "./interfaces";
 
@@ -21,6 +21,7 @@ jest.mock("./setup-response", () => {
 jest.mock("micro", () => {
   return { send: jest.fn() };
 });
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setupRequest(overrides?: any) {
   const req = {
     query: {},
@@ -28,6 +29,7 @@ function setupRequest(overrides?: any) {
   };
   return req;
 }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setupResponse(overrides?: any) {
   const res = {
     query: {},

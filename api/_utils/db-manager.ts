@@ -1,6 +1,13 @@
 import pg from "pg";
 import { getEnvs } from "./envs";
-import { Tree, AllTreesFiltered, TreeReduced, TreeWatered } from "./interfaces";
+import {
+  Tree,
+  AllTreesFiltered,
+  TreeReduced,
+  TreeWatered,
+  TreeWateredAndAdopted,
+  TreeAdopted,
+} from "./interfaces";
 
 const {
   PG_PORT: port,
@@ -56,6 +63,32 @@ export async function getWateredTrees(): Promise<{ watered: string[] }> {
   };
   return data;
 }
+
+export async function getTreesWateredAndAdopted(): Promise<
+  TreeWateredAndAdopted[]
+> {
+  const result = await pool.query(
+    `
+    WITH trees AS (SELECT tree_id, 1 AS adopted, 0 AS watered FROM trees_adopted
+    UNION ALL
+    SELECT tree_id, 0 AS adopted, 1 AS watered FROM trees_watered WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days') SELECT tree_id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY tree_id;
+    `,
+    [],
+  );
+  return result.rows;
+}
+export async function getTreesWateredByUser(
+  uuid: string,
+): Promise<TreeWatered[]> {
+  const result = await pool.query(
+    `
+    SELECT *
+    FROM trees_watered
+    WHERE trees_watered.uuid = $1`,
+    [uuid],
+  );
+  return result.rows;
+}
 export async function getTreesByAge(
   start: string,
   end: string,
@@ -66,11 +99,43 @@ export async function getTreesByAge(
     FROM trees
     WHERE trees.pflanzjahr >= $1
     AND trees.pflanzjahr <= $2;`,
-    [Number(start), Number(end)],
+    [parseInt(start, 10), parseInt(end, 10)],
   );
   const data = result.rows.map((row) => row.id);
   return data;
 }
+
+export async function isTreeAdoptedByUser(
+  uuid: string,
+  tree_id: string,
+): Promise<TreeAdopted[]> {
+  const result = await pool.query(
+    `
+    SELECT *
+    FROM trees_adopted
+    WHERE trees_adopted.uuid = $1 AND trees_adopted.tree_id = $2
+    `,
+    [uuid, tree_id],
+  );
+  return result.rows;
+}
+export async function countTreesByAge(
+  start: string,
+  end: string,
+): Promise<{ count: number }> {
+  const result = await pool.query(
+    `
+    SELECT COUNT(*)
+    FROM trees
+    WHERE trees.pflanzjahr > $1
+    AND trees.pflanzjahr < $2;`,
+    [parseInt(start, 10), parseInt(end, 10)],
+  );
+
+  const data = parseInt(result.rows[0].count, 10);
+  return { count: data };
+}
+
 export async function getLastWateredTreeById(
   id: string,
 ): Promise<TreeWatered[]> {
@@ -80,6 +145,19 @@ export async function getLastWateredTreeById(
     FROM trees_watered
     WHERE trees_watered.tree_id = $1`,
     [id],
+  );
+  return result.rows;
+}
+
+export async function getTreesByids(tree_ids: string): Promise<Tree[]> {
+  // this is done in the frontend m(
+
+  const result = await pool.query(
+    `
+    SELECT * FROM trees
+    WHERE id = ANY ($1);
+  `,
+    [`{${tree_ids}}`],
   );
   return result.rows;
 }
@@ -136,4 +214,67 @@ export async function getAllTrees(
     watered,
   };
   return data;
+}
+
+// POST POST POST POST POST POST POST POST POST
+// POST POST POST POST POST POST POST POST POST POST
+// POST POST POST POST POST POST POST POST POST POST POST
+
+/**
+ * Adopts a tree
+ * @todo Check if tree actually exists
+ */
+export async function adoptTree(
+  tree_id: string,
+  uuid: string,
+): Promise<string> {
+  await pool.query(
+    `
+     INSERT INTO trees_adopted (tree_id, uuid)
+     VALUES ($1, $2);
+  `,
+    [tree_id, uuid],
+  );
+  // console.log(res);
+  return `tree ${tree_id} was adopted by user ${uuid}`;
+}
+
+interface WaterTreeProps {
+  tree_id: string;
+  uuid: string;
+  amount: number;
+  username: string;
+}
+export async function waterTree(opts: WaterTreeProps): Promise<string> {
+  const { tree_id, uuid, amount, username } = opts;
+  await pool.query(
+    `
+    INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
+    VALUES ($1, clock_timestamp(), $2, $3, clock_timestamp(), $4)
+  `,
+    [tree_id, uuid, amount, username],
+  );
+  return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
+}
+// DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
+// DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
+// DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
+// DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
+
+/**
+ * Unadopt a tree
+ *
+ */
+export async function unadoptTree(
+  tree_id: string,
+  uuid: string,
+): Promise<string> {
+  await pool.query(
+    `
+    DELETE FROM trees_adopted
+    WHERE tree_id = $1 AND uuid = $2;
+  `,
+    [tree_id, uuid],
+  );
+  return `tree ${tree_id} was unadopted by user ${uuid}`;
 }

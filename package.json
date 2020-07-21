@@ -4,7 +4,9 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
+    "@types/jsonwebtoken": "8.5.0",
     "@vercel/node": "1.7.1",
+    "jsonwebtoken": "8.5.1",
     "jwks-rsa": "^1.6.2",
     "micro": "9.3.4",
     "pg": "8.3.0",

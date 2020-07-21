@@ -5,10 +5,10 @@ interface Envs {
   PG_PASSWORD: string;
   PG_PORT: number;
   PG_HOST: string;
-  // jwksUri: string;
-  // audience: string;
-  // issuer: string;
-  // audienceFrontend: string;
+  jwksUri: string;
+  audience: string;
+  issuer: string;
+
   // auth0ClientIdManagementApi: string;
   // auth0ClientSecretManagementApi: string;
   // auth0ManagementApiAudience: string;
@@ -22,10 +22,10 @@ export function getEnvs(): Envs {
   const PG_PORT = process.env.port ? parseInt(process.env.port, 10) : 5432;
   const PG_HOST = process.env.host ? process.env.host : "localhost";
 
-  // const jwksUri = process.env.JWKS_URI;
+  const jwksUri = process.env.jwksuri;
   // const audienceFrontend = process.env.AUTH0_AUDIENCE_FRONTEND;
-  // const audience = process.env.AUTH0_AUDIENCE;
-  // const issuer = process.env.AUTH0_ISSUER;
+  const audience = process.env.audience;
+  const issuer = process.env.issuer;
 
   // const auth0ClientIdManagementApi = process.env.AUTH0_CLIENT_ID_MANAGEMENT_API;
   // const auth0ClientSecretManagementApi =
@@ -36,10 +36,10 @@ export function getEnvs(): Envs {
   //   process.env.AUTH0_TOKEN_API_URL_MANAGEMENT_API;
   // const auth0ManagementApiUrl = process.env.AUTH0_MANAGEMENT_API_URL;
 
-  // if (!jwksUri) throw new Error("Could not find jwksUri");
-  // if (!audience) throw new Error("Could not find audience");
+  if (!jwksUri) throw new Error("Could not find jwksUri");
+  if (!audience) throw new Error("Could not find audience");
   // if (!audienceFrontend) throw new Error("Could not find audienceFrontend");
-  // if (!issuer) throw new Error("Could not find issuer");
+  if (!issuer) throw new Error("Could not find issuer");
   // if (!auth0ClientIdManagementApi)
   //   throw new Error("Could not find auth0ClientIdManagementApi");
   // if (!auth0ClientSecretManagementApi)
@@ -58,9 +58,9 @@ export function getEnvs(): Envs {
     PG_PORT,
     PG_HOST,
     // audienceFrontend,
-    // audience,
-    // issuer,
-    // jwksUri,
+    audience,
+    issuer,
+    jwksUri,
     // auth0ClientIdManagementApi,
     // auth0ClientSecretManagementApi,
     // auth0ManagementApiAudience,

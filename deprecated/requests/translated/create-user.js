@@ -10,7 +10,7 @@ var config = {
 };
 
 var pool = new pg.Pool(config);
-
+// not used
 module.exports = async (req, res, next) => {
   try {
     const { mail, uuid } = req.query;

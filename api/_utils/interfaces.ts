@@ -1,8 +1,16 @@
-import { types } from "pg";
+import { PostQueryType } from "./types";
 
 export interface Generic {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
+}
+
+export interface RequestBody {
+  queryType: PostQueryType;
+  tree_id?: string;
+  uuid?: string;
+  username?: string;
+  amount?: number;
 }
 
 export interface Tree {
@@ -43,4 +51,15 @@ export interface TreeWatered {
   uuid: string;
   timestamp: Date | string;
   username: string;
+}
+
+export interface TreeAdopted {
+  id: string;
+  tree_id: string;
+  uuid: string;
+}
+export interface TreeWateredAndAdopted {
+  tree_id: string;
+  adopted: string;
+  watered: string;
 }
