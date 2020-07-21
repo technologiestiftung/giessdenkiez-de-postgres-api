@@ -40,7 +40,7 @@ export async function verifyRequest(
       );
     } else {
       // token should be valid now
-      await handleVerifiedRequest(response, request);
+      await handleVerifiedRequest(request, response);
     }
     /*
     if (request.method !== "POST" && request.method !== "OPTIONS") {

@@ -16,6 +16,22 @@ const client = new pg.Client({
   host: "127.0.01",
 });
 
+jest.mock("./envs", () => {
+  return {
+    getEnvs: () => {
+      return {
+        PG_USER: process.env.user ? process.env.user : "fangorn",
+        PG_DATABASE: process.env.database ? process.env.database : "trees",
+        PG_PASSWORD: process.env.password ? process.env.password : "ent",
+        PG_PORT: process.env.port ? parseInt(process.env.port, 10) : 5432,
+        PG_HOST: process.env.host ? process.env.host : "localhost",
+        jwksUri: "",
+        audience: "",
+        issuer: "",
+      };
+    },
+  };
+});
 // INSERT INTO trees (id) VALUES ('_abc');
 // DELETE FROM trees WHERE id = '_abc';
 async function connect() {
@@ -26,10 +42,14 @@ async function close() {
   await client.end();
 }
 describe("db-manager", () => {
+  beforeEach(async () => {
+    await client.query("TRUNCATE trees, trees_watered, trees_adopted CASCADE");
+  });
   beforeAll(async () => {
     await connect();
   });
   afterAll(async () => {
+    jest.restoreAllMocks();
     await close();
   });
   test("getting tree by id", async () => {

@@ -13,8 +13,8 @@ import {
 } from "../db-manager";
 
 export async function handleVerifiedRequest(
-  response: NowResponse,
   request: NowRequest,
+  response: NowResponse,
 ): Promise<void> {
   let statusCode = 200;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,6 +23,14 @@ export async function handleVerifiedRequest(
     switch (request.method) {
       case "GET": {
         const { id, queryType, uuid } = request.query;
+        if (queryType === undefined) {
+          statusCode = 400;
+          throw new Error("queryType is not defined");
+        }
+        if (Array.isArray(queryType)) {
+          statusCode = 400;
+          throw new Error("queryType needs to be a string");
+        }
         statusCode = 200;
         if (Array.isArray(uuid)) {
           statusCode = 400;
@@ -40,7 +48,6 @@ export async function handleVerifiedRequest(
           }
           case "wateredbyuser": {
             // private
-
             if (uuid === undefined) {
               statusCode = 400;
               throw new Error("uuid is undefined");
