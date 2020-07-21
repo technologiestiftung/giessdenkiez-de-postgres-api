@@ -27,13 +27,18 @@ export default async function (
   let statusCode = 200;
   try {
     const { id, queryType, offset, limit, uuid, start, end } = request.query;
+
+    if (queryType === undefined) {
+      statusCode = 400;
+      throw new Error("queryType needs to defiend");
+    }
+
     if (Array.isArray(id)) {
       statusCode = 400;
       throw new Error("id needs to be a string");
     }
     if (Array.isArray(queryType)) {
       statusCode = 400;
-
       throw new Error("queryType needs to be a string");
     }
     if (Array.isArray(uuid)) {
@@ -54,13 +59,14 @@ export default async function (
         "offset and limit need to be strings needs to be a string",
       );
     }
-    if (queryType === undefined) {
-      throw new Error("queryType needs to be on of...");
-    }
     //
     let result: Tree | any;
     switch (queryType as QueryType) {
       case "byid":
+        if (id === undefined) {
+          statusCode = 400;
+          throw new Error("id needs to be defiend");
+        }
         // formaly get-trees
         result = (await getTreeById(id)) as Tree;
         // console.log(result.rows[0]);
@@ -103,6 +109,7 @@ export default async function (
         result = await getAllTrees(offset, limit);
         break;
       default:
+        statusCode = 400;
         throw new Error("no default case defined");
     }
     if (result === undefined) {
@@ -114,18 +121,15 @@ export default async function (
       url: request.url,
       data: result ? result : {},
     });
-    console.log(data);
     return send(response, statusCode, data);
   } catch (error) {
-    return send(
-      response,
-      statusCode,
-      setupResponseData({
-        error:
-          process.env.NODE_ENV === "development"
-            ? JSON.stringify(error)
-            : error.message,
-      }),
-    );
+    let data = {};
+    if (process.env.NODE_ENV === "development") {
+      data = { ...setupResponseData({ error: JSON.stringify(error) }) };
+    }
+    if (process.env.NODE_ENV === "test") {
+      data = {};
+    }
+    return send(response, statusCode, data);
   }
 }
