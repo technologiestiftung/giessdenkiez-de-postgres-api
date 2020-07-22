@@ -1,4 +1,4 @@
-import { Generic } from "../_utils/interfaces";
+import { Generic } from "../_utils/common/interfaces";
 import { NowRequest, NowResponse } from "@vercel/node";
 
 export function setupRequest(overrides?: Generic): NowRequest {

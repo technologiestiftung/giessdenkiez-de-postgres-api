@@ -1,7 +1,7 @@
 /* eslint-disable jest/no-hooks */
-import * as manager from "../db-manager";
+import * as manager from "../db/db-manager";
 import * as micro from "micro";
-import { TreeWatered } from "../interfaces";
+import { TreeWatered, TreeAdopted } from "../common/interfaces";
 import { setupRequest, setupResponse } from "../../__test-utils";
 import { handleVerifiedRequest } from "./handle-verified-requests";
 
@@ -97,6 +97,51 @@ describe("verified request test", () => {
     const res = setupResponse();
     await handleVerifiedRequest(req, res);
     expect(manager.getLastWateredTreeById).toHaveBeenCalledWith("_abc");
+    expect(micro.send).toHaveBeenCalledWith(res, 200, undefined);
+  });
+  test("make istreeadopted request call return 400 due to mising uuid", async () => {
+    jest
+      .spyOn(manager, "isTreeAdoptedByUser")
+      .mockImplementation((_id) => Promise.resolve([] as TreeAdopted[]));
+    const req = setupRequest({
+      headers: { authorization: "Bearer xyz" },
+      query: { queryType: "istreeadopted", id: "_abc" },
+    });
+
+    const res = setupResponse();
+    await handleVerifiedRequest(req, res);
+    expect(manager.isTreeAdoptedByUser).not.toHaveBeenCalled();
+    expect(micro.send).toHaveBeenCalledWith(res, 400, {});
+  });
+  test("make istreeadopted request call return 400 due to missing uuid", async () => {
+    jest
+      .spyOn(manager, "isTreeAdoptedByUser")
+      .mockImplementation((_id) => Promise.resolve([] as TreeAdopted[]));
+    const req = setupRequest({
+      headers: { authorization: "Bearer xyz" },
+      query: { queryType: "istreeadopted", uuid: "auth|123" },
+    });
+
+    const res = setupResponse();
+    await handleVerifiedRequest(req, res);
+    expect(manager.isTreeAdoptedByUser).not.toHaveBeenCalled();
+    expect(micro.send).toHaveBeenCalledWith(res, 400, {});
+  });
+  test("make istreeadopted request call return 200", async () => {
+    jest
+      .spyOn(manager, "isTreeAdoptedByUser")
+      .mockImplementation((_uuid, _id) => Promise.resolve([] as TreeAdopted[]));
+    const req = setupRequest({
+      headers: { authorization: "Bearer xyz" },
+      query: { queryType: "istreeadopted", uuid: "auth|123", i: "_abc" },
+    });
+
+    const res = setupResponse();
+    await handleVerifiedRequest(req, res);
+    expect(manager.isTreeAdoptedByUser).toHaveBeenCalledWith(
+      "auth0|123",
+      "_abc",
+    );
     expect(micro.send).toHaveBeenCalledWith(res, 200, undefined);
   });
   test.each([

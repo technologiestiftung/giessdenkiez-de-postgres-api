@@ -1,7 +1,7 @@
 import { send } from "micro";
 import { NowRequest, NowResponse } from "@vercel/node";
 import { setupResponseData } from "./_utils/setup-response";
-import { unadoptTree } from "./_utils/db-manager";
+import { unadoptTree } from "./_utils/db/db-manager";
 
 type DeleteQueryType = "unadopt";
 

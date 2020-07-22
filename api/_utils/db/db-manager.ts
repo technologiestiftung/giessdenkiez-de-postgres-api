@@ -1,5 +1,5 @@
 import pg from "pg";
-import { getEnvs } from "./envs";
+import { getEnvs } from "../envs";
 import {
   Tree,
   AllTreesFiltered,
@@ -7,7 +7,7 @@ import {
   TreeWatered,
   TreeWateredAndAdopted,
   TreeAdopted,
-} from "./interfaces";
+} from "../common/interfaces";
 
 const {
   PG_PORT: port,

@@ -9,8 +9,8 @@ import {
   countTreesByAge,
   getTreesWateredAndAdopted,
   getTreesByids,
-} from "./_utils/db-manager";
-import { Tree } from "./_utils/interfaces";
+} from "./_utils/db/db-manager";
+import { Tree } from "./_utils/common/interfaces";
 import { verifyRequest } from "./_utils/auth/verify-request";
 
 type GetQueryType =

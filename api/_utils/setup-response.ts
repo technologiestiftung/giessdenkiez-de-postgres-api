@@ -1,4 +1,4 @@
-import { Generic } from "./interfaces";
+import { Generic } from "./common/interfaces";
 import { getPackage } from "./package";
 
 const pkg = getPackage();

@@ -1,7 +1,7 @@
 import { NowResponse, NowRequest } from "@vercel/node";
 import { setupResponseData } from "../setup-response";
 import { send } from "micro";
-import { RequestBody } from "../interfaces";
+import { RequestBody } from "../common/interfaces";
 import {
   adoptTree,
   waterTree,
@@ -10,7 +10,7 @@ import {
   isTreeAdoptedByUser,
   getAdoptedTreeIdsByUserId,
   getLastWateredTreeById,
-} from "../db-manager";
+} from "../db/db-manager";
 
 export async function handleVerifiedRequest(
   request: NowRequest,

@@ -1,8 +1,8 @@
 /* eslint-disable jest/no-hooks */
-import * as manager from "./db-manager";
+import * as manager from "./db/db-manager";
 import getTrees from "../get";
 import * as micro from "micro";
-import { Tree, TreeWatered, TreeReduced } from "./interfaces";
+import { Tree, TreeWatered, TreeReduced } from "./common/interfaces";
 import * as verifyToken from "./auth/verify-token";
 import * as handler from "./auth/verify-request";
 import { setupRequest, setupResponse } from "../__test-utils";

@@ -16,7 +16,7 @@ const client = new pg.Client({
   host: "127.0.01",
 });
 
-jest.mock("./envs", () => {
+jest.mock("../envs", () => {
   return {
     getEnvs: () => {
       return {
