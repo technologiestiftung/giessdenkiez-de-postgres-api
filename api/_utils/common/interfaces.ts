@@ -63,3 +63,11 @@ export interface TreeWateredAndAdopted {
   adopted: string;
   watered: string;
 }
+
+export interface VerifiedReqCaseOption {
+  name: string;
+  body: Generic;
+  queryType: string;
+  statusCode: number;
+  data?: Generic;
+}

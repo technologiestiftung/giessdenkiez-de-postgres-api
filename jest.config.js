@@ -7,5 +7,6 @@ defaultConfig.coveragePathIgnorePatterns = [
   "/node_modules/",
   "dist",
   "deprecated",
+  "api/_utils/auth/handle-verified-request-test-cases.ts",
 ];
 module.exports = defaultConfig;

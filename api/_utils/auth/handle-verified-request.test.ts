@@ -1,10 +1,12 @@
+import { VerifiedReqCaseOption } from "../common/interfaces";
 /* eslint-disable jest/no-hooks */
 import * as manager from "../db/db-manager";
 import * as micro from "micro";
-import { TreeWatered, TreeAdopted } from "../common/interfaces";
+import { TreeWatered, TreeAdopted, Generic } from "../common/interfaces";
 import { setupRequest, setupResponse } from "../../__test-utils";
 import { handleVerifiedRequest } from "./handle-verified-requests";
-
+import cases from "jest-in-case";
+import { caseCollection } from "../../__test-utils/handle-verified-request-test-cases";
 jest.mock("../setup-response", () => {
   return {
     setupResponseData: jest.fn(),
@@ -150,132 +152,185 @@ describe("verified request test", () => {
   // POST requests
   test.todo("make POST request without body should return 400");
 
-  test.each([
-    ["adopt", {}, 400, {}],
-    ["adopt", { uuid: "auth0|123" }, 400, {}],
-    ["adopt", { tree_id: "_abc" }, 400, {}],
-    ["adopt", { uuid: "auth0|123", tree_id: "_abc" }, 201, undefined],
+  // eslint-disable-next-line jest/no-commented-out-tests
+  // test.each([
+  //   ["adopt", {}, 400, {}],
+  //   ["adopt", { uuid: "auth0|123" }, 400, {}],
+  //   ["adopt", { tree_id: "_abc" }, 400, {}],
+  //   ["adopt", { uuid: "auth0|123", tree_id: "_abc" }, 201, undefined],
 
-    ["water", { query: {} }, 400, {}],
-    [
-      "water",
-      {
-        tree_id: "_abc",
-        amount: 100,
-        uuid: "auth0|123",
-      },
-      400,
-      {},
-    ],
-    [
-      "water",
-      {
-        username: "foo",
-        amount: 100,
-        uuid: "auth0|123",
-      },
-      400,
-      {},
-    ],
-    [
-      "water",
-      {
-        username: "foo",
-        tree_id: "_abc",
-        uuid: "auth0|123",
-      },
-      400,
-      {},
-    ],
-    [
-      "water",
-      {
-        username: "foo",
-        tree_id: "_abc",
-        amount: 100,
-      },
-      400,
-      {},
-    ],
-    [
-      "water",
-      {
-        username: "foo",
-        tree_id: "_abc",
-        amount: 100,
-        uuid: "auth0|123",
-      },
-      201,
-      undefined,
-    ],
+  //   ["water", { query: {} }, 400, {}],
+  //   [
+  //     "water",
+  //     {
+  //       tree_id: "_abc",
+  //       amount: 100,
+  //       uuid: "auth0|123",
+  //     },
+  //     400,
+  //     {},
+  //   ],
+  //   [
+  //     "water",
+  //     {
+  //       username: "foo",
+  //       amount: 100,
+  //       uuid: "auth0|123",
+  //     },
+  //     400,
+  //     {},
+  //   ],
+  //   [
+  //     "water",
+  //     {
+  //       username: "foo",
+  //       tree_id: "_abc",
+  //       uuid: "auth0|123",
+  //     },
+  //     400,
+  //     {},
+  //   ],
+  //   [
+  //     "water",
+  //     {
+  //       username: "foo",
+  //       tree_id: "_abc",
+  //       amount: 100,
+  //     },
+  //     400,
+  //     {},
+  //   ],
+  //   [
+  //     "water",
+  //     {
+  //       username: "foo",
+  //       tree_id: "_abc",
+  //       amount: 100,
+  //       uuid: "auth0|123",
+  //     },
+  //     201,
+  //     undefined,
+  //   ],
+  // ])(
+  //   "should make POST request to %s with body %j and answer with %i",
+  //   async (queryType, body, statusCode, data) => {
+  //     switch (queryType) {
+  //       case "adopt":
+  //         jest
+  //           .spyOn(manager, "adoptTree")
+  //           .mockImplementation(() => Promise.resolve("adopted"));
+  //         break;
+  //       case "water":
+  //         jest
+  //           .spyOn(manager, "waterTree")
+  //           .mockImplementation(() => Promise.resolve("watered"));
+  //         break;
+  //     }
+  //     const req = setupRequest({
+  //       body: { ...body, queryType },
+  //       method: "POST",
+  //     });
+  //     const res = setupResponse();
+  //     await handleVerifiedRequest(req, res);
+  //     expect(micro.send).toHaveBeenCalledWith(res, statusCode, data);
+  //     switch (queryType) {
+  //       case "water":
+  //         if (statusCode === 201) {
+  //           expect(manager.waterTree).toHaveBeenCalledWith({
+  //             tree_id: req.body.tree_id,
+  //             uuid: req.body.uuid,
+  //             amount: req.body.amount,
+  //             username: req.body.username,
+  //           });
+  //         } else {
+  //           expect(manager.waterTree).not.toHaveBeenCalled();
+  //         }
+  //         break;
+  //       case "adopt":
+  //         if (statusCode === 201) {
+  //           expect(manager.adoptTree).toHaveBeenCalledWith(
+  //             req.body.tree_id,
+  //             req.body.uuid,
+  //           );
+  //         } else {
+  //           expect(manager.adoptTree).not.toHaveBeenCalled();
+  //         }
+  //         break;
+  //     }
+  //   },
+  // ),
+  // );
+
+  test.each([
+    [{}],
+    [{ queryType: [] }],
+    [{ id: [], queryType: "foo" }],
+    [{ uuid: [], queryType: "foo" }],
   ])(
-    "should make POST request to %s with body %j and answer with %i",
-    async (queryType, body, statusCode, data) => {
-      switch (queryType) {
-        case "adopt":
-          jest
-            .spyOn(manager, "adoptTree")
-            .mockImplementation(() => Promise.resolve("adopted"));
-          break;
-        case "water":
-          jest
-            .spyOn(manager, "waterTree")
-            .mockImplementation(() => Promise.resolve("watered"));
-          break;
-      }
+    "should create response with 400 due to %j beeing an array",
+    async (item) => {
       const req = setupRequest({
-        body: { ...body, queryType },
-        method: "POST",
+        query: { ...item },
       });
       const res = setupResponse();
       await handleVerifiedRequest(req, res);
-      expect(micro.send).toHaveBeenCalledWith(res, statusCode, data);
-      switch (queryType) {
-        case "water":
-          if (statusCode === 201) {
-            expect(manager.waterTree).toHaveBeenCalledWith(
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              {
-                tree_id: req.body.tree_id,
-                uuid: req.body.uuid,
-                amount: req.body.amount,
-                username: req.body.username,
-              },
-            );
-          } else {
-            expect(manager.waterTree).not.toHaveBeenCalled();
-          }
-          break;
-        case "adopt":
-          if (statusCode === 201) {
-            expect(manager.adoptTree).toHaveBeenCalledWith(
-              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              req.body.tree_id,
-              req.body.uuid,
-            );
-          } else {
-            expect(manager.adoptTree).not.toHaveBeenCalled();
-          }
-          break;
-      }
+      expect(micro.send).toHaveBeenCalledWith(res, 400, {});
     },
-  ),
-    // );
-
-    test.each([
-      [{}],
-      [{ queryType: [] }],
-      [{ id: [], queryType: "foo" }],
-      [{ uuid: [], queryType: "foo" }],
-    ])(
-      "should create response with 400 due to %j beeing an array",
-      async (item) => {
-        const req = setupRequest({
-          query: { ...item },
-        });
-        const res = setupResponse();
-        await handleVerifiedRequest(req, res);
-        expect(micro.send).toHaveBeenCalledWith(res, 400, {});
-      },
-    );
+  );
 });
+
+/**
+ * Test function to run multiple test cases with jest-in-case
+ *
+ */
+const tester: (opts: VerifiedReqCaseOption) => Promise<void> = async ({
+  queryType,
+  body,
+  statusCode,
+  data,
+}) => {
+  switch (queryType) {
+    case "adopt":
+      jest
+        .spyOn(manager, "adoptTree")
+        .mockImplementation(() => Promise.resolve("adopted"));
+      break;
+    case "water":
+      jest
+        .spyOn(manager, "waterTree")
+        .mockImplementation(() => Promise.resolve("watered"));
+      break;
+  }
+  const req = setupRequest({
+    body: { ...body, queryType },
+    method: "POST",
+  });
+  const res = setupResponse();
+  await handleVerifiedRequest(req, res);
+  expect(micro.send).toHaveBeenCalledWith(res, statusCode, data);
+  switch (queryType) {
+    case "water":
+      if (statusCode === 201) {
+        expect(manager.waterTree).toHaveBeenCalledWith({
+          tree_id: req.body.tree_id,
+          uuid: req.body.uuid,
+          amount: req.body.amount,
+          username: req.body.username,
+        });
+      } else {
+        expect(manager.waterTree).not.toHaveBeenCalled();
+      }
+      break;
+    case "adopt":
+      if (statusCode === 201) {
+        expect(manager.adoptTree).toHaveBeenCalledWith(
+          req.body.tree_id,
+          req.body.uuid,
+        );
+      } else {
+        expect(manager.adoptTree).not.toHaveBeenCalled();
+      }
+      break;
+  }
+};
+cases("should make POST request to:", tester, caseCollection);
