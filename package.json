@@ -24,6 +24,7 @@
     "@types/pg": "7.14.4",
     "@types/pg-format": "1.0.0",
     "cross-spawn": "7.0.3",
+    "is-ci": "2.0.0",
     "mock-jwks": "0.3.0",
     "nock": "13.0.2",
     "pg-format": "1.0.4",

@@ -3,6 +3,7 @@
 // setup.js
 // const spawn = require("cross-spawn");
 const util = require("util");
+const isCi = require("is-ci");
 const child_process = require("child_process");
 const exec = util.promisify(child_process.exec);
 const waitOn = require("wait-on");
@@ -18,6 +19,9 @@ module.exports = async () => {
   //   console.log("Schema is already build");
   // }
   // }
+  if (isCi === true) {
+    return;
+  }
   try {
     const { stdout: _stdoutDCO, stderr: stderrDCO } = await exec(
       "docker-compose up -d",

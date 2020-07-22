@@ -2,8 +2,12 @@
 // https://jestjs.io/docs/en/configuration#globalteardown-string
 const spawn = require("cross-spawn");
 const waitOn = require("wait-on");
+const isCi = require("is-ci");
 
 module.exports = async () => {
+  if (isCi === true) {
+    return;
+  }
   const exitHandler = () => {
     const result = spawn.sync("docker-compose", ["stop"], {
       stdio: "inherit",
