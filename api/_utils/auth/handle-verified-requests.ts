@@ -170,6 +170,7 @@ export async function handleVerifiedRequest(
       data = { ...setupResponseData({ error: error.message }) };
     }
     if (process.env.NODE_ENV === "test") {
+      // console.error(error);
       data = {};
     }
     if (process.env.NODE_ENV === "production") {
