@@ -8,10 +8,11 @@ import {
   getTreesByAge,
   countTreesByAge,
   getTreesWateredAndAdopted,
-  getTreesByids,
+  getTreesByIds,
 } from "./_utils/db/db-manager";
 import { Tree } from "./_utils/common/interfaces";
 import { verifyRequest } from "./_utils/auth/verify-request";
+import { errorHandler } from "./_utils/error-handler";
 
 type GetQueryType =
   | "byid"
@@ -31,11 +32,11 @@ export default async function (
   response: NowResponse,
 ): Promise<void> {
   let statusCode = 200;
-  if (request.method !== "GET" && request.method !== "OPTIONS") {
-    statusCode = 400;
-    throw new Error(`you cant ${request.method} on this route`);
-  }
   try {
+    if (request.method !== "GET" && request.method !== "OPTIONS") {
+      statusCode = 400;
+      throw new Error(`you cant ${request.method} on this route`);
+    }
     const {
       id,
       queryType,
@@ -148,7 +149,7 @@ export default async function (
           statusCode = 400;
           throw new Error("tree_ids is not defined");
         }
-        result = await getTreesByids(tree_ids);
+        result = await getTreesByIds(tree_ids);
         break;
       }
       case "countbyage": {
@@ -179,44 +180,6 @@ export default async function (
         await verifyRequest(request, response);
         return;
       }
-
-      // PRIVATE
-      // PRIVATE
-      // PRIVATE
-      // PRIVATE
-      // case "watered": {
-      //   // private has user id
-      //   result = await getWateredTrees();
-      //   break;
-      // }
-      // case "wateredbyuser": {
-      //   // private
-      //   if (uuid === undefined) {
-      //     statusCode = 400;
-      //     throw new Error("uuid is undefined");
-      //   }
-      //   result = await getTreesWateredByUser(uuid);
-      //   break;
-      // }
-      // case "istreeadopted":
-      //   // private
-      //   if (id === undefined || uuid === undefined) {
-      //     statusCode = 400;
-      //     throw new Error("id or uuid are not defined");
-      //   }
-      //   result = await isTreeAdoptedByUser(uuid, id);
-      //   break;
-      // case "adopted": {
-      //   // private
-      //   // formerly get-adopted-trees
-      //   if (uuid === undefined) {
-      //     statusCode = 400;
-      //     throw new Error("uuid needs to be defiend");
-      //   }
-      //   result = await getAdoptedTreeIdsByUserId(uuid);
-      //   break;
-      // }
-
       default:
         statusCode = 400;
         throw new Error("no default case defined");
@@ -232,17 +195,7 @@ export default async function (
     });
     return send(response, statusCode, data);
   } catch (error) {
-    let data = {};
-    if (process.env.NODE_ENV === "development") {
-      console.error(error);
-      data = { ...setupResponseData({ error: JSON.stringify(error) }) };
-    }
-    if (process.env.NODE_ENV === "test") {
-      data = {};
-    }
-    if (process.env.NODE_ENV === "production") {
-      data = { message: error.message };
-    }
-    return send(response, statusCode, data);
+    await errorHandler({ response, error, statusCode }).catch((err) => err);
+    return;
   }
 }

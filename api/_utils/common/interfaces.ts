@@ -1,4 +1,4 @@
-import { PostQueryType, RequestMethod } from "./types";
+import { BodyQueryType, RequestMethod } from "./types";
 
 export interface Generic {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -6,7 +6,7 @@ export interface Generic {
 }
 
 export interface RequestBody {
-  queryType: PostQueryType;
+  queryType: BodyQueryType;
   tree_id?: string;
   uuid?: string;
   username?: string;

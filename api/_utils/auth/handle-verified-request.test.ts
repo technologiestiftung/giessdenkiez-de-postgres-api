@@ -13,6 +13,7 @@ import cases from "jest-in-case";
 import {
   caseCollectionPOST,
   caseCollectionGET,
+  caseCollectionDELETE,
 } from "../../__test-utils/handle-verified-request-test-cases";
 
 jest.mock("../setup-response", () => {
@@ -70,14 +71,16 @@ describe("verified request test", () => {
  * Test function to run multiple test cases with jest-in-case
  *
  */
-const testerPOST: (opts: VerifiedReqCaseOptionPOST) => Promise<void> = async ({
-  queryType,
-  body,
-  statusCode,
-  data,
-  method,
-}) => {
+const testerPOST_DELETE: (
+  opts: VerifiedReqCaseOptionPOST,
+) => Promise<void> = async ({ queryType, body, statusCode, data, method }) => {
   switch (queryType) {
+    case "unadopt": {
+      jest
+        .spyOn(manager, "unadoptTree")
+        .mockImplementation(() => Promise.resolve("unadopted"));
+      break;
+    }
     case "adopt":
       jest
         .spyOn(manager, "adoptTree")
@@ -97,7 +100,7 @@ const testerPOST: (opts: VerifiedReqCaseOptionPOST) => Promise<void> = async ({
   await handleVerifiedRequest(req, res);
   expect(micro.send).toHaveBeenCalledWith(res, statusCode, data);
   switch (queryType) {
-    case "water":
+    case "water": {
       if (statusCode === 201) {
         expect(manager.waterTree).toHaveBeenCalledWith({
           tree_id: req.body.tree_id,
@@ -109,7 +112,19 @@ const testerPOST: (opts: VerifiedReqCaseOptionPOST) => Promise<void> = async ({
         expect(manager.waterTree).not.toHaveBeenCalled();
       }
       break;
-    case "adopt":
+    }
+    case "unadopt": {
+      if (statusCode === 200) {
+        expect(manager.unadoptTree).toHaveBeenCalledWith(
+          req.body.tree_id,
+          req.body.uuid,
+        );
+      } else {
+        expect(manager.unadoptTree).not.toHaveBeenCalled();
+      }
+      break;
+    }
+    case "adopt": {
       if (statusCode === 201) {
         expect(manager.adoptTree).toHaveBeenCalledWith(
           req.body.tree_id,
@@ -119,6 +134,7 @@ const testerPOST: (opts: VerifiedReqCaseOptionPOST) => Promise<void> = async ({
         expect(manager.adoptTree).not.toHaveBeenCalled();
       }
       break;
+    }
   }
 };
 
@@ -222,6 +238,6 @@ const testerGET: (opts: VerifiedReqCaseOptionGET) => Promise<void> = async ({
     }
   }
 };
-cases("should make POST request to:", testerPOST, caseCollectionPOST);
 
+cases("should make:", testerPOST_DELETE, caseCollectionPOST);
 cases("should make GET request to:", testerGET, caseCollectionGET);

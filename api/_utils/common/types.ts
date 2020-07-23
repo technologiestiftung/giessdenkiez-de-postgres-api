@@ -1,2 +1,2 @@
-export type PostQueryType = "adopt" | "water";
-export type RequestMethod = "GET" | "POST" | "OPTIONS";
+export type BodyQueryType = "adopt" | "water" | "unadopt";
+export type RequestMethod = "GET" | "POST" | "OPTIONS" | "DELETE" | "PATCH";

@@ -10,7 +10,9 @@ import {
   isTreeAdoptedByUser,
   getAdoptedTreeIdsByUserId,
   getLastWateredTreeById,
+  unadoptTree,
 } from "../db/db-manager";
+import { errorHandler } from "../error-handler";
 
 export async function handleVerifiedRequest(
   request: NowRequest,
@@ -93,10 +95,6 @@ export async function handleVerifiedRequest(
         let result: string;
         statusCode = 201;
 
-        if (!request.body) {
-          statusCode = 400;
-          throw new Error("POST body not defined");
-        }
         if (request.body.queryType === undefined) {
           statusCode = 400;
           throw new Error("POST body needs property queryType");
@@ -146,7 +144,29 @@ export async function handleVerifiedRequest(
         return send(response, statusCode, data);
       }
       case "DELETE": {
-        break;
+        if (request.body.queryType === undefined) {
+          statusCode = 400;
+          throw new Error("DELETE body needs property queryType");
+        }
+        const { queryType, tree_id, uuid } = request.body as RequestBody;
+
+        switch (queryType) {
+          case "unadopt":
+            if (tree_id === undefined || uuid === undefined) {
+              statusCode = 400;
+              throw new Error("DELETE body uuid and tree_id string properties");
+            }
+            result = await unadoptTree(tree_id, uuid);
+            break;
+          default:
+            statusCode = 400;
+            throw new Error("Unknow DELETE body queryType");
+        }
+        const data = setupResponseData({
+          url: request.url,
+          data: result ? result : {},
+        });
+        return send(response, statusCode, data);
       }
       default: {
         send(
@@ -159,18 +179,7 @@ export async function handleVerifiedRequest(
       }
     }
   } catch (error) {
-    let data = {};
-    if (process.env.NODE_ENV === "development") {
-      console.error(error);
-      data = { ...setupResponseData({ error: error.message }) };
-    }
-    if (process.env.NODE_ENV === "test") {
-      // console.error(error);
-      data = {};
-    }
-    if (process.env.NODE_ENV === "production") {
-      data = { error: error.message };
-    }
-    return send(response, statusCode, data);
+    await errorHandler({ response, error, statusCode }).catch((err) => err);
+    return;
   }
 }

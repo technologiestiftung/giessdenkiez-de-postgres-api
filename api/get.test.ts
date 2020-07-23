@@ -1,11 +1,15 @@
+/* eslint-disable jest/no-standalone-expect */
+/* eslint-disable jest/require-top-level-describe */
 /* eslint-disable jest/no-hooks */
-import * as manager from "./db/db-manager";
-import getTrees from "../get";
+import * as manager from "./_utils/db/db-manager";
+import getTrees from "./get";
 import * as micro from "micro";
-import { Tree, TreeWatered, TreeReduced } from "./common/interfaces";
-import * as verifyToken from "./auth/verify-token";
-import * as handler from "./auth/verify-request";
-import { setupRequest, setupResponse } from "../__test-utils";
+
+import { Tree, TreeWatered, TreeReduced } from "./_utils/common/interfaces";
+import * as verifyToken from "./_utils/auth/verify-token";
+import * as handler from "./_utils/auth/verify-request";
+import { setupRequest, setupResponse } from "./__test-utils";
+import cases from "jest-in-case";
 // jest.mock("./db-manager", () => {
 //   return {
 //     getTreesById: jest.fn().mockImplementation(() => {
@@ -13,13 +17,13 @@ import { setupRequest, setupResponse } from "../__test-utils";
 //     }),
 //   };
 // });
-jest.mock("./auth/verify-request");
-jest.mock("./auth/verify-token", () => {
+jest.mock("./_utils/auth/verify-request");
+jest.mock("./_utils/auth/verify-token", () => {
   return {
     verifyAuth0Token: jest.fn(),
   };
 });
-jest.mock("./envs", () => {
+jest.mock("./_utils/envs", () => {
   return {
     getEnvs: () => {
       return {
@@ -36,7 +40,7 @@ jest.mock("./envs", () => {
   };
 });
 
-jest.mock("./setup-response", () => {
+jest.mock("./_utils/setup-response", () => {
   return {
     setupResponseData: jest.fn(),
   };
@@ -47,11 +51,11 @@ jest.mock("micro", () => {
 });
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
+beforeEach(() => jest.clearAllMocks());
+afterAll(() => {
+  jest.restoreAllMocks();
+});
 describe("test GET request handlers", () => {
-  beforeEach(() => jest.clearAllMocks());
-  afterAll(() => {
-    jest.restoreAllMocks();
-  });
   test("make request without queryType should return with 200", async () => {
     const req = setupRequest();
     const res = setupResponse();
@@ -254,25 +258,92 @@ describe("test GET request handlers", () => {
 
     expect(micro.send).toHaveBeenCalledWith(res, 500, {});
   });
-
-  test.each([
-    [{ id: [], queryType: "foo" }],
-    [{ uuid: [], queryType: "foo" }],
-    [{ start: [], queryType: "foo" }],
-    [{ end: [], queryType: "foo" }],
-    [{ offset: [], queryType: "foo" }],
-    [{ limit: [], queryType: "foo" }],
-
-    [{ queryType: [] }],
-  ])(
-    "should create response with 400 due to %j beeing an array",
-    async (item) => {
-      const req = setupRequest({
-        query: { ...item },
-      });
-      const res = setupResponse();
-      await getTrees(req, res);
-      expect(micro.send).toHaveBeenCalledWith(res, 400, {});
-    },
-  );
 });
+cases(
+  "make requests:",
+  async (opts) => {
+    const req = setupRequest({ method: opts.method, query: opts.query });
+    const res = setupResponse();
+    await getTrees(req, res);
+
+    expect(micro.send).toHaveBeenCalledWith(res, opts.statusCode, {});
+  },
+  [
+    {
+      name: "not GET returns 400",
+      method: "POST",
+      query: { queryType: "foo", tree_ids: [] },
+      statusCode: 400,
+    },
+    // [{ start: [], queryType: "foo" }],
+    // [{ end: [], queryType: "foo" }],
+    // [{ offset: [], queryType: "foo" }],
+    // [{ limit: [], queryType: "foo" }],
+    {
+      name: "queryType\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: [] },
+      statusCode: 400,
+    },
+    {
+      name: "limit\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", limit: [] },
+      statusCode: 400,
+    },
+    {
+      name: "offset\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", offset: [] },
+      statusCode: 400,
+    },
+    {
+      name: "end\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", end: [] },
+      statusCode: 400,
+    },
+    {
+      name: "start\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", start: [] },
+      statusCode: 400,
+    },
+    {
+      name: "uuid\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", uuid: [] },
+      statusCode: 400,
+    },
+    {
+      name: "id\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", id: [] },
+      statusCode: 400,
+    },
+    {
+      name: "tree_id\t\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", tree_ids: [] },
+      statusCode: 400,
+    },
+    {
+      name: "countbyage\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", countbyage: [] },
+      statusCode: 400,
+    },
+    {
+      name: "wateredbyuser\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", wateredbyuser: [] },
+      statusCode: 400,
+    },
+    {
+      name: "wateredandadopted\tneeds to be a string not array returns 400",
+      method: "GET",
+      query: { queryType: "foo", wateredandadopted: [] },
+      statusCode: 400,
+    },
+  ],
+);

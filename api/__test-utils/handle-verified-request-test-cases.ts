@@ -1,15 +1,18 @@
 import {
   VerifiedReqCaseOptionPOST,
   VerifiedReqCaseOptionGET,
+  VerifiedReqCaseOption,
 } from "../_utils/common/interfaces";
 
-function setupNamesPOST(
+function setupNames(
   collection: VerifiedReqCaseOptionPOST[],
 ): VerifiedReqCaseOptionPOST[] {
   for (const item of collection) {
-    item.name = ` ${item.queryType} with body:"${JSON.stringify(
-      item.body,
-    )}" and answer with ${item.statusCode}`;
+    item.name = ` ${item.method} request, with queryType "${
+      item.queryType
+    }", with body:"${JSON.stringify(item.body)}" and answer with ${
+      item.statusCode
+    }`;
   }
   return collection;
 }
@@ -116,7 +119,79 @@ export const caseCollectionGET: VerifiedReqCaseOptionGET[] = setupNamesGET([
   },
 ]);
 
-export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNamesPOST([
+export const caseCollectionPATCH: VerifiedReqCaseOption[] = [
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "PATCH",
+    queryType: "unknown",
+    // body: {},
+    data: {},
+    statusCode: 400,
+  },
+];
+
+export const caseCollectionDELETE: VerifiedReqCaseOptionPOST[] = setupNames([
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: "unknown",
+    body: {},
+    data: {},
+    statusCode: 400,
+  },
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: undefined,
+    body: {},
+    data: {},
+    statusCode: 400,
+  },
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: "unadopt",
+    body: undefined,
+    data: {},
+    statusCode: 400,
+  },
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: "unadopt",
+    body: {},
+    data: {},
+    statusCode: 400,
+  },
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: "unadopt",
+    body: { tree_id: "_abc" },
+    data: {},
+    statusCode: 400,
+  },
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: "unadopt",
+    body: { uuid: "auth0|123" },
+    data: {},
+    statusCode: 400,
+  },
+  {
+    name: 'queryType with "query" and answer with statusCode',
+    method: "DELETE",
+    queryType: "unadopt",
+    body: { tree_id: "_abc", uuid: "auth0|123" },
+    data: undefined,
+    statusCode: 200,
+  },
+]);
+
+export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
+  ...caseCollectionDELETE,
+
   {
     name: 'queryType with "body" and answer with statusCode',
     queryType: "foo",

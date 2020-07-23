@@ -1,8 +1,7 @@
 import { send } from "micro";
 import { NowRequest, NowResponse } from "@vercel/node";
-import { getPackage } from "./_utils/package";
-
-const pkg = getPackage();
+import { setupResponseData } from "./_utils/setup-response";
+import { errorHandler } from "./_utils/error-handler";
 
 export default async function (
   _request: NowRequest,
@@ -10,16 +9,16 @@ export default async function (
 ): Promise<void> {
   try {
     // const data = await json(request);
-    send(response, 200, {
-      version: pkg.version,
-      name: pkg.name,
-      bugs: pkg.bugs?.url,
-      home: pkg.homepage,
-    });
+    send(
+      response,
+      200,
+      setupResponseData({ message: "Yeah baby. It's working" }),
+    );
     return;
   } catch (error) {
-    console.log(error);
-    send(response, 400);
+    await errorHandler({ response, error, statusCode: 500 }).catch(
+      (err) => err,
+    );
     return;
   }
 }

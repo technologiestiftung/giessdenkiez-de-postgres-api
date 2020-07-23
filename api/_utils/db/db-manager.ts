@@ -149,7 +149,7 @@ export async function getLastWateredTreeById(
   return result.rows;
 }
 
-export async function getTreesByids(tree_ids: string): Promise<Tree[]> {
+export async function getTreesByIds(tree_ids: string): Promise<Tree[]> {
   // this is done in the frontend m(
 
   const result = await pool.query(
