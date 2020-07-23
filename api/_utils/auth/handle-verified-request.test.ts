@@ -2,7 +2,7 @@ import { VerifiedReqCaseOption } from "../common/interfaces";
 /* eslint-disable jest/no-hooks */
 import * as manager from "../db/db-manager";
 import * as micro from "micro";
-import { TreeWatered, TreeAdopted, Generic } from "../common/interfaces";
+import { TreeWatered, TreeAdopted } from "../common/interfaces";
 import { setupRequest, setupResponse } from "../../__test-utils";
 import { handleVerifiedRequest } from "./handle-verified-requests";
 import cases from "jest-in-case";
