@@ -104,3 +104,114 @@ export const caseCollection: VerifiedReqCaseOption[] = setupNames([
     data: undefined,
   },
 ]);
+
+///////////////////////////// eslint-disable-next-line
+
+// eslint-disable-next-line jest/no-commented-out-tests
+// test.each([
+//   ["adopt", {}, 400, {}],
+//   ["adopt", { uuid: "auth0|123" }, 400, {}],
+//   ["adopt", { tree_id: "_abc" }, 400, {}],
+//   ["adopt", { uuid: "auth0|123", tree_id: "_abc" }, 201, undefined],
+
+//   ["water", { query: {} }, 400, {}],
+//   [
+//     "water",
+//     {
+//       tree_id: "_abc",
+//       amount: 100,
+//       uuid: "auth0|123",
+//     },
+//     400,
+//     {},
+//   ],
+//   [
+//     "water",
+//     {
+//       username: "foo",
+//       amount: 100,
+//       uuid: "auth0|123",
+//     },
+//     400,
+//     {},
+//   ],
+//   [
+//     "water",
+//     {
+//       username: "foo",
+//       tree_id: "_abc",
+//       uuid: "auth0|123",
+//     },
+//     400,
+//     {},
+//   ],
+//   [
+//     "water",
+//     {
+//       username: "foo",
+//       tree_id: "_abc",
+//       amount: 100,
+//     },
+//     400,
+//     {},
+//   ],
+//   [
+//     "water",
+//     {
+//       username: "foo",
+//       tree_id: "_abc",
+//       amount: 100,
+//       uuid: "auth0|123",
+//     },
+//     201,
+//     undefined,
+//   ],
+// ])(
+//   "should make POST request to %s with body %j and answer with %i",
+//   async (queryType, body, statusCode, data) => {
+//     switch (queryType) {
+//       case "adopt":
+//         jest
+//           .spyOn(manager, "adoptTree")
+//           .mockImplementation(() => Promise.resolve("adopted"));
+//         break;
+//       case "water":
+//         jest
+//           .spyOn(manager, "waterTree")
+//           .mockImplementation(() => Promise.resolve("watered"));
+//         break;
+//     }
+//     const req = setupRequest({
+//       body: { ...body, queryType },
+//       method: "POST",
+//     });
+//     const res = setupResponse();
+//     await handleVerifiedRequest(req, res);
+//     expect(micro.send).toHaveBeenCalledWith(res, statusCode, data);
+//     switch (queryType) {
+//       case "water":
+//         if (statusCode === 201) {
+//           expect(manager.waterTree).toHaveBeenCalledWith({
+//             tree_id: req.body.tree_id,
+//             uuid: req.body.uuid,
+//             amount: req.body.amount,
+//             username: req.body.username,
+//           });
+//         } else {
+//           expect(manager.waterTree).not.toHaveBeenCalled();
+//         }
+//         break;
+//       case "adopt":
+//         if (statusCode === 201) {
+//           expect(manager.adoptTree).toHaveBeenCalledWith(
+//             req.body.tree_id,
+//             req.body.uuid,
+//           );
+//         } else {
+//           expect(manager.adoptTree).not.toHaveBeenCalled();
+//         }
+//         break;
+//     }
+//   },
+// ),
+// );
