@@ -1,4 +1,4 @@
-import { PostQueryType } from "./types";
+import { PostQueryType, RequestMethod } from "./types";
 
 export interface Generic {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,8 +66,15 @@ export interface TreeWateredAndAdopted {
 
 export interface VerifiedReqCaseOption {
   name: string;
-  body: Generic;
-  queryType: string;
+  queryType?: string;
   statusCode: number;
   data?: Generic;
+  method: RequestMethod;
+}
+
+export interface VerifiedReqCaseOptionPOST extends VerifiedReqCaseOption {
+  body?: Generic;
+}
+export interface VerifiedReqCaseOptionGET extends VerifiedReqCaseOption {
+  query: Generic;
 }

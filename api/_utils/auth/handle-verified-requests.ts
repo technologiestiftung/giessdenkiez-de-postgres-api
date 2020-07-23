@@ -88,16 +88,11 @@ export async function handleVerifiedRequest(
           data: result ? result : {},
         });
         return send(response, statusCode, data);
-        break;
       }
       case "POST": {
         let result: string;
         statusCode = 201;
 
-        if (request.method !== "POST" && request.method !== "OPTIONS") {
-          statusCode = 400;
-          throw new Error(`you cant ${request.method} on this route`);
-        }
         if (!request.body) {
           statusCode = 400;
           throw new Error("POST body not defined");
