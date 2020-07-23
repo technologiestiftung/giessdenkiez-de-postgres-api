@@ -42,63 +42,6 @@ export async function verifyRequest(
       // token should be valid now
       await handleVerifiedRequest(request, response);
     }
-    /*
-    if (request.method !== "POST" && request.method !== "OPTIONS") {
-      statusCode = 400;
-      throw new Error(`you cant ${request.method} on this route`);
-    }
-    if (!request.body) {
-      statusCode = 400;
-      throw new Error("POST body not defined");
-    }
-    if (request.body.queryType === undefined) {
-      statusCode = 400;
-      throw new Error("POST body needs property queryType");
-    }
-    const {
-      queryType,
-      tree_id,
-      uuid,
-      username,
-      amount,
-    } = request.body as RequestBody;
-
-    switch (queryType) {
-      case "adopt":
-        if (tree_id === undefined || uuid === undefined) {
-          statusCode = 400;
-          throw new Error(
-            "POST body needs uuid (string) and tree_id (string) properties",
-          );
-        }
-        result = await adoptTree(tree_id, uuid);
-        break;
-
-      case "water":
-        if (
-          tree_id === undefined ||
-          uuid === undefined ||
-          username === undefined ||
-          amount === undefined
-        ) {
-          statusCode = 400;
-          throw new Error(
-            "POST body needs uuid (string), tree_id (string), username (string) and amount (number) properties",
-          );
-        }
-
-        result = await waterTree({ tree_id, username, amount, uuid });
-        break;
-      default:
-        statusCode = 400;
-        throw new Error("Unknow POST body queryType");
-    }
-    const data = setupResponseData({
-      url: request.url,
-      data: result ? result : {},
-    });
-    return send(response, statusCode, data);
-    */
   } catch (error) {
     statusCode = 500;
     let data = {};
