@@ -20,6 +20,15 @@ jobs:
       matrix:
         node-version: [10.x, 12.x, 14.x]
 
+    services:
+      postgres:
+        image: postgis/postgis:11-3.0
+        env:
+          POSTGRES_PASSWORD: ent
+          POSTGRES_USER: fangorn
+          POSTGRES_DB: trees
+        ports:
+          - 5432:5432
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -28,8 +37,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm run build --if-present
-      - run: |
-          docker-compose up -d
-          docker exec ${CONTAINERNAME} psql -h localhost -d trees -U fangorn -q -f provisioning/build-schema.sql
-          npm test
-          docker-compose down
+      - run: psql -h localhost -d trees -U fangorn -q -f provisioning/build-schema.sql
+      - run: npm test
