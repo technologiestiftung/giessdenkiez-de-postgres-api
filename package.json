@@ -4,8 +4,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@types/jsonwebtoken": "8.5.0",
-    "@vercel/node": "1.7.1",
+    "@vercel/node": "1.7.3",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "^1.6.2",
     "micro": "9.3.4",
@@ -21,6 +20,7 @@
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
     "@types/jest-in-case": "1.0.2",
+    "@types/jsonwebtoken": "8.5.0",
     "@types/micro": "7.3.3",
     "@types/pg": "7.14.4",
     "@types/pg-format": "1.0.0",
