@@ -1,7 +1,5 @@
 {
   "version": 2,
-  "name": "giessdenkiez-de-db-api",
   "public": true,
-  "env": {},
   "rewrites": [{ "source": "/(.*)", "destination": "/api/$1" }]
 }
