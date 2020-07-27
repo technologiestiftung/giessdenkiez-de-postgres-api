@@ -27,7 +27,7 @@ export const dbConfig = {
 
 const pool = new pg.Pool(dbConfig);
 
-export async function getTreeById(id: string): Promise<Tree> {
+export async function getTreeById(id: string): Promise<Tree[]> {
   const result = await pool.query(
     `
     SELECT *
@@ -35,7 +35,7 @@ export async function getTreeById(id: string): Promise<Tree> {
     WHERE trees.id = $1`,
     [id],
   );
-  return result.rows[0];
+  return result.rows;
 }
 
 export async function getAdoptedTreeIdsByUserId(
