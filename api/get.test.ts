@@ -71,7 +71,7 @@ describe("test GET request handlers", () => {
   test("make byid request get response back", async () => {
     jest
       .spyOn(manager, "getTreeById")
-      .mockImplementation((_id) => Promise.resolve({} as Tree));
+      .mockImplementation((_id) => Promise.resolve([] as Tree[]));
     const req = setupRequest({ query: { queryType: "byid", id: "_abc" } });
     const res = setupResponse();
     await getTrees(req, res);
