@@ -120,7 +120,7 @@ export default async function (
           throw new Error("id needs to be defiend");
         }
         // formaly get-trees
-        result = (await getTreeById(id)) as Tree;
+        result = (await getTreeById(id)) as Tree[];
         // console.log(result.rows[0]);
         break;
       }
