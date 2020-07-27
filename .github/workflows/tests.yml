@@ -30,6 +30,6 @@ jobs:
       - run: npm run build --if-present
       - run: |
           docker-compose up -d
-          docker exec ${CONTAINERNAME} psql -h 127.0.0.1 -d trees -U fangorn -q -f provisioning/build-schema.sql
+          docker exec ${CONTAINERNAME} psql -h localhost -d trees -U fangorn -q -f provisioning/build-schema.sql
           npm test
           docker-compose down
