@@ -13,7 +13,6 @@ import cases from "jest-in-case";
 import {
   caseCollectionPOST,
   caseCollectionGET,
-  caseCollectionDELETE,
 } from "../../__test-utils/handle-verified-request-test-cases";
 
 jest.mock("../setup-response", () => {

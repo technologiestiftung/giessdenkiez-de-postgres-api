@@ -135,7 +135,7 @@ describe("test GET request handlers", () => {
     const res = setupResponse();
     await getTrees(req, res);
     // expect(manager.getWateredTrees).toHaveBeenCalledTimes(1);
-    expect(handler.verifyRequest).toHaveBeenCalledWith(req, res);
+    expect(handler.verifyRequest).not.toHaveBeenCalledWith(req, res);
 
     // expect(micro.send).toHaveBeenCalledWith(res, 200, undefined);
   });

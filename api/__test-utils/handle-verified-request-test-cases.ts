@@ -32,14 +32,6 @@ export const caseCollectionGET: VerifiedReqCaseOptionGET[] = setupNamesGET([
   {
     name: 'queryType with "query" and answer with statusCode',
     method: "GET",
-    queryType: "watered",
-    query: {},
-    data: undefined,
-    statusCode: 200,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
     queryType: "istreeadopted",
     query: {},
     data: {},

@@ -43,11 +43,11 @@ export async function handleVerifiedRequest(
           throw new Error("id needs to be a string");
         }
         switch (queryType) {
-          case "watered": {
-            // private has user id
-            result = await getWateredTrees();
-            break;
-          }
+          // case "watered": {
+          //   // private has user id
+          //   result = await getWateredTrees();
+          //   break;
+          // }
           case "wateredbyuser": {
             // private
             if (uuid === undefined) {

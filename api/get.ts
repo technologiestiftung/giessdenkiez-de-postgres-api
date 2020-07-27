@@ -9,6 +9,7 @@ import {
   countTreesByAge,
   getTreesWateredAndAdopted,
   getTreesByIds,
+  getWateredTrees,
 } from "./_utils/db/db-manager";
 import { Tree } from "./_utils/common/interfaces";
 import { verifyRequest } from "./_utils/auth/verify-request";
@@ -172,8 +173,12 @@ export default async function (
         break;
       }
 
+      case "watered": {
+        // private has user id
+        result = await getWateredTrees();
+        break;
+      }
       case "lastwatered":
-      case "watered":
       case "wateredbyuser":
       case "istreeadopted":
       case "adopted": {
