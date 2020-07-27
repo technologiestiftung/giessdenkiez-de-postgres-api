@@ -1,19 +1,50 @@
 {
-  "name": "nodejs-express",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@technologiestiftung/giessdenkiez-de-db-api",
+  "version": "2.0.0",
+  "private": true,
   "license": "MIT",
   "dependencies": {
-    "express": "^4.16.4",
-    "express-jwt": "^6.0.0",
+    "@vercel/node": "1.7.3",
+    "jsonwebtoken": "8.5.1",
     "jwks-rsa": "^1.6.2",
-    "pg": "7.17.1",
-    "uuid": "^7.0.3"
+    "micro": "9.3.4",
+    "pg": "8.3.0",
+    "uuid": "8.2.0"
   },
   "scripts": {
-    "start": "node ."
+    "test": "inpyjamas-scripts test --runInBand"
   },
   "engines": {
     "node": ">=10"
-  }
+  },
+  "devDependencies": {
+    "@inpyjamas/scripts": "0.1.5-alpha",
+    "@types/jest-in-case": "1.0.2",
+    "@types/jsonwebtoken": "8.5.0",
+    "@types/micro": "7.3.3",
+    "@types/pg": "7.14.4",
+    "@types/pg-format": "1.0.0",
+    "@types/uuid": "8.0.0",
+    "cross-spawn": "7.0.3",
+    "is-ci": "2.0.0",
+    "jest-in-case": "1.0.2",
+    "mock-jwks": "0.3.0",
+    "nock": "13.0.2",
+    "pg-format": "1.0.4",
+    "wait-on": "5.1.0"
+  },
+  "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
+  "main": "\"\"",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/technologiestiftung/tsb-tree-api-now-express.git"
+  },
+  "keywords": [
+    "giessdenkiez.de"
+  ],
+  "author": "@fdnklg",
+  "bugs": {
+    "url": "https://github.com/technologiestiftung/tsb-tree-api-now-express/issues"
+  },
+  "homepage": "https://github.com/technologiestiftung/tsb-tree-api-now-express#readme"
 }

@@ -1,0 +1,10 @@
+node_modules
+**/*.md
+*.test.ts
+.env
+.eslnitignore
+.eslintrc.js
+test
+.huskyrc.js
+.nvmrc
+lint-staged.config.js
