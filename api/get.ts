@@ -33,6 +33,12 @@ export default async function (
   response: NowResponse,
 ): Promise<void> {
   let statusCode = 200;
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  response.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With, Authorization, Accept, Content-Type",
+  );
   try {
     if (request.method !== "GET" && request.method !== "OPTIONS") {
       statusCode = 400;

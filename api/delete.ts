@@ -14,6 +14,12 @@ export default async function (
   response: NowResponse,
 ): Promise<void> {
   try {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader("Access-Control-Allow-Methods", "DELETE, OPTIONS");
+    response.setHeader(
+      "Access-Control-Allow-Headers",
+      "X-Requested-With, Authorization, Accept, Content-Type",
+    );
     await verifyRequest(request, response);
   } catch (error) {
     await errorHandler({ response, error, statusCode: 500 }).catch(

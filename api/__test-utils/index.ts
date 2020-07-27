@@ -12,6 +12,7 @@ export function setupRequest(overrides?: Generic): NowRequest {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function setupResponse(overrides?: Generic): NowResponse {
   const res = {
+    setHeader: jest.fn(),
     query: {},
     ...overrides,
   };
