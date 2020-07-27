@@ -2,6 +2,15 @@
   "version": 2,
   "name": "giessdenkiez-de-db-api",
   "public": true,
-  "env": {},
+  "env": {
+    "user": "@user",
+    "database": "@database",
+    "password": "@password",
+    "port": "@port",
+    "host": "@host",
+    "jwksuri": "@jwksuri",
+    "audience": "@audience",
+    "issuer": "@issuer"
+  },
   "rewrites": [{ "source": "/(.*)", "destination": "/api/$1" }]
 }
