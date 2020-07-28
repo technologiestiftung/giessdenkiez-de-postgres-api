@@ -5,7 +5,6 @@ import { RequestBody } from "../common/interfaces";
 import {
   adoptTree,
   waterTree,
-  getWateredTrees,
   getTreesWateredByUser,
   isTreeAdoptedByUser,
   getAdoptedTreeIdsByUserId,
@@ -55,15 +54,6 @@ export async function handleVerifiedRequest(
               throw new Error("uuid is undefined");
             }
             result = await getTreesWateredByUser(uuid);
-            break;
-          }
-          case "lastwatered": {
-            // private
-            if (id === undefined) {
-              statusCode = 400;
-              throw new Error("id is undefined");
-            }
-            result = await getLastWateredTreeById(id);
             break;
           }
           case "istreeadopted":

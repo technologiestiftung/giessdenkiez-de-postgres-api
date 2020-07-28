@@ -10,6 +10,7 @@ import {
   getTreesWateredAndAdopted,
   getTreesByIds,
   getWateredTrees,
+  getLastWateredTreeById,
 } from "./_utils/db/db-manager";
 import { Tree } from "./_utils/common/interfaces";
 import { verifyRequest } from "./_utils/auth/verify-request";
@@ -184,7 +185,15 @@ export default async function (
         result = await getWateredTrees();
         break;
       }
-      case "lastwatered":
+      case "lastwatered": {
+        // private
+        if (id === undefined) {
+          statusCode = 400;
+          throw new Error("id is undefined");
+        }
+        result = await getLastWateredTreeById(id);
+        break;
+      }
       case "wateredbyuser":
       case "istreeadopted":
       case "adopted": {

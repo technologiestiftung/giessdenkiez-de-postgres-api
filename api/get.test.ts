@@ -88,15 +88,14 @@ describe("test GET request handlers", () => {
       .spyOn(manager, "getLastWateredTreeById")
       .mockImplementation((_id) => Promise.resolve([] as TreeWatered[]));
     const req = setupRequest({
-      headers: { authorization: "Bearer xyz" },
       query: { queryType: "lastwatered", id: "_abc" },
     });
 
     const res = setupResponse();
     await getTrees(req, res);
-    // expect(manager.getLastWateredTreeById).toHaveBeenCalledWith("_abc");
-    expect(handler.verifyRequest).toHaveBeenCalledWith(req, res);
-    // expect(micro.send).toHaveBeenCalledWith(res, 200, undefined);
+    expect(manager.getLastWateredTreeById).toHaveBeenCalledWith("_abc");
+    expect(handler.verifyRequest).not.toHaveBeenCalledWith(req, res);
+    expect(micro.send).toHaveBeenCalledWith(res, 200, undefined);
   });
 
   test("make adopted request get response back", async () => {

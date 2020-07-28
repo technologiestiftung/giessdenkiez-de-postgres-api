@@ -64,22 +64,6 @@ export const caseCollectionGET: VerifiedReqCaseOptionGET[] = setupNamesGET([
   {
     name: 'queryType with "query" and answer with statusCode',
     method: "GET",
-    queryType: "lastwatered",
-    query: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "lastwatered",
-    query: { id: "_abc" },
-    data: undefined,
-    statusCode: 200,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
     queryType: "wateredbyuser",
     query: {},
     data: {},
