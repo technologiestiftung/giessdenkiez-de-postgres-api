@@ -11,12 +11,6 @@ export async function verifyRequest(
   let statusCode = 200;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   try {
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    response.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    response.setHeader(
-      "Access-Control-Allow-Headers",
-      "Authorization, Accept, Content-Type",
-    );
     if (request.method === "OPTIONS") {
       return send(response, statusCode);
     }

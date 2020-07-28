@@ -8,3 +8,8 @@ test
 .huskyrc.js
 .nvmrc
 lint-staged.config.js
+docker-compose.yml
+jest.config.js
+renovate.json
+deprecated
+.github

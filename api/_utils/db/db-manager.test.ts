@@ -116,9 +116,7 @@ describe("db-manager", () => {
     const res = await getLastWateredTreeById("_abc");
     expect(res).toBeDefined();
     expect(res[0].tree_id).toBe("_abc");
-    // await client.query("DELETE FROM trees_watered WHERE tree_id LIKE $1", [
-    //   `%${"_"}%`,
-    // ]);
+    expect(res).toMatchInlineSnapshot();
   });
   test("getting trees by age", async () => {
     const values = [
