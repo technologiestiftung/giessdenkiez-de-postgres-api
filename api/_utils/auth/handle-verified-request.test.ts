@@ -148,9 +148,7 @@ const testerGET: (opts: VerifiedReqCaseOptionGET) => Promise<void> = async ({
     case "istreeadopted": {
       jest
         .spyOn(manager, "isTreeAdoptedByUser")
-        .mockImplementation((_uuid, _id) =>
-          Promise.resolve([] as TreeAdopted[]),
-        );
+        .mockImplementation((_uuid, _id) => Promise.resolve(true));
       break;
     }
     case "lastwatered": {
