@@ -108,7 +108,7 @@ export async function getTreesByAge(
 export async function isTreeAdoptedByUser(
   uuid: string,
   tree_id: string,
-): Promise<TreeAdopted[]> {
+): Promise<boolean> {
   const result = await pool.query(
     `
     SELECT *
@@ -117,7 +117,7 @@ export async function isTreeAdoptedByUser(
     `,
     [uuid, tree_id],
   );
-  return result.rows;
+  return result.rows.length > 0 ? true : false;
 }
 export async function countTreesByAge(
   start: string,

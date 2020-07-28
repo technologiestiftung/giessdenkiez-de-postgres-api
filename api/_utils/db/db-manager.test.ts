@@ -296,19 +296,9 @@ describe("db-manager", () => {
     );
     await client.query(sql);
     const res = await isTreeAdoptedByUser(values[1][2], values[1][1]);
-    expect(res).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "id": 3,
-          "tree_id": "_dCCFXUp0M5",
-          "uuid": "auth0|w_F-8Oqkn7",
-        },
-      ]
-    `);
-    expect(res[0].tree_id).toBe(values[1][1]);
-    expect(res[0].uuid).toBe(values[1][2]);
-    expect(res[0].id).toBe(values[1][0]);
-    expect(res).toHaveLength(1);
+    expect(res).toMatchInlineSnapshot(`true`);
+
+    expect(res).toBe(true);
   });
   test("countTreesByAge", async () => {
     const values = [
