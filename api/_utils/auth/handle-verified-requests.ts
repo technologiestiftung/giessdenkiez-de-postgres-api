@@ -77,7 +77,7 @@ export async function handleVerifiedRequest(
         }
         const data = setupResponseData({
           url: request.url,
-          data: result ? result : {},
+          data: result !== undefined ? result : {},
         });
         return send(response, statusCode, data);
       }
