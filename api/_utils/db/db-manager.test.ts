@@ -116,7 +116,18 @@ describe("db-manager", () => {
     const res = await getLastWateredTreeById("_abc");
     expect(res).toBeDefined();
     expect(res[0].tree_id).toBe("_abc");
-    expect(res).toMatchInlineSnapshot();
+    expect(res).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "amount": null,
+          "time": "1",
+          "timestamp": null,
+          "tree_id": "_abc",
+          "username": null,
+          "uuid": null,
+        },
+      ]
+    `);
   });
   test("getting trees by age", async () => {
     const values = [
