@@ -14,9 +14,11 @@ module.exports = async (req, res, next) => {
     const { uuid, treeid } = req.query;
     const result = await pool.query(
       `
-      WITH trees AS (SELECT id, 1 AS adopted, 0 AS watered FROM trees
+      WITH trees AS (SELECT tree_id, 1 AS adopted, 0 AS watered FROM trees_adopted
       UNION ALL
-      SELECT tree_id, 0 AS adopted, 1 AS watered FROM trees_watered WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days') SELECT id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY id;
+      SELECT tree_id, 0 AS adopted, 1 AS watered FROM trees_watered
+      WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days')
+      SELECT tree_id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY tree_id;
       `,
       [],
     );
