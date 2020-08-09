@@ -1,7 +1,7 @@
 var jwt = require("express-jwt");
 var jwks = require("jwks-rsa");
 
-var jwtCheck = params => {
+var jwtCheck = (req, res, next) => {
   try {
     console.log("jwtCheck");
     return jwt({
@@ -14,7 +14,7 @@ var jwtCheck = params => {
       audience: process.env.audience,
       issuer: process.env.issuer,
       algorithms: ['RS256'],
-    })(params);
+    })(req, res, next);
   } catch (e) {
     console.log(e);
     throw e;
