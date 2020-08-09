@@ -3,7 +3,9 @@ var jwks = require("jwks-rsa");
 
 var jwtCheck = (req, res, next) => {
   try {
-    console.log("jwtCheck");
+    console.log("jwksuri", process.env.jwksuri);
+    console.log("issuer", process.env.issuer);
+    console.log("audience", process.env.audience);
     return jwt({
       secret: jwks.expressJwtSecret({
         cache: true,
