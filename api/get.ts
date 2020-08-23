@@ -29,6 +29,22 @@ type GetQueryType =
   | "treesbyids"
   | "istreeadopted";
 
+const failSafeFloatParse = value => {
+  try {
+    return parseFloat(value);
+  } catch (e) {
+    return value;
+  }
+}
+
+const treeWithLatLongAsFloat = tree => ({
+  ...tree,
+  lat: failSafeFloatParse(tree.lat),
+  lng: failSafeFloatParse(tree.lng),
+});
+
+const treesWithLatLongAsFloat = trees => trees.map(treeWithLatLongAsFloat);
+
 export default async function (
   request: VercelRequest,
   response: VercelResponse,
@@ -58,6 +74,7 @@ export default async function (
       wateredbyuser,
       wateredandadopted,
       tree_ids,
+      floatLatLng,
     } = request.query;
     if (queryType === undefined) {
       statusCode = 200;
@@ -126,7 +143,7 @@ export default async function (
         // can be public
         if (id === undefined) {
           statusCode = 400;
-          throw new Error("id needs to be defiend");
+          throw new Error("id needs to be defined");
         }
         // formaly get-trees
         result = (await getTreeById(id)) as Tree[];
@@ -208,6 +225,9 @@ export default async function (
     if (result === undefined) {
       statusCode = 500;
       throw new Error("could not get result from db query");
+    }
+    if (floatLatLng) {
+      result = Array.isArray(result) ? treesWithLatLongAsFloat(result) : treeWithLatLongAsFloat(result);
     }
     // TODO: Fix frontend to not rely on top level objects
     const data = setupResponseData({

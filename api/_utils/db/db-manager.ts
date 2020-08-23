@@ -127,8 +127,8 @@ export async function countTreesByAge(
     `
     SELECT COUNT(*)
     FROM trees
-    WHERE trees.pflanzjahr > $1
-    AND trees.pflanzjahr < $2;`,
+    WHERE trees.pflanzjahr >= $1
+    AND trees.pflanzjahr <= $2;`,
     [parseInt(start, 10), parseInt(end, 10)],
   );
 
