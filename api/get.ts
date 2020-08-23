@@ -226,7 +226,7 @@ export default async function (
       statusCode = 500;
       throw new Error("could not get result from db query");
     }
-    if (floatLatLng) {
+    if (floatLatLng && floatLatLng !== "false") {
       result = Array.isArray(result) ? treesWithLatLongAsFloat(result) : treeWithLatLongAsFloat(result);
     }
     // TODO: Fix frontend to not rely on top level objects
