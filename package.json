@@ -4,14 +4,14 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@vercel/node": "1.8.1",
+    "@vercel/node": "1.8.3",
     "core-js": "3.6.5",
     "jsonwebtoken": "8.5.1",
-    "jwks-rsa": "1.9.0",
+    "jwks-rsa": "1.10.1",
     "micro": "9.3.4",
     "pg": "8.3.3",
     "uuid": "8.3.0",
-    "whatwg-fetch": "3.4.0"
+    "whatwg-fetch": "3.4.1"
   },
   "scripts": {
     "test": "inpyjamas-scripts test --runInBand"
