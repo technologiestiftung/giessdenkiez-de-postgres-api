@@ -9,8 +9,8 @@
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "1.10.1",
     "micro": "9.3.4",
-    "pg": "8.3.3",
-    "uuid": "8.3.0",
+    "pg": "8.4.0",
+    "uuid": "8.3.1",
     "whatwg-fetch": "3.4.1"
   },
   "scripts": {
