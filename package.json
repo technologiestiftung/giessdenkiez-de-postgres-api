@@ -4,12 +4,12 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@vercel/node": "1.8.3",
+    "@vercel/node": "1.8.4",
     "core-js": "3.6.5",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "1.10.1",
     "micro": "9.3.4",
-    "pg": "8.4.0",
+    "pg": "8.4.1",
     "uuid": "8.3.1",
     "whatwg-fetch": "3.4.1"
   },
