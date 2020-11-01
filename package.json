@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
-    "@types/jest-in-case": "1.0.2",
+    "@types/jest-in-case": "1.0.3",
     "@types/jsonwebtoken": "8.5.0",
     "@types/micro": "7.3.3",
     "@types/pg": "7.14.5",
