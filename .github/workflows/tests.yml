@@ -38,4 +38,3 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       # - run: PGPASSWORD=ent psql -h localhost -d trees -U fangorn -q -f test/sql/build-schema.sql
-      - run: npm test
