@@ -18,7 +18,7 @@ export interface Tree {
   lat: string;
   lng: string;
   artdtsch: string;
-  artBot: string;
+  artbot: string;
   gattungdeutsch: string;
   gattung: string;
   strname: string;

@@ -311,7 +311,7 @@ describe("db-manager", () => {
       Array [
         Object {
           "adopted": null,
-          "artBot": null,
+          "artbot": null,
           "artdtsch": null,
           "baumhoehe": null,
           "bezirk": null,
