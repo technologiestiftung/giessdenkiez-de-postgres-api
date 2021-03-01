@@ -5,13 +5,13 @@
   "license": "MIT",
   "dependencies": {
     "@vercel/node": "1.9.0",
-    "core-js": "3.8.3",
+    "core-js": "3.9.1",
     "jsonwebtoken": "8.5.1",
-    "jwks-rsa": "1.12.2",
+    "jwks-rsa": "1.12.3",
     "micro": "9.3.4",
     "pg": "8.5.1",
     "uuid": "8.3.2",
-    "whatwg-fetch": "3.5.0"
+    "whatwg-fetch": "3.6.2"
   },
   "scripts": {
     "test": "inpyjamas-scripts test --runInBand"
