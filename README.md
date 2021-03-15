@@ -52,3 +52,5 @@ npm test
 Locally you will need Docker installed. Jest will try to start a postgres database defined in the docker-compose.yml.
 
 On CI the postgres DB is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
+
+<!-- redeploy dev 2021-03-15 16:00:51 -->
