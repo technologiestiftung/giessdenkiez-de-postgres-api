@@ -120,6 +120,7 @@ describe("db-manager", () => {
       Array [
         Object {
           "amount": null,
+          "id": Any<Number>,
           "time": "1",
           "timestamp": null,
           "tree_id": "_abc",
@@ -201,6 +202,7 @@ describe("db-manager", () => {
       Array [
         Object {
           "amount": null,
+          "id": Any<Number>,
           "time": "2020-07-23 17:11:33",
           "timestamp": null,
           "tree_id": "_08be12a72n",
@@ -332,12 +334,14 @@ describe("db-manager", () => {
           "artdtsch": null,
           "baumhoehe": null,
           "bezirk": null,
+          "caretaker": null,
           "eigentuemer": null,
           "gattung": null,
           "gattungdeutsch": null,
           "geom": null,
           "hausnr": null,
           "id": "_08be12a72n",
+          "kennzeich": null,
           "kronedurch": null,
           "lat": null,
           "lng": null,
@@ -346,6 +350,7 @@ describe("db-manager", () => {
           "radolan_sum": null,
           "stammumfg": null,
           "standalter": null,
+          "standortnr": null,
           "strname": null,
           "type": null,
           "watered": null,
