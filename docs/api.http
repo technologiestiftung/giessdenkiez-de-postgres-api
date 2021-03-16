@@ -1,0 +1,174 @@
+@host = localhost
+@port = 3000
+
+@API_HOST = http://{{host}}:{{port}}
+
+# These needs a .env in the root of the project
+# you get these variables from auth0
+@audience = {{$dotenv audience}}
+@issuer = {{$dotenv issuer}}
+@jwksuri = {{$dotenv jwksuri}}
+@client_id = {{$dotenv client_id}}
+@client_secret = {{$dotenv client_secret}}
+# the token below is obtained from the
+# request to the token issuer
+# https://giessdenkiez.eu.auth0.com/oauth/token
+# see section POST AUTH
+@token = {{$dotenv token}}
+
+  #####  ####### #######
+ #     # #          #
+ #       #          #
+ #  #### #####      #
+ #     # #          #
+ #     # #          #
+  #####  #######    #
+
+
+### Healthcheck
+GET {{API_HOST}}
+
+### GET tree by its id byid
+
+GET {{API_HOST}}/get?queryType=byid&id=_01
+
+### GET a list of all waterd trees
+
+GET {{API_HOST}}/get?queryType=watered
+
+### get all trees with id, lat, lon, radolan_sum
+#  with pagination
+
+GET {{API_HOST}}/get?queryType=all&limit=10&offset=10
+
+
+### GET list of trees from an list of ids
+
+GET {{API_HOST}}/get?queryType=treesbyids&tree_ids=_01,_02
+
+
+### GET a list of trees with the properities
+# adopted (how many users)
+# waterd how often in the last 30days
+
+GET {{API_HOST}}/get?queryType=wateredandadopted
+
+
+### GET count of trees by age
+
+GET {{API_HOST}}/get?queryType=countbyage&start=1800&end=1910
+
+
+  #####  ####### #######       #    #     # ####### #     #
+ #     # #          #         # #   #     #    #    #     #
+ #       #          #        #   #  #     #    #    #     #
+ #  #### #####      #       #     # #     #    #    #######
+ #     # #          #       ####### #     #    #    #     #
+ #     # #          #       #     # #     #    #    #     #
+  #####  #######    #       #     #  #####     #    #     #
+
+
+### GET trees that where watered by aq specific user
+
+GET {{API_HOST}}/get?queryType=wateredbyuser&uuid=auth0|123
+Authorization: Bearer {{token}}
+
+### GET check if a tree is adopted by a specific user
+
+{{API_HOST}}/get?queryType=istreeadopted&uuid=auth0|123&id=_01
+Authorization: Bearer {{token}}
+
+
+### GET trees that are adopted by a specific user
+
+{{API_HOST}}/get?queryType=adopted&uuid=auth0|123
+Authorization: Bearer {{token}}
+
+
+### GET the last warering of a specific tree with all the users
+
+{{API_HOST}}/get?queryType=lastwatered&id=_03ftfji3n
+Authorization: Bearer {{token}}
+
+ ######  #######  #####  #######
+ #     # #     # #     #    #
+ #     # #     # #          #
+ ######  #     #  #####     #
+ #       #     #       #    #
+ #       #     # #     #    #
+ #       #######  #####     #
+
+    #    #     # ####### #     #
+   # #   #     #    #    #     #
+  #   #  #     #    #    #     #
+ #     # #     #    #    #######
+ ####### #     #    #    #     #
+ #     # #     #    #    #     #
+ #     #  #####     #    #     #
+
+### POST to the token issuer and get an JWT token
+# for authenticated requests
+POST https://giessdenkiez.eu.auth0.com/oauth/token
+Content-Type: application/json
+
+{
+    "client_id": "{{client_id}}",
+    "client_secret": "{{client_secret}}",
+    "audience": "{{audience}}",
+    "grant_type": "client_credentials"
+}
+
+
+### POST water a tree
+
+POST {{API_HOST}}/post
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "queryType":"water",
+    "tree_id":"_01",
+    "uuid": "auth0|123",
+    "username":"foo",
+    "amount": 100
+}
+
+### Adopt a tree
+
+POST {{API_HOST}}/post
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "queryType":"adopt",
+    "tree_id":"_01",
+    "uuid": "auth0|123"
+}
+
+ ######  ####### #       ####### ####### #######
+ #     # #       #       #          #    #
+ #     # #       #       #          #    #
+ #     # #####   #       #####      #    #####
+ #     # #       #       #          #    #
+ #     # #       #       #          #    #
+ ######  ####### ####### #######    #    #######
+    #    #     # ####### #     #
+   # #   #     #    #    #     #
+  #   #  #     #    #    #     #
+ #     # #     #    #    #######
+ ####### #     #    #    #     #
+ #     # #     #    #    #     #
+ #     #  #####     #    #     #
+
+
+### DELETE a tree adoption
+
+DELETE {{API_HOST}}/delete
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "queryType":"unadopt",
+    "tree_id":"_01",
+    "uuid": "auth0|123"
+}
