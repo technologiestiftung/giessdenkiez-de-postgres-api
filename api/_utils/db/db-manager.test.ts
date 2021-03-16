@@ -1,3 +1,4 @@
+/* eslint-disable jest/prefer-inline-snapshots */
 /* eslint-disable jest/no-hooks */
 import {
   getTreeById,
@@ -116,19 +117,7 @@ describe("db-manager", () => {
     const res = await getLastWateredTreeById("_abc");
     expect(res).toBeDefined();
     expect(res[0].tree_id).toBe("_abc");
-    expect(res).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "amount": null,
-          "id": Any<Number>,
-          "time": "1",
-          "timestamp": null,
-          "tree_id": "_abc",
-          "username": null,
-          "uuid": null,
-        },
-      ]
-    `);
+    expect(res).toMatchSnapshot([{ id: expect.any(Number) }]);
   });
   test("getting trees by age", async () => {
     const values = [
@@ -198,19 +187,9 @@ describe("db-manager", () => {
       values,
     );
     await client.query(sql);
-    expect(await getTreesWateredByUser(values[0][2])).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "amount": null,
-          "id": Any<Number>,
-          "time": "2020-07-23 17:11:33",
-          "timestamp": null,
-          "tree_id": "_08be12a72n",
-          "username": null,
-          "uuid": "auth0|G65iUi8WGI",
-        },
-      ]
-    `);
+    expect(await getTreesWateredByUser(values[0][2])).toMatchSnapshot([
+      { id: expect.any(Number) },
+    ]);
     // await client.query(sqlTruncate("trees_watered"));
   });
 
@@ -256,25 +235,7 @@ describe("db-manager", () => {
     await client.query(sql);
 
     const res = await getTreesWateredAndAdopted();
-    expect(res).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "adopted": "1",
-          "tree_id": "_dCCFXUp0M5",
-          "watered": "0",
-        },
-        Object {
-          "adopted": "1",
-          "tree_id": "_cBw9mi9_VG",
-          "watered": "0",
-        },
-        Object {
-          "adopted": "1",
-          "tree_id": "_08be12a72n",
-          "watered": "1",
-        },
-      ]
-    `);
+    expect(res).toMatchSnapshot();
 
     for (const tree of res) {
       // eslint-disable-next-line jest/no-if
