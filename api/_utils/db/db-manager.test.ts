@@ -120,7 +120,7 @@ describe("db-manager", () => {
       Array [
         Object {
           "amount": null,
-          "id": 76,
+          "id": Any<Number>,
           "time": "1",
           "timestamp": null,
           "tree_id": "_abc",
@@ -202,7 +202,7 @@ describe("db-manager", () => {
       Array [
         Object {
           "amount": null,
-          "id": 79,
+          "id": Any<Number>,
           "time": "2020-07-23 17:11:33",
           "timestamp": null,
           "tree_id": "_08be12a72n",
