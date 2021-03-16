@@ -2,6 +2,7 @@
 // https://jestjs.io/docs/en/configuration#globalsetup-string
 // setup.js
 // const spawn = require("cross-spawn");
+// TODO: [GDK-69] Rewrite test runner to use prisma for provisioning and maybe
 const util = require("util");
 const isCi = require("is-ci");
 const child_process = require("child_process");
@@ -24,7 +25,7 @@ module.exports = async () => {
   }
   try {
     const { stdout: _stdoutDCO, stderr: stderrDCO } = await exec(
-      "docker-compose up -d",
+      "docker-compose -f docker-compose.test.yml up -d ",
     );
     await new Promise((resolve) => setTimeout(resolve, 5000));
     // global.___DB_PROVISIONED___ = true;
