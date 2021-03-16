@@ -7,7 +7,7 @@ module.exports = defaultConfig;
 
 module.exports = utlities.merge(defaultConfig, {
   testEnvironment: path.join(__dirname, "prisma", "prisma-test-environment.js"),
-  // setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
   collectCoverageFrom: ["api/**/*.{ts,tsx}", "api/*.{ts,tsx}"],
   // globalSetup : "./test/jest.global-setup.js",
   // globalTeardown : "./test/jest.global-teardown.js",
