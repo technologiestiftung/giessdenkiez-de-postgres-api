@@ -74,9 +74,9 @@ model trees {
   radolan_sum    Int?
   radolan_days   Int[]
   geom           Unsupported("geometry")?
-  caretaker      String?
-  kennzeich      String?
   standortnr     String?
+  kennzeich      String?
+  caretaker      String?
 
   @@index([pflanzjahr], name: "pflanzjahr_index")
   @@index([geom], name: "trees_geom")
