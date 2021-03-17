@@ -3,6 +3,8 @@
 
 @API_HOST = http://{{host}}:{{port}}
 
+# @API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
+
 # These needs a .env in the root of the project
 # you get these variables from auth0
 @audience = {{$dotenv audience}}
@@ -56,7 +58,7 @@ GET {{API_HOST}}/get?queryType=wateredandadopted
 
 ### GET count of trees by age
 
-GET {{API_HOST}}/get?queryType=countbyage&start=1800&end=1910
+GET {{API_HOST}}/get?queryType=countbyage&start=1800&end=2020
 
 
   #####  ####### #######       #    #     # ####### #     #
@@ -70,25 +72,24 @@ GET {{API_HOST}}/get?queryType=countbyage&start=1800&end=1910
 
 ### GET trees that where watered by aq specific user
 
-GET {{API_HOST}}/get?queryType=wateredbyuser&uuid=auth0|123
+GET {{API_HOST}}/get?queryType=wateredbyuser&uuid=auth0|abc
 Authorization: Bearer {{token}}
 
 ### GET check if a tree is adopted by a specific user
 
-{{API_HOST}}/get?queryType=istreeadopted&uuid=auth0|123&id=_01
+{{API_HOST}}/get?queryType=istreeadopted&uuid=auth0|abc&id=_01
 Authorization: Bearer {{token}}
 
 
 ### GET trees that are adopted by a specific user
 
-{{API_HOST}}/get?queryType=adopted&uuid=auth0|123
+{{API_HOST}}/get?queryType=adopted&uuid=auth0|abc
 Authorization: Bearer {{token}}
 
 
-### GET the last warering of a specific tree with all the users
+### GET the last watering of a specific tree with all the users
 
-{{API_HOST}}/get?queryType=lastwatered&id=_03ftfji3n
-Authorization: Bearer {{token}}
+{{API_HOST}}/get?queryType=lastwatered&id=_01
 
  ######  #######  #####  #######
  #     # #     # #     #    #
@@ -128,7 +129,7 @@ Content-Type: application/json
 {
     "queryType":"water",
     "tree_id":"_01",
-    "uuid": "auth0|123",
+    "uuid": "auth0|abc",
     "username":"foo",
     "amount": 100
 }
@@ -142,7 +143,7 @@ Content-Type: application/json
 {
     "queryType":"adopt",
     "tree_id":"_01",
-    "uuid": "auth0|123"
+    "uuid": "auth0|abc"
 }
 
  ######  ####### #       ####### ####### #######
@@ -169,6 +170,6 @@ Content-Type: application/json
 
 {
     "queryType":"unadopt",
-    "tree_id":"_01",
-    "uuid": "auth0|123"
+    "tree_id":"foo",
+    "uuid": "bah"
 }
