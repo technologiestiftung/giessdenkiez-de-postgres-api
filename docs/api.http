@@ -32,7 +32,7 @@ GET {{API_HOST}}
 
 ### GET tree by its id byid
 
-GET {{API_HOST}}/get?queryType=byid&id=_01
+GET {{API_HOST}}/get?queryType=byid&id=id=_0001wka6l
 
 ### GET a list of all waterd trees
 
@@ -46,7 +46,7 @@ GET {{API_HOST}}/get?queryType=all&limit=10&offset=10
 
 ### GET list of trees from an list of ids
 
-GET {{API_HOST}}/get?queryType=treesbyids&tree_ids=_01,_02
+GET {{API_HOST}}/get?queryType=treesbyids&tree_ids=id=_0001wka6l,_00043ixvp
 
 
 ### GET a list of trees with the properities
@@ -77,7 +77,7 @@ Authorization: Bearer {{token}}
 
 ### GET check if a tree is adopted by a specific user
 
-{{API_HOST}}/get?queryType=istreeadopted&uuid=auth0|abc&id=_01
+{{API_HOST}}/get?queryType=istreeadopted&uuid=auth0|abc&id=_0001wka6l
 Authorization: Bearer {{token}}
 
 
@@ -89,7 +89,7 @@ Authorization: Bearer {{token}}
 
 ### GET the last watering of a specific tree with all the users
 
-{{API_HOST}}/get?queryType=lastwatered&id=_01
+{{API_HOST}}/get?queryType=lastwatered&id=id=_0001wka6l
 
  ######  #######  #####  #######
  #     # #     # #     #    #
@@ -128,7 +128,7 @@ Content-Type: application/json
 
 {
     "queryType":"water",
-    "tree_id":"_01",
+    "tree_id":"_0001wka6l",
     "uuid": "auth0|abc",
     "username":"foo",
     "amount": 100
@@ -142,7 +142,7 @@ Content-Type: application/json
 
 {
     "queryType":"adopt",
-    "tree_id":"_01",
+    "tree_id":"_0001wka6l",
     "uuid": "auth0|abc"
 }
 
@@ -170,6 +170,6 @@ Content-Type: application/json
 
 {
     "queryType":"unadopt",
-    "tree_id":"foo",
+    "tree_id":"_0001wka6l",
     "uuid": "bah"
 }
