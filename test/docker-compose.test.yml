@@ -10,5 +10,8 @@ services:
       POSTGRES_USER: fangorn
       POSTGRES_PASSWORD: ent
       POSTGRES_DB: trees
-    volumes:
-      - "./test/sql:/provisioning"
+    networks:
+      - gdk-api-test
+
+networks:
+  gdk-api-test:
