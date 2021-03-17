@@ -1,11 +1,11 @@
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 
 import { verifyRequest } from "./_utils/auth/verify-request";
 import { errorHandler } from "./_utils/error-handler";
 
 export default async function (
-  request: NowRequest,
-  response: NowResponse,
+  request: VercelRequest,
+  response: VercelResponse,
 ): Promise<void> {
   try {
     response.setHeader("Access-Control-Allow-Credentials", "true");

@@ -1,12 +1,12 @@
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import { send } from "micro";
 import { setupResponseData } from "../setup-response";
 import { verifyAuth0Token, options } from "./verify-token";
 import { handleVerifiedRequest } from "./handle-verified-requests";
 
 export async function verifyRequest(
-  request: NowRequest,
-  response: NowResponse,
+  request: VercelRequest,
+  response: VercelResponse,
 ): Promise<void> {
   let statusCode = 200;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
