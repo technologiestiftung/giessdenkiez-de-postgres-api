@@ -27,7 +27,7 @@
     "node": ">=10"
   },
   "devDependencies": {
-    "@inpyjamas/scripts": "0.1.5-alpha",
+    "@inpyjamas/scripts": "0.1.11-alpha",
     "@types/jest-in-case": "1.0.3",
     "@types/jsonwebtoken": "8.5.1",
     "@types/micro": "7.3.3",
