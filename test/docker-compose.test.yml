@@ -1,7 +1,8 @@
 version: "3.4"
-
+# this file is meant for running tests
 services:
   postgres:
+    container_name: postgresdb-integration
     image: postgis/postgis:11-3.0
     ports:
       - "5432:5432"
@@ -9,3 +10,8 @@ services:
       POSTGRES_USER: fangorn
       POSTGRES_PASSWORD: ent
       POSTGRES_DB: trees
+    networks:
+      - gdk-api-test
+
+networks:
+  gdk-api-test:
