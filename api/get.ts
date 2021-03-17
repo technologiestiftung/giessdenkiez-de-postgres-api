@@ -34,6 +34,7 @@ export default async function (
   response: NowResponse,
 ): Promise<void> {
   let statusCode = 200;
+  response.setHeader("Access-Control-Allow-Credentials", "true");
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   response.setHeader(
