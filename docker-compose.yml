@@ -6,8 +6,6 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-    volumes:
-      - "./test/sql:/provisioning"
+      POSTGRES_USER: fangorn
+      POSTGRES_PASSWORD: ent
+      POSTGRES_DB: trees
