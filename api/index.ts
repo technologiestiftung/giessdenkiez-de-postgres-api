@@ -1,11 +1,11 @@
 import { send } from "micro";
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import { setupResponseData } from "./_utils/setup-response";
 import { errorHandler } from "./_utils/error-handler";
 
 export default async function (
-  _request: NowRequest,
-  response: NowResponse,
+  _request: VercelRequest,
+  response: VercelResponse,
 ): Promise<void> {
   try {
     // const data = await json(request);
