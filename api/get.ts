@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { send } from "micro";
-import { NowRequest, NowResponse } from "@vercel/node";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 import { setupResponseData } from "./_utils/setup-response";
 import {
   getTreeById,
@@ -30,10 +30,11 @@ type GetQueryType =
   | "istreeadopted";
 
 export default async function (
-  request: NowRequest,
-  response: NowResponse,
+  request: VercelRequest,
+  response: VercelResponse,
 ): Promise<void> {
   let statusCode = 200;
+  response.setHeader("Access-Control-Allow-Credentials", "true");
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
   response.setHeader(

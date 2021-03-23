@@ -71,6 +71,7 @@ describe("db-manager", () => {
   });
 
   test("getting Adopted trees by userId auth0id", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_abc"]);
     await client.query(
       "INSERT INTO trees_adopted (tree_id, uuid) VALUES ($1, $2)",
       ["_abc", "auth0|123"],
@@ -84,11 +85,16 @@ describe("db-manager", () => {
     // ]);
   });
   test("getting all watered trees", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_abc"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_def"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_ghi"]);
+
     const values = [
       ["_abc", 1],
       ["_def", 1],
       ["_ghi", 1],
     ];
+
     const sql = format(
       "INSERT INTO trees_watered (tree_id, time) VALUES %L",
       values,
@@ -104,6 +110,9 @@ describe("db-manager", () => {
   });
 
   test("getting watered trees by id", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_abc"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_def"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_ghi"]);
     const values = [
       ["_abc", 1],
       ["_def", 1],
@@ -176,6 +185,11 @@ describe("db-manager", () => {
   });
 
   test("getting trees watered by user", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_R447NTgmyk"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
+
     const values = [
       ["2020-07-23 17:11:33", "_08be12a72n", "auth0|G65iUi8WGI"],
       ["2020-07-23 17:11:33", "_R447NTgmyk", "auth0|TDilMAYKVk"],
@@ -194,6 +208,10 @@ describe("db-manager", () => {
   });
 
   test("getTreesWateredAndAdopted", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
+
     const valuesAdopted: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [3, "_dCCFXUp0M5", "auth0|w_F-8Oqkn7"],
@@ -222,9 +240,7 @@ describe("db-manager", () => {
     );
     await client.query(sqlWatered);
     const valuesTrees = [
-      ["_08be12a72n", "1910", "10", "52", "13"],
       ["_R447NTgmyk", "1920", "10", "52", "13"],
-      ["_cBw9mi9_VG", "1931", "10", "52", "13"],
       ["_sfdslkslkj", "1932", "10", "52", "13"],
       ["_dfdfsdfkjh", "1940", "10", "52", "13"],
     ];
@@ -247,6 +263,10 @@ describe("db-manager", () => {
     }
   });
   test("isTreeAdoptedByUser", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
+
     const values: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [3, "_dCCFXUp0M5", "auth0|w_F-8Oqkn7"],
@@ -322,6 +342,8 @@ describe("db-manager", () => {
   });
 
   test("adoptTree", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
+
     const values = { tree_id: "_08be12a72n", uuid: "auth0|123" };
     expect(await adoptTree(values.tree_id, values.uuid)).toMatchInlineSnapshot(
       `"tree _08be12a72n was adopted by user auth0|123"`,
@@ -338,6 +360,8 @@ describe("db-manager", () => {
   });
 
   test("waterTree", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
+
     const opts = {
       tree_id: "_08be12a72n",
       username: "bunny",
@@ -360,6 +384,11 @@ describe("db-manager", () => {
   });
 
   test("unadoptTree", async () => {
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_R447NTgmyk"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
+    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
+
     const values: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [2, "_R447NTgmyk", "auth0|TDilMAYKVk"],

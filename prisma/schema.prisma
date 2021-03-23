@@ -77,6 +77,8 @@ model trees {
   standortnr     String?
   kennzeich      String?
   caretaker      String?
+  trees_adopted  trees_adopted[]
+  trees_watered  trees_watered[]
 
   @@index([pflanzjahr], name: "pflanzjahr_index")
   @@index([geom], name: "trees_geom")
@@ -85,23 +87,23 @@ model trees {
 
 model trees_adopted {
   id      Int     @id @default(autoincrement())
-  tree_id String?
   uuid    String?
+  tree_id String
+  trees   trees   @relation(fields: [tree_id], references: [id])
 
-  @@index([tree_id], name: "trees_adopted_tree_id")
   @@index([uuid], name: "trees_adopted_uuid")
 }
 
 model trees_watered {
-  tree_id   String
   time      String
   uuid      String?
   amount    String?
   timestamp DateTime? @db.Timestamp(6)
   username  String?
   id        Int       @id @default(autoincrement())
+  tree_id   String
+  trees     trees     @relation(fields: [tree_id], references: [id])
 
   @@index([timestamp], name: "trees_watered_timestamp")
-  @@index([tree_id], name: "trees_watered_tree_id")
   @@index([uuid], name: "trees_watered_uuid")
 }
