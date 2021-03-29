@@ -3,26 +3,26 @@
 Build with Typescript, Prisma and Auth0.com, runs on vercel.com
 
 - [Giessdenkiez.de Postgres API](#giessdenkiezde-postgres-api)
+
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
     - [Auth0](#auth0)
     - [Environment Variables](#environment-variables)
     - [Postgres DB with Prisma](#postgres-db-with-prisma)
     - [Vercel](#vercel)
-        - [Vercel Environment Variables](#vercel-environment-variables)
+      - [Vercel Environment Variables](#vercel-environment-variables)
   - [API Routes](#api-routes)
     - [API Authorization](#api-authorization)
   - [Develop](#develop)
   - [Tests](#tests)
-  
+
 ## Prerequisites
 
 - [Vercel.com](https://vercel.com) Account
 - [Auth0.com](https://auth0.com) Account
 - Docker PostgresDB + Postgis
 
-## Setup 
-
+## Setup
 
 ### Auth0
 
@@ -36,11 +36,10 @@ Rename the file `.env.sample` to `.env` and fill in all the values you already h
 
 Setup your Postgres + Postgis Database. Maybe on render.com, AWS or whereever you like your relational databases. Take your values for `user`, `database`, `password`, `port` and `host` and also add them to the `.env` file. Make sure that the `DATABASE_URL` environment variable in the `.env` file is set right. The pattern is `postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA`. The `DATABASE_URL` is used by [Prisma](https://www.prisma.io/) to connect to your DB. You can have several predefiend URLs in the .env file and just comment them in or out depending with which DB you want to connect.
 
+Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup and development. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
+If you want some initial data in your DB for testing run also `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
 
-Run `npm run prisma:push:dangerously`. *The dangerously is here to remind you that this will change your DB without migration.* This should only be used for the setup and development. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to 
-If you want some initial data in your DB for testing run also npm `run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
-
-### Vercel 
+### Vercel
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
 
@@ -52,19 +51,19 @@ Add all your environment variables to the Vercel project by running the commands
 
 ```bash
 # the user for the postgres db
-vercel env add user
+vercel env add plain user
 # the database name
-vercel env add database
+vercel env add plain database
 # the database password
-vercel env add password
+vercel env add plain password
 # the host of the db, aws? render.com? localhost?
-vercel env add host
+vercel env add plain host
 # defaults to 5432
-vercel env add port
+vercel env add plain port
 # below are all taken from auth0.com
-vercel env add jwksuri
-vercel env add audience
-vercel env add issuer
+vercel env add plain jwksuri
+vercel env add plain audience
+vercel env add plain issuer
 ```
 
 To let these variables take effect you need to deploy your application once more.
@@ -113,16 +112,13 @@ curl --request POST \
 
 Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
-
 ## Develop
 
-Start your local postgres DB using docker-compose. `docker-compose up`. Provision it by running npm run `prisma:push:dangerously`.
+Start your local postgres DB using docker-compose. `docker-compose up`. Provision it by running `npm run prisma:push:dangerously`.
 
 You can run the project locally by running `npx vercel dev` or `npm run vercel:dev` in the root of your project. Make sure your values in the `.env` match the settings for the DB in the `docker-compose.yml` file.
 
-
 ## Tests
-
 
 Locally you will need Docker. Start a DB and run the tests with the following commands.
 
