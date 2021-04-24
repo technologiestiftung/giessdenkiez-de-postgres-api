@@ -352,6 +352,8 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
         `UPDATE users SET ${patch.name} = $1 WHERE uuid = $2`,
         [uuid, patch.value],
       );
+    } else {
+      console.log(`Property ${patch.name} isn't supported for update`)
     }
   }  
   const result = await pool.query(

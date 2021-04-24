@@ -20,6 +20,7 @@ type GetQueryType =
   | "byid"
   | "all"
   | "adopted"
+  | "user-profile"
   | "lastwatered"
   | "watered"
   | "byage"
@@ -214,6 +215,7 @@ export default async function (
       }
       case "wateredbyuser":
       case "istreeadopted":
+      case "user-profile":
       case "adopted": {
         await verifyRequest(request, response);
         return;
