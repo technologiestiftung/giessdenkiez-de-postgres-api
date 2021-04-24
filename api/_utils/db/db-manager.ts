@@ -330,7 +330,7 @@ export async function createUserProfile(opts: UserCreateProps): Promise<UserProp
   );
   return updateUserProfile({
     uuid,
-    patches
+    patches: patches || []
   })
 }
 
@@ -348,19 +348,18 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
     "phone_number",
   ]
   const { uuid, patches } = opts;
-  console.log(`Update ${patches.length} properties`)
-  for (let patch of patches) {
-    console.log(`Update ${JSON.stringify(patch)}`)
-    if (supportedProps.indexOf(patch.name) >= 0) {
-      const updateResult = await pool.query(
-        `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
-        [uuid, patch.value],
-      );
-      console.log(`After update %j`, updateResult)
-    } else {
-      console.log(`Property ${patch.name} isn't supported for update`)
-    }
-  }  
+  if (patches && Array.isArray(patches)) {
+    for (let patch of patches) {
+      if (supportedProps.indexOf(patch.name) >= 0) {
+        await pool.query(
+          `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
+          [uuid, patch.value],
+        );
+      } else {
+        console.log(`Property ${patch.name} isn't supported for update`)
+      }
+    }  
+  }
   const result = await pool.query(
     `SELECT uuid, email, username, prefered_username, family_name, given_name, gender, street, street_number, city, zipcode, country, phone_number FROM users WHERE uuid = $1`,
     [uuid],

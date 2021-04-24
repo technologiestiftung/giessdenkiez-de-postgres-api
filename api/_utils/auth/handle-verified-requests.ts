@@ -143,8 +143,7 @@ export async function handleVerifiedRequest(
               uuid === undefined ||
               username === undefined ||
               email === undefined ||
-              patches === undefined ||
-              patches.length === 0
+              patches === undefined
             ) {
               statusCode = 400;
               throw new Error(
@@ -165,8 +164,7 @@ export async function handleVerifiedRequest(
           case "user-profile":
             if (
               uuid === undefined ||
-              patches === undefined ||
-              patches.length === 0
+              patches === undefined
             ) {
               statusCode = 400;
               throw new Error(
