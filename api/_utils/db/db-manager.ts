@@ -326,6 +326,13 @@ export async function createUserProfile(opts: UserCreateProps): Promise<UserProp
   `,
     [uuid, email, username],
   );
+  if (username && username.length) {
+    // migrate existing entries to use auth id
+    await pool.query(
+      `UPDATE trees_watered SET user_uuid = $1 WHERE username = $2`,
+      [uuid, username],
+    );
+  }
   return updateUserProfile({
     uuid,
     patches
