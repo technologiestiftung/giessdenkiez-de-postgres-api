@@ -256,6 +256,62 @@ export async function waterTree(opts: WaterTreeProps): Promise<string> {
   );
   return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
 }
+
+interface UserProps {
+  uuid: string;
+  email: string;
+  username: string;
+  prefered_username: string;
+  family_name: string;
+  given_name: string;
+  gender: string;
+  street: string;
+  street_number: string;
+  city: string;
+  zipcode: string;
+  country: string;
+  phone_number: string;
+}
+
+interface PatchProp {
+  name: string;
+  value: string;
+}
+
+interface PatchProps {
+  uuid: string;
+  patches: PatchProp[];
+}
+
+export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
+  const supportedProps: String[] = [
+    "prefered_username",
+    "family_name",
+    "given_name",
+    "gender",
+    "street",
+    "street_number",
+    "city",
+    "zipcode",
+    "country",
+    "phone_number",
+  ]
+  const { uuid, patches } = opts;
+  for (let patch of patches) {
+    if (supportedProps.indexOf(patch.name) >= 0) {
+      await pool.query(
+        `UPDATE users SET ${patch.name} = $1 WHERE uuid = $2`,
+        [uuid, uuid, patch.value],
+      );
+    }
+  }  
+  const result = await pool.query(
+    `SELECT uuid, email, username, prefered_username, family_name, given_name, gender, street, street_number, city, zipcode, country, phone_number FROM users WHERE uuid = $1`,
+    [uuid],
+  );
+  return result.rows.length > 0 && result.rows[0];
+}
+
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE

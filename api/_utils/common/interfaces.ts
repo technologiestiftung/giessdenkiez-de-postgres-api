@@ -5,12 +5,17 @@ export interface Generic {
   [key: string]: any;
 }
 
+export interface PatchProp {
+  name: string;
+  value: string;
+}
 export interface RequestBody {
   queryType: BodyQueryType;
   tree_id?: string;
   uuid?: string;
   username?: string;
   amount?: number;
+  patches?: PatchProp[];
 }
 
 export interface Tree {

@@ -10,6 +10,7 @@ import {
   getAdoptedTreeIdsByUserId,
   // getLastWateredTreeById,
   unadoptTree,
+  updateUserProfile,
 } from "../db/db-manager";
 import { errorHandler } from "../error-handler";
 
@@ -77,7 +78,7 @@ export async function handleVerifiedRequest(
         return send(response, statusCode, data);
       }
       case "POST": {
-        let result: string;
+        let result: any;
         statusCode = 201;
 
         if (request.body.queryType === undefined) {
@@ -90,6 +91,7 @@ export async function handleVerifiedRequest(
           uuid,
           username,
           amount,
+          patches,
         } = request.body as RequestBody;
 
         switch (queryType) {
@@ -118,6 +120,22 @@ export async function handleVerifiedRequest(
 
             result = await waterTree({ tree_id, username, amount, uuid });
             break;
+
+          case "user":
+            if (
+              uuid === undefined ||
+              patches === undefined ||
+              patches.length === 0
+            ) {
+              statusCode = 400;
+              throw new Error(
+                "POST body needs uuid (string) and patches (array) properties",
+              );
+            }
+
+            result = await updateUserProfile({ uuid, patches });
+            break;
+  
           default:
             statusCode = 400;
             throw new Error("Unknow POST body queryType");
