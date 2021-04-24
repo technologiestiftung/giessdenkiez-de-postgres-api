@@ -350,11 +350,11 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
   for (let patch of patches) {
     console.log(`Update ${JSON.stringify(patch)}`)
     if (supportedProps.indexOf(patch.name) >= 0) {
-      await pool.query(
-        `UPDATE users SET ${patch.name} = $1 WHERE uuid = $2`,
+      const updateResult = await pool.query(
+        `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
         [uuid, patch.value],
       );
-      console.log(`After update`)
+      console.log(`After update %j`, updateResult)
     } else {
       console.log(`Property ${patch.name} isn't supported for update`)
     }
