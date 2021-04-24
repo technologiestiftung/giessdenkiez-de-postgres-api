@@ -181,6 +181,7 @@ export async function handleVerifiedRequest(
               );
             }
 
+            statusCode = 200;
             result = await updateUserProfile({ uuid, patches });
             break;
 
