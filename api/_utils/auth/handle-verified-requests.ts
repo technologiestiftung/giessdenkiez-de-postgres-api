@@ -72,7 +72,7 @@ export async function handleVerifiedRequest(
             result = await getAdoptedTreeIdsByUserId(uuid);
             break;
           }
-          case "user": {
+          case "user-profile": {
             if (uuid === undefined) {
               statusCode = 400;
               throw new Error("uuid needs to be defiend");
