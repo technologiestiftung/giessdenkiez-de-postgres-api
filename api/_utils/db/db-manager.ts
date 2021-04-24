@@ -216,6 +216,32 @@ export async function getAllTrees(
   return data;
 }
 
+interface UserProps {
+  uuid: string;
+  email: string;
+  username: string;
+  prefered_username: string;
+  family_name: string;
+  given_name: string;
+  gender: string;
+  street: string;
+  street_number: string;
+  city: string;
+  zipcode: string;
+  country: string;
+  phone_number: string;
+}
+
+export async function getUserById(uuid: string): Promise<UserProps> {
+  const result = await pool.query(
+    `SELECT uuid, email, username, prefered_username, family_name, given_name, gender, street, 
+     street_number, city, zipcode, country, phone_number FROM users WHERE uuid = $1
+    `,
+    [uuid],
+  );
+  return result.rows.length > 0 && result.rows[0];
+}
+
 // POST POST POST POST POST POST POST POST POST
 // POST POST POST POST POST POST POST POST POST POST
 // POST POST POST POST POST POST POST POST POST POST POST
@@ -256,31 +282,54 @@ export async function waterTree(opts: WaterTreeProps): Promise<string> {
   );
   return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
 }
-
-interface UserProps {
-  uuid: string;
-  email: string;
-  username: string;
-  prefered_username: string;
-  family_name: string;
-  given_name: string;
-  gender: string;
-  street: string;
-  street_number: string;
-  city: string;
-  zipcode: string;
-  country: string;
-  phone_number: string;
-}
-
 interface PatchProp {
   name: string;
   value: string;
 }
 
+interface UserCreateProps {
+  uuid: string;
+  email: string,
+  username: string,
+  patches: PatchProp[];
+}
+
 interface PatchProps {
   uuid: string;
   patches: PatchProp[];
+}
+
+export async function createUserProfile(opts: UserCreateProps): Promise<UserProps> {
+  const { uuid, email, username, patches } = opts;
+  const uuidResult = await pool.query(
+    `SELECT uuid FROM users WHERE uuid = $1`,
+    [uuid],
+  );
+  if (uuidResult.rows.length > 0) {
+    throw new Error(
+      "The user profile already exists",
+    );
+  }
+  const emailResult = await pool.query(
+    `SELECT uuid FROM users WHERE email = $1`,
+    [email],
+  );
+  if (emailResult.rows.length > 0) {
+    throw new Error(
+      "There is already a user with that email",
+    );
+  }
+  await pool.query(
+    `
+    INSERT INTO users (uuid, email, username, created)
+    VALUES ($1, $2, $3, clock_timestamp())
+  `,
+    [uuid, email, username],
+  );
+  return updateUserProfile({
+    uuid,
+    patches
+  })
 }
 
 export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
@@ -301,7 +350,7 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
     if (supportedProps.indexOf(patch.name) >= 0) {
       await pool.query(
         `UPDATE users SET ${patch.name} = $1 WHERE uuid = $2`,
-        [uuid, uuid, patch.value],
+        [uuid, patch.value],
       );
     }
   }  

@@ -8,13 +8,15 @@ import {
   getTreesWateredByUser,
   isTreeAdoptedByUser,
   getAdoptedTreeIdsByUserId,
-  // getLastWateredTreeById,
+  getUserById,
   unadoptTree,
+  createUserProfile,
   updateUserProfile,
 } from "../db/db-manager";
 import { errorHandler } from "../error-handler";
 
 export async function handleVerifiedRequest(
+  tokenSubject: string,
   request: VercelRequest,
   response: VercelResponse,
 ): Promise<void> {
@@ -70,6 +72,20 @@ export async function handleVerifiedRequest(
             result = await getAdoptedTreeIdsByUserId(uuid);
             break;
           }
+          case "user": {
+            if (uuid === undefined) {
+              statusCode = 400;
+              throw new Error("uuid needs to be defiend");
+            }
+            if (tokenSubject !== uuid) {
+              statusCode = 400;
+              throw new Error(
+                "You're only allowed to query your own user profile",
+              );
+            }
+            result = await getUserById(uuid);
+            break;
+          }
         }
         const data = setupResponseData({
           url: request.url,
@@ -92,6 +108,7 @@ export async function handleVerifiedRequest(
           username,
           amount,
           patches,
+          email,
         } = request.body as RequestBody;
 
         switch (queryType) {
@@ -124,18 +141,49 @@ export async function handleVerifiedRequest(
           case "user":
             if (
               uuid === undefined ||
+              username === undefined ||
+              email === undefined ||
               patches === undefined ||
               patches.length === 0
             ) {
               statusCode = 400;
               throw new Error(
-                "POST body needs uuid (string) and patches (array) properties",
+                "POST body needs uuid (string) and email (string) properties",
+              );
+            }
+
+            if (tokenSubject !== uuid) {
+              statusCode = 400;
+              throw new Error(
+                "You're only allowed to create your own user profile",
+              );
+            }
+
+            result = await createUserProfile({ uuid, username, email, patches });
+            break;
+
+          case "user-profile":
+            if (
+              uuid === undefined ||
+              patches === undefined ||
+              patches.length === 0
+            ) {
+              statusCode = 400;
+              throw new Error(
+                "POST body needs uuid (string) and a non empty patches (array) properties",
+              );
+            }
+
+            if (tokenSubject !== uuid) {
+              statusCode = 400;
+              throw new Error(
+                "You're only allowed to update your own user profile",
               );
             }
 
             result = await updateUserProfile({ uuid, patches });
             break;
-  
+
           default:
             statusCode = 400;
             throw new Error("Unknow POST body queryType");

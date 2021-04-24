@@ -16,6 +16,7 @@ export interface RequestBody {
   username?: string;
   amount?: number;
   patches?: PatchProp[];
+  email?: string;
 }
 
 export interface Tree {

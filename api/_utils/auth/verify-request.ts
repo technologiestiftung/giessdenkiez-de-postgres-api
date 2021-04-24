@@ -34,7 +34,7 @@ export async function verifyRequest(
       );
     } else {
       // token should be valid now
-      await handleVerifiedRequest(request, response);
+      await handleVerifiedRequest(decoded.sub, request, response);
     }
   } catch (error) {
     statusCode = 500;
