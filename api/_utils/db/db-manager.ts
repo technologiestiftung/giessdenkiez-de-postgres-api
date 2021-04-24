@@ -140,13 +140,15 @@ export async function getLastWateredTreeById(
   id: string,
 ): Promise<TreeWatered[]> {
   const result = await pool.query(
-    `
-    SELECT *
-    FROM trees_watered
-    WHERE trees_watered.tree_id = $1`,
+    `SELECT tw.*, u.username AS username_set FROM trees_watered tw 
+     LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.tree_id = $1`,
     [id],
   );
-  return result.rows;
+  return result.rows.map(row => ({
+    username: row.username_set || row.username_set,
+    username_set: undefined,
+    ...row,
+  }));
 }
 
 export async function getTreesByIds(tree_ids: string): Promise<Tree[]> {
@@ -326,13 +328,6 @@ export async function createUserProfile(opts: UserCreateProps): Promise<UserProp
   `,
     [uuid, email, username],
   );
-  if (username && username.length) {
-    // migrate existing entries to use auth id
-    await pool.query(
-      `UPDATE trees_watered SET user_uuid = $1 WHERE username = $2`,
-      [uuid, username],
-    );
-  }
   return updateUserProfile({
     uuid,
     patches
