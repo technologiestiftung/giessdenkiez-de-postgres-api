@@ -142,8 +142,7 @@ export async function handleVerifiedRequest(
             if (
               uuid === undefined ||
               username === undefined ||
-              email === undefined ||
-              patches === undefined
+              email === undefined
             ) {
               statusCode = 400;
               throw new Error(
@@ -158,7 +157,7 @@ export async function handleVerifiedRequest(
               );
             }
 
-            result = await createUserProfile({ uuid, username, email, patches });
+            result = await createUserProfile({ uuid, username, email, patches: patches || [] });
             break;
 
           case "user-profile":
