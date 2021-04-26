@@ -20,7 +20,7 @@ Build with Typescript, Prisma and Auth0.com, runs on vercel.com
 
 - [Vercel.com](https://vercel.com) Account
 - [Auth0.com](https://auth0.com) Account
-- Docker PostgresDB + Postgis
+- [Docker](https://www.docker.com/) PostgresDB + Postgis
 
 ## Setup
 
@@ -43,7 +43,8 @@ If you want some initial data in your DB for testing run also `npm run prisma:se
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
 
-From the root of the repo run once `vercel` and follow the prompts. The defaults are fine. This will deploy your application. it might fail due to missing environment variables on vercel but we will fix this in the next paragraph.
+We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. *The dangerously is here to remind you that this will change your DB without migration.* This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to 
+If you want some more data in your DB for testing run also npm `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
 
 ##### Vercel Environment Variables
 
