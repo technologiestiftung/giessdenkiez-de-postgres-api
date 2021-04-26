@@ -1,9 +1,9 @@
 @host = localhost
 @port = 3000
 
-@API_HOST = http://{{host}}:{{port}}
+# @API_HOST = http://{{host}}:{{port}}
 
-# @API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
+@API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
 
 # These needs a .env in the root of the project
 # you get these variables from auth0
