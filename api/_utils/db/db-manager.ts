@@ -71,7 +71,7 @@ export async function getTreesWateredAndAdopted(): Promise<
     `
     WITH trees AS (SELECT tree_id, 1 AS adopted, 0 AS watered FROM trees_adopted
     UNION ALL
-    SELECT tree_id, 0 AS adopted, 1 AS watered FROM trees_watered WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days') SELECT tree_id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY tree_id;
+    SELECT tree_id, 0 AS adopted, CAST(trees_watered.amount AS INTEGER) AS watered FROM trees_watered WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days') SELECT tree_id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY tree_id;
     `,
     [],
   );
