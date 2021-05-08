@@ -140,13 +140,14 @@ export async function getLastWateredTreeById(
   id: string,
 ): Promise<TreeWatered[]> {
   const result = await pool.query(
-    `SELECT tw.*, u.username AS username_set FROM trees_watered tw 
+    `SELECT tw.*, u.username AS username_set, u.prefered_username FROM trees_watered tw 
      LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.tree_id = $1`,
     [id],
   );
   return result.rows.map(row => ({
-    username: row.username_set || row.username_set,
+    username: row.prefered_username || row.username_set || row.username,
     username_set: undefined,
+    prefered_username: undefined,
     ...row,
   }));
 }
