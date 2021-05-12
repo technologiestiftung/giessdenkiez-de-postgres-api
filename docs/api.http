@@ -16,7 +16,7 @@
 @client_secret = {{$dotenv client_secret}}
 # the token below is obtained from the
 # request to the token issuer
-# https://giessdenkiez.eu.auth0.com/oauth/token
+# https://YOUR-tenant.eu.auth0.com/oauth/token
 # see section POST AUTH
 @token = {{$dotenv token}}
 
@@ -63,14 +63,60 @@ GET {{API_HOST}}/get?queryType=wateredandadopted
 GET {{API_HOST}}/get?queryType=countbyage&start=1800&end=2020
 
 
-  #####  ####### #######       #    #     # ####### #     #
- #     # #          #         # #   #     #    #    #     #
- #       #          #        #   #  #     #    #    #     #
- #  #### #####      #       #     # #     #    #    #######
- #     # #          #       ####### #     #    #    #     #
- #     # #          #       #     # #     #    #    #     #
-  #####  #######    #       #     #  #####     #    #     #
+  #####  ####### #######
+ #     # #          #
+ #       #          #
+ #  #### #####      #
+ #     # #          #
+ #     # #          #
+  #####  #######    #
 
+    #
+   # #
+  #   #
+ #     #
+ #######
+ #     #
+ #     #
+
+ ####### ####### #    # ####### #     #
+    #    #     # #   #  #       ##    #
+    #    #     # #  #   #       # #   #
+    #    #     # ###    #####   #  #  #
+    #    #     # #  #   #       #   # #
+    #    #     # #   #  #       #    ##
+    #    ####### #    # ####### #     #
+
+
+### POST to the token issuer and get an JWT token
+# for authenticated requests
+POST {{issuer}}oauth/token
+Content-Type: application/json
+
+{
+    "client_id": "{{client_id}}",
+    "client_secret": "{{client_secret}}",
+    "audience": "{{audience}}",
+    "grant_type": "client_credentials"
+}
+
+
+
+  #####  ####### #######
+ #     # #          #
+ #       #          #
+ #  #### #####      #
+ #     # #          #
+ #     # #          #
+  #####  #######    #
+
+   #    #     # ####### #     #
+  # #   #     #    #    #     #
+ #   #  #     #    #    #     #
+#     # #     #    #    #######
+####### #     #    #    #     #
+#     # #     #    #    #     #
+#     #  #####     #    #     #
 
 ### GET trees that where watered by aq specific user
 
@@ -108,18 +154,6 @@ Authorization: Bearer {{token}}
  ####### #     #    #    #     #
  #     # #     #    #    #     #
  #     #  #####     #    #     #
-
-### POST to the token issuer and get an JWT token
-# for authenticated requests
-POST https://giessdenkiez.eu.auth0.com/oauth/token
-Content-Type: application/json
-
-{
-    "client_id": "{{client_id}}",
-    "client_secret": "{{client_secret}}",
-    "audience": "{{audience}}",
-    "grant_type": "client_credentials"
-}
 
 
 ### POST water a tree
