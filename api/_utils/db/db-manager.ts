@@ -25,6 +25,8 @@ export const dbConfig = {
   host,
 };
 
+// TODO: [GDK-137] Use connectionString instead of user,db,pw,port,host
+// Would also work with Prisma
 const pool = new pg.Pool(dbConfig);
 
 export async function getTreeById(id: string): Promise<Tree[]> {
