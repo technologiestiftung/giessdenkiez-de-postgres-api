@@ -352,10 +352,25 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
   if (patches && Array.isArray(patches)) {
     for (let patch of patches) {
       if (supportedProps.indexOf(patch.name) >= 0) {
+        var oldUsername;
+        if (patch.name == "prefered_username") {
+          const result = await pool.query(
+            `SELECT username, prefered_username FROM users WHERE uuid = $1`,
+            [uuid],
+          );
+          const entry = result.rows.length > 0 && result.rows[0];
+          oldUsername = entry && (entry.prefered_username || entry.username);            
+        }
         await pool.query(
           `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
           [uuid, patch.value],
         );
+        if (patch.name == "prefered_username" && oldUsername !== patch.value) {
+          await pool.query(
+            `UPDATE trees_watered SET username = $2 WHERE uuid = $1`,
+            [uuid, patch.value],
+          );  
+        }
       } else {
         console.log(`Property ${patch.name} isn't supported for update`)
       }
