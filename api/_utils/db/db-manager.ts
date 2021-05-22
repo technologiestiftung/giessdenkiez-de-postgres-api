@@ -226,19 +226,16 @@ interface UserProps {
   prefered_username: string;
   family_name: string;
   given_name: string;
-  gender: string;
-  street: string;
-  street_number: string;
-  city: string;
+  salutation: string;
+  street_with_number: string;
   zipcode: string;
-  country: string;
   phone_number: string;
 }
 
 export async function getUserById(uuid: string): Promise<UserProps> {
   const result = await pool.query(
-    `SELECT uuid, email, username, prefered_username, family_name, given_name, gender, street, 
-     street_number, city, zipcode, country, phone_number FROM users WHERE uuid = $1
+    `SELECT uuid, email, username, prefered_username, family_name, given_name, salutation, street_with_number, 
+     zipcode, phone_number FROM users WHERE uuid = $1
     `,
     [uuid],
   );
@@ -340,36 +337,43 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
     "prefered_username",
     "family_name",
     "given_name",
-    "gender",
-    "street",
-    "street_number",
-    "city",
+    "salutation",
+    "street_with_number",
     "zipcode",
-    "country",
     "phone_number",
   ]
   const { uuid, patches } = opts;
   if (patches && Array.isArray(patches)) {
     for (let patch of patches) {
       if (supportedProps.indexOf(patch.name) >= 0) {
-        var oldUsername;
+        var oldValue;
         if (patch.name == "prefered_username") {
           const result = await pool.query(
             `SELECT username, prefered_username FROM users WHERE uuid = $1`,
             [uuid],
           );
           const entry = result.rows.length > 0 && result.rows[0];
-          oldUsername = entry && (entry.prefered_username || entry.username);            
+          oldValue = entry && (entry.prefered_username || entry.username);
+        } else if (supportedProps.indexOf(patch.name) >= 0) {
+          const result = await pool.query(
+            `SELECT ${patch.name} FROM users WHERE uuid = $1`,
+            [uuid],
+          );
+          const entry = result.rows.length > 0 && result.rows[0];
+          oldValue = entry && entry[patch.name];
         }
-        await pool.query(
-          `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
-          [uuid, patch.value],
-        );
-        if (patch.name == "prefered_username" && oldUsername !== patch.value) {
+        if (supportedProps.indexOf(patch.name) >= 0) {
+          const value = (patch.value === undefined || patch.value === null || patch.value === "") ? null : patch.value
           await pool.query(
-            `UPDATE trees_watered SET username = $2 WHERE uuid = $1`,
-            [uuid, patch.value],
-          );  
+            `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
+            [uuid, value],
+          );
+          if (patch.name == "prefered_username" && oldValue !== patch.value) {
+            await pool.query(
+              `UPDATE trees_watered SET username = $2 WHERE uuid = $1`,
+              [uuid, value],
+            );  
+          }  
         }
       } else {
         console.log(`Property ${patch.name} isn't supported for update`)
@@ -377,7 +381,7 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
     }  
   }
   const result = await pool.query(
-    `SELECT uuid, email, username, prefered_username, family_name, given_name, gender, street, street_number, city, zipcode, country, phone_number FROM users WHERE uuid = $1`,
+    `SELECT uuid, email, username, prefered_username, family_name, given_name, salutation, street_with_number, zipcode, phone_number FROM users WHERE uuid = $1`,
     [uuid],
   );
   return result.rows.length > 0 && result.rows[0];
