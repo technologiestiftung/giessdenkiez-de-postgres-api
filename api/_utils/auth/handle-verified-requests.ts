@@ -67,7 +67,7 @@ export async function handleVerifiedRequest(
             // formerly get-adopted-trees
             if (uuid === undefined) {
               statusCode = 400;
-              throw new Error("uuid needs to be defiend");
+              throw new Error("uuid needs to be defined");
             }
             result = await getAdoptedTreeIdsByUserId(uuid);
             break;
@@ -75,7 +75,7 @@ export async function handleVerifiedRequest(
           case "user-profile": {
             if (uuid === undefined) {
               statusCode = 400;
-              throw new Error("uuid needs to be defiend");
+              throw new Error("uuid needs to be defined");
             }
             if (tokenSubject !== uuid) {
               statusCode = 400;
@@ -222,7 +222,7 @@ export async function handleVerifiedRequest(
           response,
           404,
           setupResponseData({
-            message: `no response defiend for method ${request.method}`,
+            message: `no response defined for method ${request.method}`,
           }),
         );
       }

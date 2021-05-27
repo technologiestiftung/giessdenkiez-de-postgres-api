@@ -365,7 +365,7 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
         if (supportedProps.indexOf(patch.name) >= 0) {
           const value = (patch.value === undefined || patch.value === null || patch.value === "") ? null : patch.value
           await pool.query(
-            `UPDATE users SET ${patch.name} = $2 WHERE uuid = $1`,
+            `UPDATE users SET ${patch.name} = $2, updated = now() WHERE uuid = $1`,
             [uuid, value],
           );
           if (patch.name == "prefered_username" && oldValue !== patch.value) {
