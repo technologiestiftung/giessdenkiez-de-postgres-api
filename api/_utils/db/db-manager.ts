@@ -55,8 +55,9 @@ export async function getAdoptedTreeIdsByUserId(
 
 export async function getWateredTrees(): Promise<{ watered: string[] }> {
   const result = await pool.query(`
-  SELECT tree_id
+  SELECT DISTINCT(tree_id)
   FROM trees_watered
+  ORDER BY tree_id
 `);
   const data = {
     watered: result.rows.map((item) => item.tree_id),
@@ -83,8 +84,9 @@ export async function getTreesWateredByUser(
   const result = await pool.query(
     `
     SELECT *
-    FROM trees_watered
-    WHERE trees_watered.uuid = $1`,
+    FROM trees_watered tw
+    WHERE tw.uuid = $1 
+    ORDER BY tw.timestamp DESC`,
     [uuid],
   );
   return result.rows;
@@ -141,7 +143,7 @@ export async function getLastWateredTreeById(
 ): Promise<TreeWatered[]> {
   const result = await pool.query(
     `SELECT tw.*, u.username AS username_set, u.prefered_username FROM trees_watered tw 
-     LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.tree_id = $1`,
+     LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.tree_id = $1 ORDER BY tw.timestamp DESC`,
     [id],
   );
   return result.rows.map(row => ({
