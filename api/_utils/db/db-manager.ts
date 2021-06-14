@@ -145,6 +145,7 @@ export async function getLastWateredTreeById(
     `
     SELECT *
     FROM trees_watered
+    ORDER BY timestamp DESC
     WHERE trees_watered.tree_id = $1`,
     [id],
   );
