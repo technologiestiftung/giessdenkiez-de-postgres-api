@@ -86,7 +86,7 @@ export async function getTreesWateredByUser(
     SELECT *
     FROM trees_watered tw
     WHERE tw.uuid = $1 
-    ORDER BY tw.timestamp DESC`,
+    ORDER BY tw.timestamp ASC`,
     [uuid],
   );
   return result.rows;
@@ -143,7 +143,7 @@ export async function getLastWateredTreeById(
 ): Promise<TreeWatered[]> {
   const result = await pool.query(
     `SELECT tw.*, u.username AS username_set, u.prefered_username FROM trees_watered tw 
-     LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.tree_id = $1 ORDER BY tw.timestamp DESC`,
+     LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.tree_id = $1 ORDER BY tw.timestamp ASC`,
     [id],
   );
   return result.rows.map(row => ({
