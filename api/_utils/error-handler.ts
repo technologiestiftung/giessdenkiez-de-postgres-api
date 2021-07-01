@@ -1,9 +1,9 @@
 import { setupResponseData } from "./setup-response";
 import { send } from "micro";
-import { NowResponse } from "@vercel/node";
+import { VercelResponse } from "@vercel/node";
 
 export async function errorHandler(opts: {
-  response: NowResponse;
+  response: VercelResponse;
   error: Error;
   statusCode: number;
 }): Promise<void> {

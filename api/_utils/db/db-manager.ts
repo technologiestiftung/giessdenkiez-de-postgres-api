@@ -25,6 +25,8 @@ export const dbConfig = {
   host,
 };
 
+// TODO: [GDK-137] Use connectionString instead of user,db,pw,port,host
+// Would also work with Prisma
 const pool = new pg.Pool(dbConfig);
 
 export async function getTreeById(id: string): Promise<Tree[]> {
@@ -143,7 +145,8 @@ export async function getLastWateredTreeById(
     `
     SELECT *
     FROM trees_watered
-    WHERE trees_watered.tree_id = $1`,
+    WHERE trees_watered.tree_id = $1
+    ORDER BY timestamp ASC`,
     [id],
   );
   return result.rows;
@@ -269,12 +272,15 @@ export async function unadoptTree(
   tree_id: string,
   uuid: string,
 ): Promise<string> {
-  await pool.query(
+  const response = await pool.query(
     `
     DELETE FROM trees_adopted
     WHERE tree_id = $1 AND uuid = $2;
   `,
     [tree_id, uuid],
   );
-  return `tree ${tree_id} was unadopted by user ${uuid}`;
+
+  return response.rowCount > 0
+    ? `tree ${tree_id} was unadopted by user ${uuid}`
+    : `tree ${tree_id} or user ${uuid} don't exist`;
 }
