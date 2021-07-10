@@ -251,10 +251,8 @@ export async function exportUserData(): Promise<string> {
     "salutation", "street_with_number", "zipcode", "phone_number"
   ]
   const result = await pool.query(
-    `SELECT ${fields.join(", ")} FROM users WHERE uuid = $1
-    `,
-    [],
-  );
+    `SELECT ${fields.join(", ")} FROM users
+    `);
   return convertToCsv(result.rows, fields);
 }
 
