@@ -247,9 +247,9 @@ export async function getUserById(uuid: string): Promise<UserProps> {
 
 export async function exportUserData(): Promise<string> {
   const fields = [
-    "uuid", "email", "username", "prefered_username", "family_name", "given_name", 
-    "salutation", "street_with_number", "zipcode", "phone_number"
-  ]
+    "email", "uuid", "username", "family_name", "given_name", "prefered_username", 
+    "salutation", "street_with_number", "zipcode", "phone_number", "created",	"updated"
+  ];
   const result = await pool.query(
     `SELECT ${fields.join(", ")} FROM users
     `);
