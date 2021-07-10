@@ -88,7 +88,7 @@ export async function handleVerifiedRequest(
             break;
           }
           case "canexportusers": {
-            if (tokenSubject === "auth0|5f2682bb53a599003795121c"/*joerg*/ 
+            if (tokenSubject === "auth0|5f29bb0c53a5990037970148"/*joerg*/ 
                 || tokenSubject === "auth0|5f3bc85b4ee503006d6c041b"/*thorsten*/) {
               result = true;    
             } else {
@@ -97,7 +97,7 @@ export async function handleVerifiedRequest(
             break;
           }
           case "user-export": {
-            if (tokenSubject !== "auth0|5f2682bb53a599003795121c"/*joerg*/ 
+            if (tokenSubject !== "auth0|5f29bb0c53a5990037970148"/*joerg*/ 
                 && tokenSubject !== "auth0|5f3bc85b4ee503006d6c041b"/*thorsten*/) {
               statusCode = 400;
               throw new Error(

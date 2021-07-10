@@ -1,4 +1,5 @@
 import pg from "pg";
+import { Parser } from 'json2csv';
 import { getEnvs } from "../envs";
 import {
   Tree,
@@ -244,16 +245,23 @@ export async function getUserById(uuid: string): Promise<UserProps> {
   return result.rows.length > 0 && result.rows[0];
 }
 
-export async function exportUserData(): Promise<UserProps[]> {
+export async function exportUserData(): Promise<string> {
+  const fields = [
+    "uuid", "email", "username", "prefered_username", "family_name", "given_name", 
+    "salutation", "street_with_number", "zipcode", "phone_number"
+  ]
   const result = await pool.query(
-    `SELECT uuid, email, username, prefered_username, family_name, given_name, salutation, street_with_number, 
-     zipcode, phone_number FROM users WHERE uuid = $1
+    `SELECT ${fields.join(", ")} FROM users WHERE uuid = $1
     `,
     [],
   );
-  return result.rows;
+  return convertToCsv(result.rows, fields);
 }
 
+function convertToCsv(data: UserProps[], fields: string[]): string {
+  const json2csv = new Parser({ fields });
+  return json2csv.parse(data);
+}
 
 
 // POST POST POST POST POST POST POST POST POST

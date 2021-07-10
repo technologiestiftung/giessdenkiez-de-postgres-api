@@ -7,6 +7,7 @@
     "@prisma/client": "2.19.0",
     "@vercel/node": "1.9.1",
     "core-js": "3.9.1",
+    "json2csv": "^5.0.6",
     "jsonwebtoken": "8.5.1",
     "jwks-rsa": "1.12.3",
     "micro": "9.3.4",
@@ -29,6 +30,7 @@
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
     "@types/jest-in-case": "1.0.3",
+    "@types/json2csv": "^5.0.3",
     "@types/jsonwebtoken": "8.5.1",
     "@types/micro": "7.3.3",
     "@types/pg": "7.14.11",
