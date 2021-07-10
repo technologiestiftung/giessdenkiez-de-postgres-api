@@ -9,6 +9,7 @@ import {
   isTreeAdoptedByUser,
   getAdoptedTreeIdsByUserId,
   getUserById,
+  exportUserData,
   unadoptTree,
   createUserProfile,
   updateUserProfile,
@@ -84,6 +85,26 @@ export async function handleVerifiedRequest(
               );
             }
             result = await getUserById(uuid);
+            break;
+          }
+          case "canexportusers": {
+            if (tokenSubject === "auth0|5f2682bb53a599003795121c"/*joerg*/ 
+                || tokenSubject === "auth0|5f3bc85b4ee503006d6c041b"/*thorsten*/) {
+              result = true;    
+            } else {
+              result = false;
+            }
+            break;
+          }
+          case "user-export": {
+            if (tokenSubject !== "auth0|5f2682bb53a599003795121c"/*joerg*/ 
+                && tokenSubject !== "auth0|5f3bc85b4ee503006d6c041b"/*thorsten*/) {
+              statusCode = 400;
+              throw new Error(
+                "You're not allowed to export the user data",
+              );
+            }
+            result = await exportUserData();
             break;
           }
         }

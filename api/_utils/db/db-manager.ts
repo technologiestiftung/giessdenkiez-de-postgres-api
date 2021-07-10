@@ -244,6 +244,18 @@ export async function getUserById(uuid: string): Promise<UserProps> {
   return result.rows.length > 0 && result.rows[0];
 }
 
+export async function exportUserData(): Promise<UserProps[]> {
+  const result = await pool.query(
+    `SELECT uuid, email, username, prefered_username, family_name, given_name, salutation, street_with_number, 
+     zipcode, phone_number FROM users WHERE uuid = $1
+    `,
+    [],
+  );
+  return result.rows;
+}
+
+
+
 // POST POST POST POST POST POST POST POST POST
 // POST POST POST POST POST POST POST POST POST POST
 // POST POST POST POST POST POST POST POST POST POST POST
