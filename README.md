@@ -1,4 +1,6 @@
-# Giessdenkiez.de Postgres API
+![](https://img.shields.io/badge/Build%20with%20%E2%9D%A4%EF%B8%8F-at%20Technologiesitftung%20Berlin-blue)
+
+# Giess den Kiez Postgres API
 
 Build with Typescript, Prisma and Auth0.com, runs on vercel.com
 
