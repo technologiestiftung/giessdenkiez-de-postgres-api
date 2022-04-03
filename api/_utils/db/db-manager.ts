@@ -392,19 +392,100 @@ export async function updateUserProfile(opts: PatchProps): Promise<UserProps> {
             await pool.query(
               `UPDATE trees_watered SET username = $2 WHERE uuid = $1`,
               [uuid, value],
-            );  
-          }  
+            );
+          }
         }
       } else {
         console.log(`Property ${patch.name} isn't supported for update`)
       }
-    }  
+    }
   }
   const result = await pool.query(
     `SELECT uuid, email, username, prefered_username, family_name, given_name, salutation, street_with_number, zipcode, phone_number FROM users WHERE uuid = $1`,
     [uuid],
   );
   return result.rows.length > 0 && result.rows[0];
+}
+
+export async function updateWatered(opts: PatchProps): Promise<TreeWatered|null> {
+  const supportedProps: String[] = [
+    "amount",
+    "time",
+    "tree_id",
+  ]
+  const { uuid, patches } = opts;
+  const result = await pool.query(
+    `SELECT uuid FROM trees_watered WHERE uuid = $1`,
+    [uuid],
+  );
+  if (result.rows.length == 0) {
+    return Promise.resolve(null)
+  }
+  if (patches && Array.isArray(patches)) {
+    for (let patch of patches) {
+      if (supportedProps.indexOf(patch.name) >= 0) {
+        const entry = result.rows.length > 0 && result.rows[0];
+        const oldValue = entry && entry[patch.name];
+        const value = (patch.value === undefined || patch.value === null || patch.value === "") ? null : patch.value
+        if (patch.name == "amount") {
+          if (!value || !(typeof value == 'number') || value < 0 || value >= 300) {
+            console.log(`Value ${value} invalid for new amount of watering, skipping...`)
+            continue
+          }
+        } else if (patch.name == "tree_id") {
+          if (!value) {
+            console.log(`Value null invalid for new tree of watering, skipping...`)
+            continue
+          }
+          const queryResult = await pool.query(
+            `SELECT id FROM trees WHERE id = $1`,
+            [value],
+          );
+          const foundTree = queryResult.rows.length > 0;
+          if (!foundTree) {
+            console.log(`New tree ${value} of watering doesn't exist, skipping...`)
+            continue
+          }
+        } else if (patch.name == "time") {
+          if (!value) {
+            console.log(`Value null invalid for new time of watering, skipping...`)
+            continue
+          }
+          try {
+            const current = new Date();
+            const currentYear = current.getFullYear();
+            const date = new Date(value);
+            const year = date.getFullYear();
+            if (current.getTime() < date.getTime() || year != currentYear) {
+              console.log(`Value ${value} invalid for new time of watering, skipping...`)
+              continue
+            }
+          } catch(e) {
+            console.log(`Value ${value} for new time of watering cause error, skipping...`)
+            continue
+          }
+        }
+        await pool.query(
+          `UPDATE trees_watered SET ${patch.name} = $2, timestamp = clock_timestamp() WHERE uuid = $1`,
+          [uuid, value],
+        );
+      } else {
+        console.log(`Property ${patch.name} isn't supported for update`)
+      }
+    }
+  }
+  const finalResult = await pool.query(
+    `SELECT tw.*, u.username AS username_set, u.prefered_username FROM trees_watered tw 
+     LEFT OUTER JOIN users u ON tw.uuid = u.uuid WHERE tw.uuid = $1`,
+    [uuid],
+  );
+  const tw = finalResult.rows[0];
+  return Promise.resolve({
+    username: tw.prefered_username || tw.username_set || tw.username,
+    username_set: undefined,
+    prefered_username: undefined,
+    ...tw,
+  });
 }
 
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
