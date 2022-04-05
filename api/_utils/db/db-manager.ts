@@ -513,3 +513,23 @@ export async function unadoptTree(
     ? `tree ${tree_id} was unadopted by user ${uuid}`
     : `tree ${tree_id} or user ${uuid} don't exist`;
 }
+
+/**
+ * Delete watering
+ *
+ */
+export async function deleteWatering(
+  uuid: string,
+): Promise<string> {
+  const response = await pool.query(
+    `
+    DELETE FROM trees_watered
+    WHERE uuid = $1;
+  `,
+    [uuid],
+  );
+
+  return response.rowCount > 0
+    ? `watering ${uuid} has been deleted`
+    : `watering ${uuid} doesn't exist`;
+}

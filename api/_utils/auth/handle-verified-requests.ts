@@ -13,6 +13,8 @@ import {
   unadoptTree,
   createUserProfile,
   updateUserProfile,
+  updateWatered,
+  deleteWatering,
 } from "../db/db-manager";
 import { errorHandler } from "../error-handler";
 
@@ -90,7 +92,15 @@ export async function handleVerifiedRequest(
           case "canexportusers": {
             if (tokenSubject === "auth0|5f29bb0c53a5990037970148"/*joerg*/ 
                 || tokenSubject === "auth0|5f3bc85b4ee503006d6c041b"/*thorsten*/) {
-              result = true;    
+              result = true;
+            } else {
+              result = false;
+            }
+            break;
+          }
+          case "canupdatewatering": {
+            if (tokenSubject === "auth0|5f29bb0c53a5990037970148"/*joerg*/) {
+              result = true;
             } else {
               result = false;
             }
@@ -203,6 +213,35 @@ export async function handleVerifiedRequest(
             result = await updateUserProfile({ uuid, patches });
             break;
 
+          case "water-update": {
+            if (tokenSubject !== "auth0|5f29bb0c53a5990037970148"/*joerg*/) {
+              statusCode = 400;
+              throw new Error(
+                "You're not allowed to patch waterings",
+              );
+            }
+            if (
+              uuid === undefined ||
+              patches === undefined
+            ) {
+              statusCode = 400;
+              throw new Error(
+                "POST body needs uuid (string) and a non empty patches (array) properties",
+              );
+            }
+
+            if (tokenSubject !== uuid) {
+              statusCode = 400;
+              throw new Error(
+                "You're only allowed to update your own waterings",
+              );
+            }
+
+            statusCode = 200;
+            result = await updateWatered({ uuid, patches });
+            break;
+          }
+
           default:
             statusCode = 400;
             throw new Error("Unknow POST body queryType");
@@ -228,6 +267,20 @@ export async function handleVerifiedRequest(
             }
             result = await unadoptTree(tree_id, uuid);
             break;
+          case "water-delete":
+            if (tokenSubject !== "auth0|5f29bb0c53a5990037970148"/*joerg*/) {
+              statusCode = 400;
+              throw new Error(
+                "You're not allowed to delete waterings",
+              );
+            }
+            if (uuid === undefined) {
+              statusCode = 400;
+              throw new Error("DELETE body uuid string properties");
+            }
+            result = await deleteWatering(uuid);
+            break;
+
           default:
             statusCode = 400;
             throw new Error("Unknow DELETE body queryType");
