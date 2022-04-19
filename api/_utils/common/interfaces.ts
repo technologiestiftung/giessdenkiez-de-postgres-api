@@ -7,6 +7,7 @@ export interface Generic {
 
 export interface RequestBody {
   queryType: BodyQueryType;
+  time?: string;
   tree_id?: string;
   uuid?: string;
   username?: string;

@@ -87,6 +87,7 @@ export async function handleVerifiedRequest(
         const {
           queryType,
           tree_id,
+          time,
           uuid,
           username,
           amount,
@@ -107,16 +108,23 @@ export async function handleVerifiedRequest(
             if (
               tree_id === undefined ||
               uuid === undefined ||
+              time === undefined ||
               username === undefined ||
               amount === undefined
             ) {
               statusCode = 400;
               throw new Error(
-                "POST body needs uuid (string), tree_id (string), username (string) and amount (number) properties",
+                "POST body needs uuid (string), time (ISO string), tree_id (string), username (string) and amount (number) properties",
               );
             }
 
-            result = await waterTree({ tree_id, username, amount, uuid });
+            result = await waterTree({
+              tree_id,
+              username,
+              amount,
+              uuid,
+              time,
+            });
             break;
           default:
             statusCode = 400;
@@ -164,7 +172,9 @@ export async function handleVerifiedRequest(
       }
     }
   } catch (error) {
-    await errorHandler({ response, error, statusCode }).catch((err) => err);
+    await errorHandler({ response, error: error as Error, statusCode }).catch(
+      (err) => err,
+    );
     return;
   }
 }

@@ -364,19 +364,21 @@ describe("db-manager", () => {
 
     const opts = {
       tree_id: "_08be12a72n",
+      time: "2020-01-01T00:00:00.000Z",
       username: "bunny",
       uuid: "auth0|TDilMAYKVk",
       amount: 100,
     };
     expect(await waterTree(opts)).toMatchInlineSnapshot(
-      `"Tree with tree_id _08be12a72n was watered by user auth0|TDilMAYKVk/bunny with 100l of water"`,
+      `"Tree with tree_id _08be12a72n was watered by user auth0|TDilMAYKVk/bunny with 100l of water at 2020-01-01T00:00:00.000Z"`,
     );
     const res = await client.query(
-      "SELECT tree_id, username, uuid, amount FROM trees_watered WHERE uuid LIKE $1",
+      "SELECT tree_id, time, username, uuid, amount FROM trees_watered WHERE uuid LIKE $1",
       [opts.uuid],
     );
     expect(res.rows[0]).toStrictEqual({
       tree_id: opts.tree_id,
+      time: opts.time,
       username: opts.username,
       uuid: opts.uuid,
       amount: `${opts.amount}`,

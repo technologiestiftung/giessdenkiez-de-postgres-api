@@ -6,7 +6,6 @@ import {
   TreeReduced,
   TreeWatered,
   TreeWateredAndAdopted,
-  TreeAdopted,
 } from "../common/interfaces";
 
 const {
@@ -244,20 +243,21 @@ export async function adoptTree(
 
 interface WaterTreeProps {
   tree_id: string;
+  time: string;
   uuid: string;
   amount: number;
   username: string;
 }
 export async function waterTree(opts: WaterTreeProps): Promise<string> {
-  const { tree_id, uuid, amount, username } = opts;
+  const { tree_id, time, uuid, amount, username } = opts;
   await pool.query(
     `
     INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
-    VALUES ($1, clock_timestamp(), $2, $3, clock_timestamp(), $4)
+    VALUES ($1, $2, $3, $4, clock_timestamp(), $5)
   `,
-    [tree_id, uuid, amount, username],
+    [tree_id, time, uuid, amount, username],
   );
-  return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
+  return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water at ${time}`;
 }
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE

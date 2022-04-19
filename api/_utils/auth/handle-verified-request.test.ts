@@ -6,7 +6,7 @@ import {
 /* eslint-disable jest/no-hooks */
 import * as manager from "../db/db-manager";
 import * as micro from "micro";
-import { TreeWatered, TreeAdopted } from "../common/interfaces";
+import { TreeWatered } from "../common/interfaces";
 import { setupRequest, setupResponse } from "../../__test-utils";
 import { handleVerifiedRequest } from "./handle-verified-requests";
 import cases from "jest-in-case";
@@ -103,6 +103,7 @@ const testerPOST_DELETE: (
       if (statusCode === 201) {
         expect(manager.waterTree).toHaveBeenCalledWith({
           tree_id: req.body.tree_id,
+          time: req.body.time,
           uuid: req.body.uuid,
           amount: req.body.amount,
           username: req.body.username,
