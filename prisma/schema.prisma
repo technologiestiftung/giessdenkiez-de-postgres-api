@@ -55,7 +55,7 @@ model trees {
   lat            String?
   lng            String?
   artdtsch       String?
-  artBot         String?
+  artbot         String?
   gattungdeutsch String?
   gattung        String?
   strname        String?
@@ -77,6 +77,7 @@ model trees {
   standortnr     String?
   kennzeich      String?
   caretaker      String?
+  gmlid          String?
   trees_adopted  trees_adopted[]
   trees_watered  trees_watered[]
 
@@ -91,6 +92,7 @@ model trees_adopted {
   tree_id String
   trees   trees   @relation(fields: [tree_id], references: [id])
 
+  @@unique([tree_id, uuid], name: "trees_adopted_tree_id_uuid_key")
   @@index([uuid], name: "trees_adopted_uuid")
 }
 
