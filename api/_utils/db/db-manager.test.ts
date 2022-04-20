@@ -86,15 +86,17 @@ describe("db-manager", () => {
     // ]);
   });
   test("getting all watered trees", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_abc"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_def"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_ghi"]);
-
     const values = [
       ["_abc", 1],
       ["_def", 1],
       ["_ghi", 1],
     ];
+
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      values.map(([id]) => [id]),
+    );
+    await client.query(sqlTrees);
 
     const sql = format(
       "INSERT INTO trees_watered (tree_id, time) VALUES %L",
@@ -111,14 +113,18 @@ describe("db-manager", () => {
   });
 
   test("getting watered trees by id", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_abc"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_def"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_ghi"]);
     const values = [
       ["_abc", 1],
       ["_def", 1],
       ["_ghi", 1],
     ];
+
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      values.map(([id]) => [id]),
+    );
+    await client.query(sqlTrees);
+
     const sql = format(
       "INSERT INTO trees_watered (tree_id, time) VALUES %L",
       values,
@@ -186,17 +192,19 @@ describe("db-manager", () => {
   });
 
   test("getting trees watered by user", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_R447NTgmyk"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
-
     const values = [
       ["2020-07-23 17:11:33", "_08be12a72n", "auth0|G65iUi8WGI"],
       ["2020-07-23 17:11:33", "_R447NTgmyk", "auth0|TDilMAYKVk"],
       ["2020-07-23 17:11:33", "_dCCFXUp0M5", "auth0|w_F-8Oqkn7"],
       ["2020-07-23 17:11:33", "_cBw9mi9_VG", "auth0|448ef305kj"],
     ];
+
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      values.map(([_, id]) => [id]),
+    );
+    await client.query(sqlTrees);
+
     const sql = format(
       "INSERT INTO trees_watered (time, tree_id, uuid) VALUES %L",
       values,
@@ -209,15 +217,17 @@ describe("db-manager", () => {
   });
 
   test("getTreesWateredAndAdopted", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
-
     const valuesAdopted: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [3, "_dCCFXUp0M5", "auth0|w_F-8Oqkn7"],
       [4, "_cBw9mi9_VG", "auth0|448ef305kj"],
     ];
+
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      valuesAdopted.map(([_, id]) => [id]),
+    );
+    await client.query(sqlTrees);
 
     const sqlAdopted = format(
       "INSERT INTO trees_adopted (id,tree_id,uuid) VALUES %L",
@@ -264,21 +274,22 @@ describe("db-manager", () => {
     }
   });
   test("isTreeAdoptedByUser", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
-
     const values: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [3, "_dCCFXUp0M5", "auth0|w_F-8Oqkn7"],
       [4, "_cBw9mi9_VG", "auth0|448ef305kj"],
     ];
 
-    const sql = format(
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      values.map(([_, id]) => [id]),
+    );
+    await client.query(sqlTrees);
+    const sqlAdopted = format(
       "INSERT INTO trees_adopted (id,tree_id,uuid) VALUES %L",
       values,
     );
-    await client.query(sql);
+    await client.query(sqlAdopted);
     const res = await isTreeAdoptedByUser(values[1][2], values[1][1]);
     expect(res).toMatchInlineSnapshot(`true`);
 
@@ -387,33 +398,28 @@ describe("db-manager", () => {
   });
 
   test("unadoptTree", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_R447NTgmyk"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
-
     const values: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [2, "_R447NTgmyk", "auth0|TDilMAYKVk"],
       [3, "_dCCFXUp0M5", "auth0|w_F-8Oqkn7"],
       [4, "_cBw9mi9_VG", "auth0|448ef305kj"],
     ];
-    const sql = format(
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      values.map(([_, id]) => [id]),
+    );
+    await client.query(sqlTrees);
+    const sqlAdopted = format(
       "INSERT INTO trees_adopted (id,tree_id,uuid) VALUES %L",
       values,
     );
-    await client.query(sql);
+    await client.query(sqlAdopted);
     expect(await unadoptTree(values[1][1], values[1][2])).toMatchInlineSnapshot(
       `"tree _R447NTgmyk was unadopted by user auth0|TDilMAYKVk"`,
     );
   });
 
   test("unwaterTree", async () => {
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_08be12a72n"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_R447NTgmyk"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_dCCFXUp0M5"]);
-    await client.query("INSERT INTO trees (id) VALUES ($1)", ["_cBw9mi9_VG"]);
-
     const today = new Date().toISOString();
     const values: [number, string, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI", today],
@@ -421,14 +427,19 @@ describe("db-manager", () => {
       [3, "_dCCFXUp0M5", "auth0|w_F-8Oqkn7", today],
       [4, "_cBw9mi9_VG", "auth0|448ef305kj", today],
     ];
-    const sql = format(
+    const sqlTrees = format(
+      "INSERT INTO trees (id) VALUES %L",
+      values.map(([_, id]) => [id]),
+    );
+    await client.query(sqlTrees);
+    const sqlWatered = format(
       "INSERT INTO trees_watered (id,tree_id,uuid,time) VALUES %L",
       values,
     );
-    await client.query(sql);
+    await client.query(sqlWatered);
     const [watering_id, tree_id, uuid] = values[1];
     expect(await unwaterTree(watering_id, tree_id, uuid)).toMatchInlineSnapshot(
-      `"The watering with id ${watering_id} on tree ${tree_id} was deleted by user ${uuid}"`,
+      `"The watering with id 2 on tree _R447NTgmyk was deleted by user auth0|TDilMAYKVk"`,
     );
   });
 });
