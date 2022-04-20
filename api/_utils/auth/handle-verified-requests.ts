@@ -165,7 +165,7 @@ export async function handleVerifiedRequest(
             ) {
               statusCode = 400;
               throw new Error(
-                "DELETE body watering_id, uuid and tree_id string properties",
+                "DELETE body watering_id is a number and uuid and tree_id are string properties",
               );
             }
             result = await unwaterTree(watering_id, tree_id, uuid);
