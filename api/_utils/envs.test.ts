@@ -10,6 +10,7 @@ describe("testing env values", () => {
     delete process.env.database;
     delete process.env.password;
     delete process.env.port;
+    delete process.env.MAX_LITER_AMOUNTS;
   });
 
   test("all values exist module does not throw (uses fallbacks)", () => {
@@ -29,12 +30,14 @@ describe("testing env values", () => {
           PG_HOST,
           PG_PASSWORD,
           PG_DATABASE,
+          MAX_LITER_AMOUNTS,
         } = module.getEnvs();
         expect(PG_PORT).toBe(5432);
         expect(PG_USER).toBe("fangorn");
         expect(PG_HOST).toBe("localhost");
         expect(PG_PASSWORD).toBe("ent");
         expect(PG_DATABASE).toBe("trees");
+        expect(MAX_LITER_AMOUNTS).toBe(999);
       })
       .catch((err) => {
         throw err;
@@ -49,6 +52,7 @@ describe("testing env values", () => {
     process.env.password = "foo";
     process.env.port = "1234";
     process.env.host = "foo";
+    process.env.MAX_LITER_AMOUNTS = "123";
     import("./envs")
       .then((module) => {
         expect(module).toBeDefined();
@@ -61,12 +65,14 @@ describe("testing env values", () => {
           PG_HOST,
           PG_PASSWORD,
           PG_DATABASE,
+          MAX_LITER_AMOUNTS,
         } = module.getEnvs();
         expect(PG_PORT).toBe(1234);
         expect(PG_USER).toBe("foo");
         expect(PG_HOST).toBe("foo");
         expect(PG_PASSWORD).toBe("foo");
         expect(PG_DATABASE).toBe("foo");
+        expect(MAX_LITER_AMOUNTS).toBe(123);
       })
       .catch((err) => {
         throw err;
