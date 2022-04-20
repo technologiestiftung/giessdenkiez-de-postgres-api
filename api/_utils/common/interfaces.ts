@@ -6,6 +6,7 @@ export interface Generic {
 }
 
 export interface RequestBody {
+  watering_id?: number;
   queryType: BodyQueryType;
   time?: string;
   tree_id?: string;

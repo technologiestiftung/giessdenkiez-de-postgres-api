@@ -80,6 +80,12 @@ const testerPOST_DELETE: (
         .mockImplementation(() => Promise.resolve("unadopted"));
       break;
     }
+    case "unwater": {
+      jest
+        .spyOn(manager, "unwaterTree")
+        .mockImplementation(() => Promise.resolve("unwatered"));
+      break;
+    }
     case "adopt":
       jest
         .spyOn(manager, "adoptTree")
@@ -121,6 +127,18 @@ const testerPOST_DELETE: (
         );
       } else {
         expect(manager.unadoptTree).not.toHaveBeenCalled();
+      }
+      break;
+    }
+    case "unwater": {
+      if (statusCode === 200) {
+        expect(manager.unwaterTree).toHaveBeenCalledWith(
+          req.body.watering_id,
+          req.body.tree_id,
+          req.body.uuid,
+        );
+      } else {
+        expect(manager.unwaterTree).not.toHaveBeenCalled();
       }
       break;
     }

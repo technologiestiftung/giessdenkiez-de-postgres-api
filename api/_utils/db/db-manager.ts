@@ -284,3 +284,18 @@ export async function unadoptTree(
     ? `tree ${tree_id} was unadopted by user ${uuid}`
     : `tree ${tree_id} or user ${uuid} don't exist`;
 }
+
+export async function unwaterTree(
+  watering_id: number,
+  tree_id: string,
+  uuid: string,
+): Promise<string> {
+  await pool.query(
+    `
+    DELETE FROM trees_watered
+    WHERE id = $1 AND tree_id = $2 AND uuid = $3;
+  `,
+    [watering_id, tree_id, uuid],
+  );
+  return `The watering with id ${watering_id} on tree ${tree_id} was deleted by user ${uuid}`;
+}

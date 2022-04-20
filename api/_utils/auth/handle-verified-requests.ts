@@ -10,6 +10,7 @@ import {
   getAdoptedTreeIdsByUserId,
   // getLastWateredTreeById,
   unadoptTree,
+  unwaterTree,
 } from "../db/db-manager";
 import { errorHandler } from "../error-handler";
 
@@ -141,7 +142,12 @@ export async function handleVerifiedRequest(
           statusCode = 400;
           throw new Error("DELETE body needs property queryType");
         }
-        const { queryType, tree_id, uuid } = request.body as RequestBody;
+        const {
+          watering_id,
+          queryType,
+          tree_id,
+          uuid,
+        } = request.body as RequestBody;
 
         switch (queryType) {
           case "unadopt":
@@ -150,6 +156,19 @@ export async function handleVerifiedRequest(
               throw new Error("DELETE body uuid and tree_id string properties");
             }
             result = await unadoptTree(tree_id, uuid);
+            break;
+          case "unwater":
+            if (
+              watering_id === undefined ||
+              tree_id === undefined ||
+              uuid === undefined
+            ) {
+              statusCode = 400;
+              throw new Error(
+                "DELETE body watering_id, uuid and tree_id string properties",
+              );
+            }
+            result = await unwaterTree(watering_id, tree_id, uuid);
             break;
           default:
             statusCode = 400;
