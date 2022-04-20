@@ -311,7 +311,7 @@ describe("db-manager", () => {
       Array [
         Object {
           "adopted": null,
-          "artBot": null,
+          "artbot": null,
           "artdtsch": null,
           "baumhoehe": null,
           "bezirk": null,
@@ -320,6 +320,7 @@ describe("db-manager", () => {
           "gattung": null,
           "gattungdeutsch": null,
           "geom": null,
+          "gmlid": null,
           "hausnr": null,
           "id": "_08be12a72n",
           "kennzeich": null,
