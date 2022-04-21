@@ -6,7 +6,7 @@ import {
 /* eslint-disable jest/no-hooks */
 import * as manager from "../db/db-manager";
 import * as micro from "micro";
-import { TreeWatered, TreeAdopted } from "../common/interfaces";
+import { TreeWatered } from "../common/interfaces";
 import { setupRequest, setupResponse } from "../../__test-utils";
 import { handleVerifiedRequest } from "./handle-verified-requests";
 import cases from "jest-in-case";
@@ -80,6 +80,12 @@ const testerPOST_DELETE: (
         .mockImplementation(() => Promise.resolve("unadopted"));
       break;
     }
+    case "unwater": {
+      jest
+        .spyOn(manager, "unwaterTree")
+        .mockImplementation(() => Promise.resolve("unwatered"));
+      break;
+    }
     case "adopt":
       jest
         .spyOn(manager, "adoptTree")
@@ -103,6 +109,7 @@ const testerPOST_DELETE: (
       if (statusCode === 201) {
         expect(manager.waterTree).toHaveBeenCalledWith({
           tree_id: req.body.tree_id,
+          timestamp: req.body.timestamp,
           uuid: req.body.uuid,
           amount: req.body.amount,
           username: req.body.username,
@@ -120,6 +127,18 @@ const testerPOST_DELETE: (
         );
       } else {
         expect(manager.unadoptTree).not.toHaveBeenCalled();
+      }
+      break;
+    }
+    case "unwater": {
+      if (statusCode === 200) {
+        expect(manager.unwaterTree).toHaveBeenCalledWith(
+          req.body.watering_id,
+          req.body.tree_id,
+          req.body.uuid,
+        );
+      } else {
+        expect(manager.unwaterTree).not.toHaveBeenCalled();
       }
       break;
     }
