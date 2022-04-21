@@ -123,7 +123,7 @@ export async function handleVerifiedRequest(
         const {
           queryType,
           tree_id,
-          time,
+          timestamp,
           uuid,
           username,
           amount,
@@ -147,7 +147,7 @@ export async function handleVerifiedRequest(
               validateString(tree_id, request.method, "tree_id");
               validateString(uuid, request.method, "uuid");
               validateString(username, request.method, "username");
-              validateString(time, request.method, "time");
+              validateString(timestamp, request.method, "timestamp");
               validateNumber(amount, request.method, "amount");
             } catch (error) {
               statusCode = 400;
@@ -159,7 +159,7 @@ export async function handleVerifiedRequest(
               username: username as string,
               amount: amount as number,
               uuid: uuid as string,
-              time: time as string,
+              timestamp: timestamp as string,
             });
             break;
           default:

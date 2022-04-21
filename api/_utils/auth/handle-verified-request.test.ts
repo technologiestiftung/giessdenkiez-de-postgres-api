@@ -109,7 +109,7 @@ const testerPOST_DELETE: (
       if (statusCode === 201) {
         expect(manager.waterTree).toHaveBeenCalledWith({
           tree_id: req.body.tree_id,
-          time: req.body.time,
+          timestamp: req.body.timestamp,
           uuid: req.body.uuid,
           amount: req.body.amount,
           username: req.body.username,

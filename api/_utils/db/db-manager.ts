@@ -244,25 +244,28 @@ export async function adoptTree(
 
 interface WaterTreeProps {
   tree_id: string;
-  time: string;
+  timestamp: string;
   uuid: string;
   amount: number;
   username: string;
 }
 export async function waterTree(opts: WaterTreeProps): Promise<string> {
-  const { tree_id, time, uuid, amount, username } = opts;
+  const { tree_id, timestamp, uuid, amount, username } = opts;
   if (amount > MAX_LITER_AMOUNTS)
     throw new Error(
       "You attempted to water a tree with more than 999l. This seems like an error. If you really did, please water the tree multiple times.",
     );
+  await pool.query(`
+    set time zone UTC;
+  `);
   await pool.query(
     `
     INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
-    VALUES ($1, $2, $3, $4, clock_timestamp(), $5)
+    VALUES ($1, $4::text, $2, $3, TO_TIMESTAMP ($4, 'YYYY-MM-DD HH24:MI:ss'), $5)
   `,
-    [tree_id, time, uuid, amount, username],
+    [tree_id, uuid, amount, timestamp, username],
   );
-  return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water at ${time}`;
+  return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
 }
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE

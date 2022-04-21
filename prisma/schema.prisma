@@ -98,11 +98,11 @@ model trees_watered {
   time      String
   uuid      String?
   amount    String?
-  timestamp DateTime? @db.Timestamp(6)
+  timestamp DateTime @db.Timestamptz()
   username  String?
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   tree_id   String
-  trees     trees     @relation(fields: [tree_id], references: [id])
+  trees     trees    @relation(fields: [tree_id], references: [id])
 
   @@index([timestamp], name: "trees_watered_timestamp")
   @@index([uuid], name: "trees_watered_uuid")
