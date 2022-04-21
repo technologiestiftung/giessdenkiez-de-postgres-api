@@ -16,8 +16,6 @@ const {
   PG_DATABASE: database,
 } = getEnvs();
 
-const MAX_LITER_AMOUNTS = 999;
-
 export const dbConfig = {
   user,
   database,
@@ -252,10 +250,6 @@ interface WaterTreeProps {
 }
 export async function waterTree(opts: WaterTreeProps): Promise<string> {
   const { tree_id, timestamp, uuid, amount, username } = opts;
-  if (amount > MAX_LITER_AMOUNTS)
-    throw new Error(
-      "You attempted to water a tree with more than 999l. This seems like an error. If you really did, please water the tree multiple times.",
-    );
   await pool.query(`
     set time zone UTC;
   `);

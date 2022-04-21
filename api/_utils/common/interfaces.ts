@@ -8,7 +8,7 @@ export interface Generic {
 export interface RequestBody {
   watering_id?: number;
   queryType: BodyQueryType;
-  timestamp?: string;
+  timestamp: string;
   tree_id?: string;
   uuid?: string;
   username?: string;
