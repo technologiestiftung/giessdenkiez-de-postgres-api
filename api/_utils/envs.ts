@@ -8,7 +8,6 @@ interface Envs {
   jwksUri: string;
   audience: string;
   issuer: string;
-  MAX_LITER_AMOUNTS: number;
 
   // auth0ClientIdManagementApi: string;
   // auth0ClientSecretManagementApi: string;
@@ -22,8 +21,6 @@ export function getEnvs(): Envs {
   const PG_PASSWORD = process.env.password ? process.env.password : "ent";
   const PG_PORT = process.env.port ? parseInt(process.env.port, 10) : 5432;
   const PG_HOST = process.env.host ? process.env.host : "localhost";
-  const MAX_LITER_AMOUNTS =
-    parseInt(process.env.MAX_LITER_AMOUNTS || "", 10) || 999;
 
   const jwksUri = process.env.jwksuri;
   // const audienceFrontend = process.env.AUTH0_AUDIENCE_FRONTEND;
@@ -40,7 +37,6 @@ export function getEnvs(): Envs {
     PG_PASSWORD,
     PG_PORT,
     PG_HOST,
-    MAX_LITER_AMOUNTS,
     audience,
     issuer,
     jwksUri,

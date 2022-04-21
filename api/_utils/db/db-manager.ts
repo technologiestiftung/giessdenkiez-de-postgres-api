@@ -14,8 +14,9 @@ const {
   PG_PASSWORD: password,
   PG_HOST: host,
   PG_DATABASE: database,
-  MAX_LITER_AMOUNTS,
 } = getEnvs();
+
+const MAX_LITER_AMOUNTS = 999;
 
 export const dbConfig = {
   user,
