@@ -235,11 +235,11 @@ export async function adoptTree(
   await pool.query(
     `
      INSERT INTO trees_adopted (tree_id, uuid)
-     VALUES ($1, $2);
+     VALUES ($1, $2) on conflict (tree_id, uuid) do nothing;
   `,
     [tree_id, uuid],
   );
-  // console.log(res);
+
   return `tree ${tree_id} was adopted by user ${uuid}`;
 }
 
