@@ -79,8 +79,13 @@ export async function handleVerifiedRequest(
               statusCode = 400;
               throw new Error("uuid is undefined");
             }
-            result = await getTreesWateredByUser(uuid as string);
-            break;
+            try {
+              result = await getTreesWateredByUser(uuid as string);
+              break;
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
           }
           case "istreeadopted":
             // private
@@ -102,8 +107,13 @@ export async function handleVerifiedRequest(
               statusCode = 400;
               throw error;
             }
-            result = await getAdoptedTreeIdsByUserId(uuid as string);
-            break;
+            try {
+              result = await getAdoptedTreeIdsByUserId(uuid as string);
+              break;
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
           }
         }
         const data = setupResponseData({
@@ -138,9 +148,13 @@ export async function handleVerifiedRequest(
               statusCode = 400;
               throw error;
             }
-
-            result = await adoptTree(tree_id as string, uuid as string);
-            break;
+            try {
+              result = await adoptTree(tree_id as string, uuid as string);
+              break;
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
 
           case "water":
             try {
@@ -153,14 +167,18 @@ export async function handleVerifiedRequest(
               statusCode = 400;
               throw error;
             }
-
-            result = await waterTree({
-              tree_id: tree_id as string,
-              username: username as string,
-              amount: amount as number,
-              uuid: uuid as string,
-              timestamp: timestamp as string,
-            });
+            try {
+              result = await waterTree({
+                tree_id: tree_id as string,
+                username: username as string,
+                amount: amount as number,
+                uuid: uuid as string,
+                timestamp: timestamp as string,
+              });
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
             break;
           default:
             statusCode = 400;
