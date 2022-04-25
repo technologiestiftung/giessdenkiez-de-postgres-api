@@ -98,7 +98,7 @@ model trees_adopted {
 
 model trees_watered {
   uuid      String?
-  amount    String?
+  amount    Decimal? @db.Decimal
   timestamp DateTime @db.Timestamptz(6)
   username  String?
   id        Int      @id @default(autoincrement())
