@@ -1,10 +1,9 @@
-INSERT INTO
-  "public"."trees" (
+INSERT INTO "public"."trees" (
     "id",
     "lat",
     "lng",
     "artdtsch",
-    "artBot",
+    "artbot",
     "gattungdeutsch",
     "gattung",
     "strname",
@@ -27,8 +26,7 @@ INSERT INTO
     "kennzeich",
     "caretaker"
   )
-VALUES
-  (
+VALUES (
     '_0001wka6l',
     '13.31083',
     '52.45717',

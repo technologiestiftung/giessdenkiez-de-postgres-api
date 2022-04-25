@@ -97,14 +97,18 @@ model trees_adopted {
 }
 
 model trees_watered {
-  time      String
   uuid      String?
-  amount    String?
-  timestamp DateTime? @db.Timestamp(6)
+  // prisma schema cant reflect check constraints
+  // see https://github.com/prisma/prisma/issues/3388
+  // you need to do this manually in the database
+  // alter table trees_adopted add UNIQUE (tree_id, uuid);
+  amount    Decimal? @db.Decimal
+  timestamp DateTime @db.Timestamptz(6)
   username  String?
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   tree_id   String
-  trees     trees     @relation(fields: [tree_id], references: [id])
+  time      String
+  trees     trees    @relation(fields: [tree_id], references: [id])
 
   @@index([timestamp], name: "trees_watered_timestamp")
   @@index([uuid], name: "trees_watered_uuid")

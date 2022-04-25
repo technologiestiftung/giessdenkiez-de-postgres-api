@@ -25,8 +25,8 @@ Array [
   Object {
     "amount": null,
     "id": Any<Number>,
-    "time": "2020-07-23 17:11:33",
-    "timestamp": null,
+    "time": Any<String>,
+    "timestamp": Any<Date>,
     "tree_id": "_08be12a72n",
     "username": null,
     "uuid": "auth0|G65iUi8WGI",
@@ -39,8 +39,8 @@ Array [
   Object {
     "amount": null,
     "id": Any<Number>,
-    "time": "1",
-    "timestamp": null,
+    "time": "2020-01-01T00:00:00.000Z",
+    "timestamp": 2020-01-01T00:00:00.000Z,
     "tree_id": "_abc",
     "username": null,
     "uuid": null,
