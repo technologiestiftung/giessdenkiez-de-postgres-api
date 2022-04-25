@@ -98,6 +98,10 @@ model trees_adopted {
 
 model trees_watered {
   uuid      String?
+  // prisma schema cant reflect check constraints
+  // see https://github.com/prisma/prisma/issues/3388
+  // you need to do this manually in the database
+  // alter table trees_adopted add UNIQUE (tree_id, uuid);
   amount    Decimal? @db.Decimal
   timestamp DateTime @db.Timestamptz(6)
   username  String?
