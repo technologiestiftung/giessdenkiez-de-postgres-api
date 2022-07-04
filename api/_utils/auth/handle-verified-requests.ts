@@ -1,3 +1,4 @@
+import { RequestMethod } from "./../common/types";
 import { VercelResponse, VercelRequest } from "@vercel/node";
 import { setupResponseData } from "../setup-response";
 import { send } from "micro";
@@ -10,8 +11,38 @@ import {
   getAdoptedTreeIdsByUserId,
   // getLastWateredTreeById,
   unadoptTree,
+  unwaterTree,
 } from "../db/db-manager";
 import { errorHandler } from "../error-handler";
+
+type ValidationType = "string" | "number";
+
+const validateType = (
+  value: unknown,
+  method: RequestMethod,
+  paramName: string,
+  type: ValidationType,
+) => {
+  if (typeof value !== type) {
+    throw new Error(`${method} body param "${paramName}" must be a ${type}`);
+  }
+};
+
+const validateString = (
+  value: unknown,
+  method: RequestMethod,
+  paramName: string,
+) => {
+  validateType(value, method, paramName, "string");
+};
+
+const validateNumber = (
+  value: unknown,
+  method: RequestMethod,
+  paramName: string,
+) => {
+  validateType(value, method, paramName, "number");
+};
 
 export async function handleVerifiedRequest(
   request: VercelRequest,
@@ -48,26 +79,41 @@ export async function handleVerifiedRequest(
               statusCode = 400;
               throw new Error("uuid is undefined");
             }
-            result = await getTreesWateredByUser(uuid);
-            break;
+            try {
+              result = await getTreesWateredByUser(uuid as string);
+              break;
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
           }
           case "istreeadopted":
             // private
-            if (id === undefined || uuid === undefined) {
+            try {
+              validateString(id, request.method, "id");
+              validateString(uuid, request.method, "uuid");
+            } catch (error) {
               statusCode = 400;
-              throw new Error("id or uuid are not defined");
+              throw error;
             }
-            result = await isTreeAdoptedByUser(uuid, id);
+            result = await isTreeAdoptedByUser(uuid as string, id as string);
             break;
           case "adopted": {
             // private
             // formerly get-adopted-trees
-            if (uuid === undefined) {
+            try {
+              validateString(uuid, request.method, "uuid");
+            } catch (error) {
               statusCode = 400;
-              throw new Error("uuid needs to be defiend");
+              throw error;
             }
-            result = await getAdoptedTreeIdsByUserId(uuid);
-            break;
+            try {
+              result = await getAdoptedTreeIdsByUserId(uuid as string);
+              break;
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
           }
         }
         const data = setupResponseData({
@@ -87,6 +133,7 @@ export async function handleVerifiedRequest(
         const {
           queryType,
           tree_id,
+          timestamp,
           uuid,
           username,
           amount,
@@ -94,29 +141,44 @@ export async function handleVerifiedRequest(
 
         switch (queryType) {
           case "adopt":
-            if (tree_id === undefined || uuid === undefined) {
+            try {
+              validateString(tree_id, request.method, "tree_id");
+              validateString(uuid, request.method, "uuid");
+            } catch (error) {
               statusCode = 400;
-              throw new Error(
-                "POST body needs uuid (string) and tree_id (string) properties",
-              );
+              throw error;
             }
-            result = await adoptTree(tree_id, uuid);
-            break;
+            try {
+              result = await adoptTree(tree_id as string, uuid as string);
+              break;
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
 
           case "water":
-            if (
-              tree_id === undefined ||
-              uuid === undefined ||
-              username === undefined ||
-              amount === undefined
-            ) {
+            try {
+              validateString(tree_id, request.method, "tree_id");
+              validateString(uuid, request.method, "uuid");
+              validateString(username, request.method, "username");
+              validateString(timestamp, request.method, "timestamp");
+              validateNumber(amount, request.method, "amount");
+            } catch (error) {
               statusCode = 400;
-              throw new Error(
-                "POST body needs uuid (string), tree_id (string), username (string) and amount (number) properties",
-              );
+              throw error;
             }
-
-            result = await waterTree({ tree_id, username, amount, uuid });
+            try {
+              result = await waterTree({
+                tree_id: tree_id as string,
+                username: username as string,
+                amount: amount as number,
+                uuid: uuid as string,
+                timestamp: timestamp as string,
+              });
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
             break;
           default:
             statusCode = 400;
@@ -133,15 +195,39 @@ export async function handleVerifiedRequest(
           statusCode = 400;
           throw new Error("DELETE body needs property queryType");
         }
-        const { queryType, tree_id, uuid } = request.body as RequestBody;
+        const {
+          watering_id,
+          queryType,
+          tree_id,
+          uuid,
+        } = request.body as RequestBody;
 
         switch (queryType) {
           case "unadopt":
-            if (tree_id === undefined || uuid === undefined) {
+            try {
+              validateString(tree_id, request.method, "tree_id");
+              validateString(uuid, request.method, "uuid");
+            } catch (error) {
               statusCode = 400;
-              throw new Error("DELETE body uuid and tree_id string properties");
+              throw error;
             }
-            result = await unadoptTree(tree_id, uuid);
+
+            result = await unadoptTree(tree_id as string, uuid as string);
+            break;
+          case "unwater":
+            try {
+              validateNumber(watering_id, request.method, "watering_id");
+              validateString(tree_id, request.method, "tree_id");
+              validateString(uuid, request.method, "uuid");
+            } catch (error) {
+              statusCode = 400;
+              throw error;
+            }
+            result = await unwaterTree(
+              watering_id as number,
+              tree_id as string,
+              uuid as string,
+            );
             break;
           default:
             statusCode = 400;
@@ -164,7 +250,9 @@ export async function handleVerifiedRequest(
       }
     }
   } catch (error) {
-    await errorHandler({ response, error, statusCode }).catch((err) => err);
+    await errorHandler({ response, error: error as Error, statusCode }).catch(
+      (err) => err,
+    );
     return;
   }
 }
