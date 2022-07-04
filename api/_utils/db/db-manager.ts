@@ -6,7 +6,6 @@ import {
   TreeReduced,
   TreeWatered,
   TreeWateredAndAdopted,
-  TreeAdopted,
 } from "../common/interfaces";
 
 const {
@@ -234,28 +233,32 @@ export async function adoptTree(
   await pool.query(
     `
      INSERT INTO trees_adopted (tree_id, uuid)
-     VALUES ($1, $2);
+     VALUES ($1, $2) on conflict (tree_id, uuid) do nothing;
   `,
     [tree_id, uuid],
   );
-  // console.log(res);
+
   return `tree ${tree_id} was adopted by user ${uuid}`;
 }
 
 interface WaterTreeProps {
   tree_id: string;
+  timestamp: string;
   uuid: string;
   amount: number;
   username: string;
 }
 export async function waterTree(opts: WaterTreeProps): Promise<string> {
-  const { tree_id, uuid, amount, username } = opts;
+  const { tree_id, timestamp, uuid, amount, username } = opts;
+  await pool.query(`
+    set time zone UTC;
+  `);
   await pool.query(
     `
     INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
-    VALUES ($1, clock_timestamp(), $2, $3, clock_timestamp(), $4)
+    VALUES ($1, $4::text, $2, $3, TO_TIMESTAMP ($4, 'YYYY-MM-DD HH24:MI:ss'), $5)
   `,
-    [tree_id, uuid, amount, username],
+    [tree_id, uuid, amount, timestamp, username],
   );
   return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
 }
@@ -283,4 +286,19 @@ export async function unadoptTree(
   return response.rowCount > 0
     ? `tree ${tree_id} was unadopted by user ${uuid}`
     : `tree ${tree_id} or user ${uuid} don't exist`;
+}
+
+export async function unwaterTree(
+  watering_id: number,
+  tree_id: string,
+  uuid: string,
+): Promise<string> {
+  await pool.query(
+    `
+    DELETE FROM trees_watered
+    WHERE id = $1 AND tree_id = $2 AND uuid = $3;
+  `,
+    [watering_id, tree_id, uuid],
+  );
+  return `The watering with id ${watering_id} on tree ${tree_id} was deleted by user ${uuid}`;
 }
