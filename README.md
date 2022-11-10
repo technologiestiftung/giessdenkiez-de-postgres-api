@@ -45,7 +45,7 @@ If you want some initial data in your DB for testing run also `npm run prisma:se
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
 
-We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. *The dangerously is here to remind you that this will change your DB without migration.* This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to 
+We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
 If you want some more data in your DB for testing run also npm `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
 
 ##### Vercel Environment Variables
@@ -126,9 +126,8 @@ You can run the project locally by running `npx vercel dev` or `npm run vercel:d
 Locally you will need Docker. Start a DB and run the tests with the following commands.
 
 ```bash
-cd test
 # omit the -d if you want to keep it in the foreground
-docker-compose -f docker-compose.test.yml up -d
+docker-compose up -d
 cd ..
 npm test
 ```
