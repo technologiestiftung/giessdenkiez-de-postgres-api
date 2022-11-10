@@ -16,8 +16,8 @@
   },
   "scripts": {
     "test": "inpyjamas-scripts test --runInBand",
-    "test:db:start": "cd test; docker-compose -f docker-compose.test.yml up -d",
-    "test:db:stop": "cd test; docker-compose down && docker kill postgresdb-integration",
+    "test:db:start": "docker-compose up -d",
+    "test:db:stop": "docker-compose down && docker kill postgresdb-integration",
     "prisma:seed:dangerously": "prisma db seed --preview-feature",
     "prisma:push:dangerously": "prisma db push --preview-feature --skip-generate",
     "prisma:pull": "prisma db pull",
@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
+    "@saithodev/semantic-release-backmerge": "2.1.2",
+    "@technologiestiftung/semantic-release-config": "1.1.0",
     "@types/jest-in-case": "1.0.5",
     "@types/jsonwebtoken": "8.5.5",
     "@types/micro": "7.3.6",
@@ -35,6 +37,7 @@
     "@types/pg-format": "1.0.2",
     "@types/uuid": "8.3.1",
     "cross-spawn": "7.0.3",
+    "docker-compose": "0.23.17",
     "is-ci": "3.0.0",
     "jest-environment-node": "27.0.6",
     "jest-in-case": "1.0.2",
@@ -42,6 +45,7 @@
     "nock": "13.1.2",
     "pg-format": "1.0.4",
     "prisma": "2.29.1",
+    "typescript": "3.9.5",
     "vercel": "23.1.2",
     "wait-on": "6.0.0"
   },

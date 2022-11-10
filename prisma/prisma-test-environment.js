@@ -4,7 +4,8 @@ const path = require("path");
 // const fs = require("fs");
 const util = require("util");
 // const spawn = require("cross-spawn");
-// const waitOn = require("wait-on");
+const waitOn = require("wait-on");
+const compose = require("docker-compose");
 const isCi = require("is-ci");
 const NodeEnvironment = require("jest-environment-node");
 const exec = util.promisify(require("child_process").exec);
@@ -28,6 +29,19 @@ class PrismaTestEnvironment extends NodeEnvironment {
   }
 
   async setup() {
+    if (isCi === false) {
+      try {
+        await compose.upAll({ cwd: process.cwd(), log: true });
+        await waitOn({
+          resources: ["tcp:127.0.0.1:5432"],
+          delay: 20000, // initial delay in ms, default 0
+        });
+        console.info("done");
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
     // spawn.sync("docker-compose", ["down"], {
     //   stdio: "inherit",
     // });
@@ -39,9 +53,7 @@ class PrismaTestEnvironment extends NodeEnvironment {
     //   },
     // );
     // Run the migrations to ensure our schema has the required structure
-    await exec(
-      `${prismaBinary} db push --preview-feature —-force-reset --accept-data-loss`,
-    );
+    await exec(`${prismaBinary} db push —-force-reset --accept-data-loss`);
     return super.setup();
   }
 
@@ -49,6 +61,13 @@ class PrismaTestEnvironment extends NodeEnvironment {
     if (isCi === true) {
       return;
     }
+    // try {
+    //   await compose.down({ cwd: process.cwd(), log: true });
+    //   console.info("done");
+    // } catch (err) {
+    //   console.error(err);
+    // }
+    // return super.teardown();
     // const exitHandler = () => {
     //   const result = spawn.sync("docker-compose", ["stop"], {
     //     stdio: "inherit",
