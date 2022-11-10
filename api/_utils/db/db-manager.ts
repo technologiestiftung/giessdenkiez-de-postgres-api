@@ -233,7 +233,7 @@ export async function adoptTree(
   await pool.query(
     `
      INSERT INTO trees_adopted (tree_id, uuid)
-     VALUES ($1, $2) on conflict (tree_id, uuid) do nothing;
+     VALUES ($1, $2) on conflict (tree_id, uuid) WHERE ((tree_id)::text = $1::text) OR ((uuid)::text= $2::text) do nothing;
   `,
     [tree_id, uuid],
   );
