@@ -1,3 +1,17 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const eslintConfig = require("@inpyjamas/scripts/eslint");
-module.exports = eslintConfig;
+module.exports = {
+	env: {
+		es2020: true,
+		node: true,
+	},
+	extends: "eslint:recommended",
+	parserOptions: {
+		ecmaVersion: 12,
+		sourceType: "module",
+	},
+	rules: {
+		indent: ["error", "tab"],
+		"linebreak-style": ["error", "unix"],
+		quotes: ["error", "double"],
+		semi: ["error", "always"],
+	},
+};

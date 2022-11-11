@@ -1,14 +1,14 @@
 {
-  "exclude": ["node_modules", "api/_utils/__tests__"],
-  "compilerOptions": {
-    "target": "ES2015",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "rootDir": "api",
-    "strict": true,
-    "typeRoots": ["node_modules/@types"],
-    "types": ["jest", "node"],
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
-  }
+	"exclude": ["node_modules", "api/_utils/__tests__"],
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"outDir": "./dist",
+		"rootDir": "api",
+		"strict": true,
+		"typeRoots": ["node_modules/@types"],
+		"types": ["jest", "node"],
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true
+	}
 }

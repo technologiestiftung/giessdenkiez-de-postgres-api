@@ -1,72 +1,51 @@
 {
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "version": "2.0.0",
-  "private": true,
-  "license": "MIT",
-  "dependencies": {
-    "@prisma/client": "2.29.1",
-    "@vercel/node": "1.12.1",
-    "core-js": "3.16.2",
-    "jsonwebtoken": "8.5.1",
-    "jwks-rsa": "1.12.3",
-    "micro": "9.3.4",
-    "pg": "8.7.1",
-    "uuid": "8.3.2",
-    "whatwg-fetch": "3.6.2"
-  },
-  "scripts": {
-    "test": "inpyjamas-scripts test --runInBand",
-    "test:db:start": "docker-compose up -d",
-    "test:db:stop": "docker-compose down && docker kill postgresdb-integration",
-    "prisma:seed:dangerously": "prisma db seed --preview-feature",
-    "prisma:push:dangerously": "prisma db push --preview-feature --skip-generate",
-    "prisma:pull": "prisma db pull",
-    "vercel:dev": "vercel dev"
-  },
-  "engines": {
-    "node": ">=10"
-  },
-  "devDependencies": {
-    "@inpyjamas/scripts": "0.1.5-alpha",
-    "@saithodev/semantic-release-backmerge": "2.1.2",
-    "@technologiestiftung/semantic-release-config": "1.1.0",
-    "@types/jest-in-case": "1.0.5",
-    "@types/jsonwebtoken": "8.5.5",
-    "@types/micro": "7.3.6",
-    "@types/pg": "8.6.1",
-    "@types/pg-format": "1.0.2",
-    "@types/uuid": "8.3.1",
-    "cross-spawn": "7.0.3",
-    "docker-compose": "0.23.17",
-    "is-ci": "3.0.0",
-    "jest-environment-node": "27.0.6",
-    "jest-in-case": "1.0.2",
-    "mock-jwks": "1.0.1",
-    "nock": "13.1.2",
-    "pg-format": "1.0.4",
-    "prisma": "2.29.1",
-    "typescript": "3.9.5",
-    "vercel": "23.1.2",
-    "wait-on": "6.0.0"
-  },
-  "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
-  "main": "api/index.ts",
-  "keywords": [
-    "giessdenkiez.de"
-  ],
-  "directories": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/technologiestiftung/giessdenkiez-de-postgres-api.git"
-  },
-  "bugs": {
-    "url": "https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues"
-  },
-  "homepage": "https://github.com/technologiestiftung/giessdenkiez-de-postgres-api#readme",
-  "author": "Fabian Morón Zirfas <fabianmoronzirfas@protonmail.ch> (https://fabianmoronzirfas.me)",
-  "contributors": [
-    "@fdnklg"
-  ]
+	"name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+	"version": "2.0.0",
+	"private": true,
+	"license": "MIT",
+	"type": "module",
+	"dependencies": {
+		"@supabase/supabase-js": "2.0.6",
+		"@vercel/node": "1.12.1",
+		"ajv": "8.11.0",
+		"uuid": "8.3.2"
+	},
+	"scripts": {
+		"test": "inpyjamas-scripts test --runInBand",
+		"vercel:dev": "vercel dev"
+	},
+	"engines": {
+		"node": ">=18"
+	},
+	"devDependencies": {
+		"@inpyjamas/scripts": "0.1.5-alpha",
+		"@saithodev/semantic-release-backmerge": "2.1.2",
+		"@technologiestiftung/semantic-release-config": "1.1.0",
+		"@types/jest-in-case": "1.0.5",
+		"@types/uuid": "8.3.1",
+		"cross-spawn": "7.0.3",
+		"is-ci": "3.0.0",
+		"jest-environment-node": "27.0.6",
+		"jest-in-case": "1.0.2",
+		"typescript": "3.9.5",
+		"vercel": "23.1.2",
+		"wait-on": "6.0.0"
+	},
+	"description": "vercel functions for the giessdenkiez.de project to interact with the supabase database",
+	"main": "api/index.ts",
+	"keywords": [
+		"giessdenkiez.de"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/technologiestiftung/giessdenkiez-de-postgres-api.git"
+	},
+	"bugs": {
+		"url": "https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues"
+	},
+	"homepage": "https://github.com/technologiestiftung/giessdenkiez-de-postgres-api#readme",
+	"author": "Fabian Morón Zirfas <hash@ff6347.email> (https://fabianmoronzirfas.me)",
+	"contributors": [
+		"@fdnklg"
+	]
 }
