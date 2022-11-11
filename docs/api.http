@@ -5,6 +5,10 @@
 
 @API_HOST = {{protocol}}://{{host}}:{{port}}
 
+@TREE_ID = _00049a79p
+@USER_ID = auth0|abc
+@USER_NAME = foo
+
 # @API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
 
 # These needs a .env in the root of the project
@@ -34,7 +38,7 @@ GET {{API_HOST}}
 
 ### GET tree by its id byid
 
-GET {{API_HOST}}/get?queryType=byid&id=id=_0001wka6l
+GET {{API_HOST}}/get?queryType=byid&id={{TREE_ID}}
 
 ### GET a list of all waterd trees
 
@@ -48,7 +52,7 @@ GET {{API_HOST}}/get?queryType=all&limit=10&offset=10
 
 ### GET list of trees from an list of ids
 
-GET {{API_HOST}}/get?queryType=treesbyids&tree_ids=id=_0001wka6l,_00043ixvp
+GET {{API_HOST}}/get?queryType=treesbyids&tree_ids={{TREE_ID}},_00096p5ra
 
 
 ### GET a list of trees with the properities
@@ -120,24 +124,24 @@ Content-Type: application/json
 
 ### GET trees that where watered by aq specific user
 
-GET {{API_HOST}}/get?queryType=wateredbyuser&uuid=auth0|abc
+GET {{API_HOST}}/get?queryType=wateredbyuser&uuid={{USER_ID}}
 Authorization: Bearer {{token}}
 
 ### GET check if a tree is adopted by a specific user
 
-{{API_HOST}}/get?queryType=istreeadopted&uuid=auth0|abc&id=_0001wka6l
+{{API_HOST}}/get?queryType=istreeadopted&uuid={{USER_ID}}&id={{TREE_ID}}
 Authorization: Bearer {{token}}
 
 
 ### GET trees that are adopted by a specific user
 
-{{API_HOST}}/get?queryType=adopted&uuid=auth0|abc
+{{API_HOST}}/get?queryType=adopted&uuid={{USER_ID}}
 Authorization: Bearer {{token}}
 
 
 ### GET the last watering of a specific tree with all the users
 
-{{API_HOST}}/get?queryType=lastwatered&id=id=_0001wka6l
+{{API_HOST}}/get?queryType=lastwatered&id={{TREE_ID}}
 
  ######  #######  #####  #######
  #     # #     # #     #    #
@@ -164,9 +168,10 @@ Content-Type: application/json
 
 {
     "queryType":"water",
-    "tree_id":"_0001wka6l",
-    "uuid": "auth0|abc",
-    "username":"foo",
+    "timestamp":"{{$datetime "YYYY-MM-DD HH:mm:ss"}}",
+    "tree_id":"{{TREE_ID}}",
+    "uuid": "{{USER_ID}}",
+    "username":"{{USER_NAME}}",
     "amount": 100
 }
 
@@ -178,8 +183,8 @@ Content-Type: application/json
 
 {
     "queryType":"adopt",
-    "tree_id":"_0001wka6l",
-    "uuid": "auth0|abc"
+    "tree_id":"{{TREE_ID}}",
+    "uuid": "{{USER_ID}}"
 }
 
  ######  ####### #       ####### ####### #######
@@ -206,6 +211,6 @@ Content-Type: application/json
 
 {
     "queryType":"unadopt",
-    "tree_id":"_0001wka6l",
-    "uuid": "bah"
+    "tree_id":"{{TREE_ID}}",
+    "uuid": "{{USER_ID}}"
 }
