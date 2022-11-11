@@ -2,71 +2,99 @@
 
 # Giess den Kiez Postgres API
 
-Build with Typescript, Prisma and Auth0.com, runs on vercel.com
+Build with Typescript connects to Supabase, runs on vercel.com.
 
-- [Giessdenkiez.de Postgres API](#giessdenkiezde-postgres-api)
+🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
+
+- [Giess den Kiez Postgres API](#giess-den-kiez-postgres-api)
 
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
-    - [Auth0](#auth0)
-    - [Environment Variables](#environment-variables)
-    - [Postgres DB with Prisma](#postgres-db-with-prisma)
+  - [Development](#development)
+  - [Deploy](#deploy)
     - [Vercel](#vercel)
-      - [Vercel Environment Variables](#vercel-environment-variables)
+    - [Vercel Environment Variables](#vercel-environment-variables)
   - [API Routes](#api-routes)
     - [API Authorization](#api-authorization)
-  - [Develop](#develop)
   - [Tests](#tests)
 
 ## Prerequisites
 
 - [Vercel.com](https://vercel.com) Account
 - [Auth0.com](https://auth0.com) Account
-- [Docker](https://www.docker.com/) PostgresDB + Postgis
+- [Supabase](https://supabase.com) Account
+- [Supabase CLI](https://supabase.com/docs/guides/cli) installed
 
 ## Setup
 
+Clone this repo and the Supabase repo
+
+```bash
+# supabase only needed for local development
+git clone git@github.com:technologiestiftung/giessdenkiez-de-supabase.git
+cd giessdenkiez-de-supabase
+npm ci
+supabase start
+# for more info on supabase check out the giessdenkiez-de-supabase repo
+git clone git@github.com:technologiestiftung/giessdenkiez-de-postgres-api.git
+cd ../giessdenkiez-de-postgres-api
+npm ci
+# create .env file and populate with ENV variables from the supabase start command
+cp .env.example .env
+# SERVICE_ROLE_KEY=...
+# SUPABASE_URL=...
+# SUPABASE_ANON_KEY=...
+
+```
+
+<!--
 ### Auth0
 
-Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values. The values for `client_id` and `client_secret` are only needed if you want to run local tests with tools like rest-client, Postman, Insomnia or Paw. This is explained later in this document.
+Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values. The values for `client_id` and `client_secret` are only needed if you want to run local tests with tools like rest-client, Postman, Insomnia or Paw. This is explained later in this document. -->
 
-### Environment Variables
+## Development
 
-Rename the file `.env.sample` to `.env` and fill in all the values you already have available.
+In your supabase repo run
 
+```bash
+supabase start
+```
+
+Rename the file `.env.sample` to `.env` and fill in all the values you get from the command.
+
+in your `giessdenkiez-de-postgres-api` repo run
+
+```bash
+npx vercel dev
+```
+
+<!--
 ### Postgres DB with Prisma
 
 Setup your Postgres + Postgis Database. Maybe on render.com, AWS or whereever you like your relational databases. Take your values for `user`, `database`, `password`, `port` and `host` and also add them to the `.env` file. Make sure that the `DATABASE_URL` environment variable in the `.env` file is set right. The pattern is `postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA`. The `DATABASE_URL` is used by [Prisma](https://www.prisma.io/) to connect to your DB. You can have several predefiend URLs in the .env file and just comment them in or out depending with which DB you want to connect.
 
 Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup and development. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
-If you want some initial data in your DB for testing run also `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
+If you want some initial data in your DB for testing run also `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight. -->
+
+## Deploy
 
 ### Vercel
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
+Deploy your application with `npx vercel`. This will create a new project on vercel.com and deploy the application.
 
-We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
-If you want some more data in your DB for testing run also npm `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
+<!-- We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
+If you want some more data in your DB for testing run also npm `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight. -->
 
-##### Vercel Environment Variables
+### Vercel Environment Variables
 
-Add all your environment variables to the Vercel project by running the commands below. The cli will prompt for the values as input and lets you select if they should be added to `development`, `preview` and `production`. For local development you can overwrite these value with an `.env` file in the root of your project. It is wise to have one remote Postgres DB for production and one for preview. The preview will then be used in deployment previews on GitHub. You can connect your vercel project with your GitHub repository on the vercel backend.
+Add all your environment variables to the Vercel project by running the commands below. The cli will prompt for the values as input and lets you select if they should be added to `development`, `preview` and `production`. For local development you can overwrite these value with an `.env` file in the root of your project. It is wise to have one Supabase project for production and one for preview. The preview will then be used in deployment previews on GitHub. You can connect your vercel project with your GitHub repository on the vercel backend.
 
 ```bash
-# the user for the postgres db
-vercel env add plain user
-# the database name
-vercel env add plain database
-# the database password
-vercel env add plain password
-# the host of the db, aws? render.com? localhost?
-vercel env add plain host
-# defaults to 5432
-vercel env add plain port
-# below are all taken from auth0.com
-vercel env add plain jwksuri
-vercel env add plain audience
-vercel env add plain issuer
+# the master key for supabase
+vercel env add SUPABASE_SERVICE_ROLE_KEY
+# the url to your supabase project
+vercel env add SUPABASE_URL
 ```
 
 To let these variables take effect you need to deploy your application once more.
@@ -75,7 +103,7 @@ To let these variables take effect you need to deploy your application once more
 vercel --prod
 ```
 
-Congrats. Your API should be up and running. You might need to request tokens for the your endpoints that need authentification. See the auth0.com docs for more info.
+<!-- Congrats. Your API should be up and running. You might need to request tokens for the your endpoints that need authentification. See the auth0.com docs for more info. -->
 
 ## API Routes
 
@@ -115,23 +143,14 @@ curl --request POST \
 
 Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
-## Develop
-
-Start your local postgres DB using docker-compose. `docker-compose up`. Provision it by running `npm run prisma:push:dangerously`.
-
-You can run the project locally by running `npx vercel dev` or `npm run vercel:dev` in the root of your project. Make sure your values in the `.env` match the settings for the DB in the `docker-compose.yml` file.
-
 ## Tests
 
-Locally you will need Docker. Start a DB and run the tests with the following commands.
+Locally you will need supabase running
 
 ```bash
-# omit the -d if you want to keep it in the foreground
-docker-compose up -d
-cd ..
+cd giessdenkiez-de-supabase
+supabase start
+
+cd giessdenkiez-de-postgres-api
 npm test
 ```
-
-On CI the postgres DB is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
-
-<!-- redeploy dev 2021-03-15 16:00:51 -->
