@@ -24,7 +24,7 @@
     "vercel:dev": "vercel dev"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
