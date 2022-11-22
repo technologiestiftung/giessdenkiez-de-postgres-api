@@ -4,16 +4,24 @@ import setHeaders from "../_utils/set-headers";
 import { supabase } from "../_utils/supabase";
 import { adoptSchema, validate, waterSchema } from "../_utils/validation";
 import { Database } from "../_types/database";
+import { verifyRequest } from "../_utils/auth/verify";
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
 
-type TreesAdopted = Database["public"]["Tables"]["trees_adopted"]["Insert"];
+// type TreesAdopted = Database["public"]["Tables"]["trees_adopted"]["Insert"];
 type TreesWatered = Database["public"]["Tables"]["trees_watered"]["Insert"];
 export default async function (
 	request: VercelRequest,
-	response: VercelResponse
+	response: VercelResponse,
 ) {
 	setHeaders(response, "POST");
+	if (request.method === "OPTIONS") {
+		return response.status(200).end();
+	}
+	const authorized = await verifyRequest(request);
+	if (!authorized) {
+		return response.status(401).json({ error: "unauthorized" });
+	}
 	const { type } = request.query;
 	if (Array.isArray(type)) {
 		return response.status(400).json({ error: "type needs to be a string" });
@@ -27,6 +35,7 @@ export default async function (
 		}
 		// TODO: Test what happens on conflict
 		// https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues/159
+
 		case "adopt": {
 			const isBodyValid = validate(request.body, adoptSchema);
 			if (!isBodyValid) {
@@ -40,7 +49,7 @@ export default async function (
 						tree_id,
 						uuid,
 					},
-					{ onConflict: "user_id" }
+					{ onConflict: "user_id" },
 				)
 				.select();
 			if (error) {

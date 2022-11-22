@@ -20,9 +20,12 @@ import { supabase } from "../_utils/supabase";
 // req.query.name -> "lee"
 export default async function (
 	request: VercelRequest,
-	response: VercelResponse
+	response: VercelResponse,
 ) {
 	setHeaders(response, "GET");
+	if (request.method === "OPTIONS") {
+		return response.status(200).end();
+	}
 	const { type } = request.query;
 	if (Array.isArray(type)) {
 		return response.status(400).json({ error: "type needs to be a string" });

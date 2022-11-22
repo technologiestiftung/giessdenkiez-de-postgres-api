@@ -1,309 +1,309 @@
 import {
-  VerifiedReqCaseOptionPOST,
-  VerifiedReqCaseOptionGET,
-  VerifiedReqCaseOption,
+	VerifiedReqCaseOptionPOST,
+	VerifiedReqCaseOptionGET,
+	VerifiedReqCaseOption,
 } from "../_utils/common/interfaces";
 
 function setupNames(
-  collection: VerifiedReqCaseOptionPOST[],
+	collection: VerifiedReqCaseOptionPOST[],
 ): VerifiedReqCaseOptionPOST[] {
-  for (const item of collection) {
-    item.name = ` ${item.method} request, with queryType "${
-      item.queryType
-    }", with body:"${JSON.stringify(item.body)}" and answer with ${
-      item.statusCode
-    }`;
-  }
-  return collection;
+	for (const item of collection) {
+		item.name = ` ${item.method} request, with queryType "${
+			item.queryType
+		}", with body:"${JSON.stringify(item.body)}" and answer with ${
+			item.statusCode
+		}`;
+	}
+	return collection;
 }
 
 function setupNamesGET(
-  collection: VerifiedReqCaseOptionGET[],
+	collection: VerifiedReqCaseOptionGET[],
 ): VerifiedReqCaseOptionGET[] {
-  for (const item of collection) {
-    item.name = ` ${item.queryType} with query:"${JSON.stringify(
-      item.query,
-    )}" and answer with ${item.statusCode}`;
-  }
-  return collection;
+	for (const item of collection) {
+		item.name = ` ${item.queryType} with query:"${JSON.stringify(
+			item.query,
+		)}" and answer with ${item.statusCode}`;
+	}
+	return collection;
 }
 
 export const caseCollectionGET: VerifiedReqCaseOptionGET[] = setupNamesGET([
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "istreeadopted",
-    query: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "istreeadopted",
-    query: { id: "_abc" },
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "istreeadopted",
-    query: { uuid: "auth0|123" },
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "istreeadopted",
-    query: { id: "_abc", uuid: "auth0|123" },
-    data: undefined,
-    statusCode: 200,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "wateredbyuser",
-    query: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "wateredbyuser",
-    query: { uuid: "auth0|123" },
-    data: undefined,
-    statusCode: 200,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "adopted",
-    query: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "GET",
-    queryType: "adopted",
-    query: { uuid: "auth0|123" },
-    data: undefined,
-    statusCode: 200,
-  },
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "istreeadopted",
+		query: {},
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "istreeadopted",
+		query: { id: "_abc" },
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "istreeadopted",
+		query: { uuid: "auth0|123" },
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "istreeadopted",
+		query: { id: "_abc", uuid: "auth0|123" },
+		data: undefined,
+		statusCode: 200,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "wateredbyuser",
+		query: {},
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "wateredbyuser",
+		query: { uuid: "auth0|123" },
+		data: undefined,
+		statusCode: 200,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "adopted",
+		query: {},
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "GET",
+		queryType: "adopted",
+		query: { uuid: "auth0|123" },
+		data: undefined,
+		statusCode: 200,
+	},
 ]);
 
 export const caseCollectionPATCH: VerifiedReqCaseOption[] = [
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "PATCH",
-    queryType: "unknown",
-    // body: {},
-    data: {},
-    statusCode: 400,
-  },
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "PATCH",
+		queryType: "unknown",
+		// body: {},
+		data: {},
+		statusCode: 400,
+	},
 ];
 
 export const caseCollectionDELETE: VerifiedReqCaseOptionPOST[] = setupNames([
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: "unknown",
-    body: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: undefined,
-    body: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: "unadopt",
-    body: undefined,
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: "unadopt",
-    body: {},
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: "unadopt",
-    body: { tree_id: "_abc" },
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: "unadopt",
-    body: { uuid: "auth0|123" },
-    data: {},
-    statusCode: 400,
-  },
-  {
-    name: 'queryType with "query" and answer with statusCode',
-    method: "DELETE",
-    queryType: "unadopt",
-    body: { tree_id: "_abc", uuid: "auth0|123" },
-    data: undefined,
-    statusCode: 200,
-  },
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: "unknown",
+		body: {},
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: undefined,
+		body: {},
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: "unadopt",
+		body: undefined,
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: "unadopt",
+		body: {},
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: "unadopt",
+		body: { tree_id: "_abc" },
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: "unadopt",
+		body: { uuid: "auth0|123" },
+		data: {},
+		statusCode: 400,
+	},
+	{
+		name: 'queryType with "query" and answer with statusCode',
+		method: "DELETE",
+		queryType: "unadopt",
+		body: { tree_id: "_abc", uuid: "auth0|123" },
+		data: undefined,
+		statusCode: 200,
+	},
 ]);
 
 export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
-  ...caseCollectionDELETE,
+	...caseCollectionDELETE,
 
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "foo",
-    body: {},
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: undefined,
-    body: undefined,
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "adopt",
-    body: undefined,
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "adopt",
-    body: {},
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "adopt",
-    body: { uuid: "auth0|123" },
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "adopt",
-    body: { tree_id: "_abc" },
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "adopt",
-    body: { uuid: "auth0|123", tree_id: "_abc" },
-    statusCode: 201,
-    data: undefined,
-    method: "POST",
-  },
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "foo",
+		body: {},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: undefined,
+		body: undefined,
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "adopt",
+		body: undefined,
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "adopt",
+		body: {},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "adopt",
+		body: { uuid: "auth0|123" },
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "adopt",
+		body: { tree_id: "_abc" },
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "adopt",
+		body: { uuid: "auth0|123", tree_id: "_abc" },
+		statusCode: 201,
+		data: undefined,
+		method: "POST",
+	},
 
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "water",
-    body: {},
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "water",
-    body: {
-      tree_id: "_abc",
-      time: "2022-04-19T00:00:00Z",
-      timestamp: "2022-04-19T00:00:00Z",
-      amount: 100,
-      uuid: "auth0|123",
-    },
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "water",
-    body: {
-      username: "foo",
-      time: "2022-04-19T00:00:00Z",
-      timestamp: "2022-04-19T00:00:00Z",
-      amount: 100,
-      uuid: "auth0|123",
-    },
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "water",
-    body: {
-      username: "foo",
-      time: "2022-04-19T00:00:00Z",
-      timestamp: "2022-04-19T00:00:00Z",
-      tree_id: "_abc",
-      uuid: "auth0|123",
-    },
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "water",
-    body: {
-      username: "foo",
-      time: "2022-04-19T00:00:00Z",
-      timestamp: "2022-04-19T00:00:00Z",
-      tree_id: "_abc",
-      amount: 100,
-    },
-    statusCode: 400,
-    data: {},
-    method: "POST",
-  },
-  {
-    name: 'queryType with "body" and answer with statusCode',
-    queryType: "water",
-    body: {
-      username: "foo",
-      time: "2022-04-19T00:00:00Z",
-      timestamp: "2022-04-19T00:00:00Z",
-      tree_id: "_abc",
-      amount: 100,
-      uuid: "auth0|123",
-    },
-    statusCode: 201,
-    data: undefined,
-    method: "POST",
-  },
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "water",
+		body: {},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "water",
+		body: {
+			tree_id: "_abc",
+			time: "2022-04-19T00:00:00Z",
+			timestamp: "2022-04-19T00:00:00Z",
+			amount: 100,
+			uuid: "auth0|123",
+		},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "water",
+		body: {
+			username: "foo",
+			time: "2022-04-19T00:00:00Z",
+			timestamp: "2022-04-19T00:00:00Z",
+			amount: 100,
+			uuid: "auth0|123",
+		},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "water",
+		body: {
+			username: "foo",
+			time: "2022-04-19T00:00:00Z",
+			timestamp: "2022-04-19T00:00:00Z",
+			tree_id: "_abc",
+			uuid: "auth0|123",
+		},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "water",
+		body: {
+			username: "foo",
+			time: "2022-04-19T00:00:00Z",
+			timestamp: "2022-04-19T00:00:00Z",
+			tree_id: "_abc",
+			amount: 100,
+		},
+		statusCode: 400,
+		data: {},
+		method: "POST",
+	},
+	{
+		name: 'queryType with "body" and answer with statusCode',
+		queryType: "water",
+		body: {
+			username: "foo",
+			time: "2022-04-19T00:00:00Z",
+			timestamp: "2022-04-19T00:00:00Z",
+			tree_id: "_abc",
+			amount: 100,
+			uuid: "auth0|123",
+		},
+		statusCode: 201,
+		data: undefined,
+		method: "POST",
+	},
 ]);
 
 ///////////////////////////// eslint-disable-next-line

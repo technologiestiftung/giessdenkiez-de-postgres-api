@@ -1,221 +1,255 @@
 import pg from "pg";
 import { getEnvs } from "../envs";
 import {
-  Tree,
-  AllTreesFiltered,
-  TreeReduced,
-  TreeWatered,
-  TreeWateredAndAdopted,
+	Tree,
+	AllTreesFiltered,
+	TreeReduced,
+	TreeWatered,
+	TreeWateredAndAdopted,
 } from "../common/interfaces";
 
 const {
-  PG_PORT: port,
-  PG_USER: user,
-  PG_PASSWORD: password,
-  PG_HOST: host,
-  PG_DATABASE: database,
+	PG_PORT: port,
+	PG_USER: user,
+	PG_PASSWORD: password,
+	PG_HOST: host,
+	PG_DATABASE: database,
 } = getEnvs();
 
 export const dbConfig = {
-  user,
-  database,
-  password,
-  port,
-  host,
+	user,
+	database,
+	password,
+	port,
+	host,
 };
 
 // TODO: [GDK-137] Use connectionString instead of user,db,pw,port,host
 // Would also work with Prisma
 const pool = new pg.Pool(dbConfig);
 
+/**
+ * @deprecated
+ */
 export async function getTreeById(id: string): Promise<Tree[]> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT *
     FROM trees
     WHERE trees.id = $1`,
-    [id],
-  );
-  return result.rows;
+		[id]
+	);
+	return result.rows;
 }
 
+/**
+ * @deprecated
+ */
 export async function getAdoptedTreeIdsByUserId(
-  uuid: string,
+	uuid: string
 ): Promise<string[]> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
       SELECT tree_id
       FROM trees_adopted
       WHERE trees_adopted.uuid = $1;
   `,
-    [uuid],
-  );
-  const data = result.rows.map((item) => item.tree_id);
-  return data;
+		[uuid]
+	);
+	const data = result.rows.map((item) => item.tree_id);
+	return data;
 }
 
+/**
+ * @deprecated
+ */
 export async function getWateredTrees(): Promise<{ watered: string[] }> {
-  const result = await pool.query(`
+	const result = await pool.query(`
   SELECT tree_id
   FROM trees_watered
 `);
-  const data = {
-    watered: result.rows.map((item) => item.tree_id),
-  };
-  return data;
+	const data = {
+		watered: result.rows.map((item) => item.tree_id),
+	};
+	return data;
 }
 
+/**
+ * @deprecated
+ */
 export async function getTreesWateredAndAdopted(): Promise<
-  TreeWateredAndAdopted[]
+	TreeWateredAndAdopted[]
 > {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     WITH trees AS (SELECT tree_id, 1 AS adopted, 0 AS watered FROM trees_adopted
     UNION ALL
     SELECT tree_id, 0 AS adopted, 1 AS watered FROM trees_watered WHERE trees_watered.timestamp >= NOW() - INTERVAL '30 days') SELECT tree_id, SUM(adopted) AS adopted, SUM(watered) AS watered FROM trees GROUP BY tree_id;
     `,
-    [],
-  );
-  return result.rows;
+		[]
+	);
+	return result.rows;
 }
+
+/**
+ * @deprecated
+ */
 export async function getTreesWateredByUser(
-  uuid: string,
+	uuid: string
 ): Promise<TreeWatered[]> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT *
     FROM trees_watered
     WHERE trees_watered.uuid = $1`,
-    [uuid],
-  );
-  return result.rows;
+		[uuid]
+	);
+	return result.rows;
 }
+/**
+ * @deprecated
+ */
 export async function getTreesByAge(
-  start: string,
-  end: string,
+	start: string,
+	end: string
 ): Promise<string[]> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT id
     FROM trees
     WHERE trees.pflanzjahr >= $1
     AND trees.pflanzjahr <= $2;`,
-    [parseInt(start, 10), parseInt(end, 10)],
-  );
-  const data = result.rows.map((row) => row.id);
-  return data;
+		[parseInt(start, 10), parseInt(end, 10)]
+	);
+	const data = result.rows.map((row) => row.id);
+	return data;
 }
 
+/**
+ * @deprecated
+ */
 export async function isTreeAdoptedByUser(
-  uuid: string,
-  tree_id: string,
+	uuid: string,
+	tree_id: string
 ): Promise<boolean> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT *
     FROM trees_adopted
     WHERE trees_adopted.uuid = $1 AND trees_adopted.tree_id = $2
     `,
-    [uuid, tree_id],
-  );
-  return result.rows.length > 0 ? true : false;
+		[uuid, tree_id]
+	);
+	return result.rows.length > 0 ? true : false;
 }
+/**
+ * @deprecated
+ */
 export async function countTreesByAge(
-  start: string,
-  end: string,
+	start: string,
+	end: string
 ): Promise<{ count: number }> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT COUNT(*)
     FROM trees
     WHERE trees.pflanzjahr > $1
     AND trees.pflanzjahr < $2;`,
-    [parseInt(start, 10), parseInt(end, 10)],
-  );
+		[parseInt(start, 10), parseInt(end, 10)]
+	);
 
-  const data = parseInt(result.rows[0].count, 10);
-  return { count: data };
+	const data = parseInt(result.rows[0].count, 10);
+	return { count: data };
 }
 
+/**
+ * @deprecated
+ */
 export async function getLastWateredTreeById(
-  id: string,
+	id: string
 ): Promise<TreeWatered[]> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT *
     FROM trees_watered
     WHERE trees_watered.tree_id = $1
     ORDER BY timestamp ASC`,
-    [id],
-  );
-  return result.rows;
+		[id]
+	);
+	return result.rows;
 }
 
+/**
+ * @deprecated
+ */
 export async function getTreesByIds(tree_ids: string): Promise<Tree[]> {
-  // this is done in the frontend m(
+	// this is done in the frontend m(
 
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT * FROM trees
     WHERE id = ANY ($1);
   `,
-    [`{${tree_ids}}`],
-  );
-  return result.rows;
+		[`{${tree_ids}}`]
+	);
+	return result.rows;
 }
+/**
+ * @deprecated
+ */
 export async function getAllTrees(
-  offset: string,
-  limit: string,
+	offset: string,
+	limit: string
 ): Promise<AllTreesFiltered> {
-  const result = await pool.query(
-    `
+	const result = await pool.query(
+		`
     SELECT (id, lat, lng, radolan_sum)
     FROM trees
     ORDER BY id ASC
     OFFSET $1 LIMIT $2;
   `,
-    [offset, limit],
-  );
+		[offset, limit]
+	);
 
-  const watered: TreeReduced[] = result.rows.map((item) => {
-    const regExId = /(?<=\()(.*?)(?=,)/;
+	const watered: TreeReduced[] = result.rows.map((item) => {
+		const regExId = /(?<=\()(.*?)(?=,)/;
 
-    const regExLat = /(?<=,)(.*?)(?=,)/;
+		const regExLat = /(?<=,)(.*?)(?=,)/;
 
-    const regExLng = /([^,]*,){2}([^,]+)./;
+		const regExLng = /([^,]*,){2}([^,]+)./;
 
-    const regExSum = /([^,]*,){3}([^)]+)./;
+		const regExSum = /([^,]*,){3}([^)]+)./;
 
-    const id = item.row.match(regExId);
+		const id = item.row.match(regExId);
 
-    const lat = item.row.match(regExLat);
+		const lat = item.row.match(regExLat);
 
-    const lng = item.row.match(regExLng);
+		const lng = item.row.match(regExLng);
 
-    const sum = item.row.match(regExSum);
+		const sum = item.row.match(regExSum);
 
-    // This below is dirty work
-    if (sum) {
-      return [
-        id[0] as string,
-        lat ? parseFloat(lat[0]) : 0,
-        lng ? parseFloat(lng[2]) : 0,
-        sum ? parseFloat(sum[2]) : 0,
-      ];
-    } else {
-      return [
-        id[0] as string,
-        lat ? parseFloat(lat[0]) : 0,
-        lng ? parseFloat(lng[2]) : 0,
-        0,
-      ];
-    }
-  });
+		// This below is dirty work
+		if (sum) {
+			return [
+				id[0] as string,
+				lat ? parseFloat(lat[0]) : 0,
+				lng ? parseFloat(lng[2]) : 0,
+				sum ? parseFloat(sum[2]) : 0,
+			];
+		} else {
+			return [
+				id[0] as string,
+				lat ? parseFloat(lat[0]) : 0,
+				lng ? parseFloat(lng[2]) : 0,
+				0,
+			];
+		}
+	});
 
-  const data = {
-    watered,
-  };
-  return data;
+	const data = {
+		watered,
+	};
+	return data;
 }
 
 // POST POST POST POST POST POST POST POST POST
@@ -223,44 +257,46 @@ export async function getAllTrees(
 // POST POST POST POST POST POST POST POST POST POST POST
 
 /**
- * Adopts a tree
- * @todo Check if tree actually exists
+ * @deprecated
  */
 export async function adoptTree(
-  tree_id: string,
-  uuid: string,
+	tree_id: string,
+	uuid: string
 ): Promise<string> {
-  await pool.query(
-    `
+	await pool.query(
+		`
      INSERT INTO trees_adopted (tree_id, uuid)
      VALUES ($1, $2) on conflict (tree_id, uuid) do nothing;
   `,
-    [tree_id, uuid],
-  );
+		[tree_id, uuid]
+	);
 
-  return `tree ${tree_id} was adopted by user ${uuid}`;
+	return `tree ${tree_id} was adopted by user ${uuid}`;
 }
 
 interface WaterTreeProps {
-  tree_id: string;
-  timestamp: string;
-  uuid: string;
-  amount: number;
-  username: string;
+	tree_id: string;
+	timestamp: string;
+	uuid: string;
+	amount: number;
+	username: string;
 }
+/**
+ * @deprecated
+ */
 export async function waterTree(opts: WaterTreeProps): Promise<string> {
-  const { tree_id, timestamp, uuid, amount, username } = opts;
-  await pool.query(`
+	const { tree_id, timestamp, uuid, amount, username } = opts;
+	await pool.query(`
     set time zone UTC;
   `);
-  await pool.query(
-    `
+	await pool.query(
+		`
     INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
     VALUES ($1, $4::text, $2, $3, TO_TIMESTAMP ($4, 'YYYY-MM-DD HH24:MI:ss'), $5)
   `,
-    [tree_id, uuid, amount, timestamp, username],
-  );
-  return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
+		[tree_id, uuid, amount, timestamp, username]
+	);
+	return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
 }
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
@@ -268,37 +304,39 @@ export async function waterTree(opts: WaterTreeProps): Promise<string> {
 // DELETE DELETE DELETE DELETE DELETE DELETE DELETE DELETE
 
 /**
- * Unadopt a tree
- *
+ * @deprecated
  */
 export async function unadoptTree(
-  tree_id: string,
-  uuid: string,
+	tree_id: string,
+	uuid: string
 ): Promise<string> {
-  const response = await pool.query(
-    `
+	const response = await pool.query(
+		`
     DELETE FROM trees_adopted
     WHERE tree_id = $1 AND uuid = $2;
   `,
-    [tree_id, uuid],
-  );
+		[tree_id, uuid]
+	);
 
-  return response.rowCount > 0
-    ? `tree ${tree_id} was unadopted by user ${uuid}`
-    : `tree ${tree_id} or user ${uuid} don't exist`;
+	return response.rowCount > 0
+		? `tree ${tree_id} was unadopted by user ${uuid}`
+		: `tree ${tree_id} or user ${uuid} don't exist`;
 }
 
+/**
+ * @deprecated
+ */
 export async function unwaterTree(
-  watering_id: number,
-  tree_id: string,
-  uuid: string,
+	watering_id: number,
+	tree_id: string,
+	uuid: string
 ): Promise<string> {
-  await pool.query(
-    `
+	await pool.query(
+		`
     DELETE FROM trees_watered
     WHERE id = $1 AND tree_id = $2 AND uuid = $3;
   `,
-    [watering_id, tree_id, uuid],
-  );
-  return `The watering with id ${watering_id} on tree ${tree_id} was deleted by user ${uuid}`;
+		[watering_id, tree_id, uuid]
+	);
+	return `The watering with id ${watering_id} on tree ${tree_id} was deleted by user ${uuid}`;
 }

@@ -1,44 +1,44 @@
 interface Envs {
-  // [key: string]: string;
-  PG_USER: string;
-  PG_DATABASE: string;
-  PG_PASSWORD: string;
-  PG_PORT: number;
-  PG_HOST: string;
-  jwksUri: string;
-  audience: string;
-  issuer: string;
+	// [key: string]: string;
+	SUPABASE_URL: string;
+	SUPABASE_ANON_KEY: string;
+	SUPABASE_SERVICE_ROLE_KEY: string;
 
-  // auth0ClientIdManagementApi: string;
-  // auth0ClientSecretManagementApi: string;
-  // auth0ManagementApiAudience: string;
-  // auth0TokenApiUrlManagementApi: string;
-  // auth0ManagementApiUrl: string;
+	JWKS_URI: string;
+	AUDIENCE: string;
+	ISSUER: string;
+
+	// auth0ClientIdManagementApi: string;
+	// auth0ClientSecretManagementApi: string;
+	// auth0ManagementApiAudience: string;
+	// auth0TokenApiUrlManagementApi: string;
+	// auth0ManagementApiUrl: string;
 }
 export function getEnvs(): Envs {
-  const PG_USER = process.env.user ? process.env.user : "fangorn";
-  const PG_DATABASE = process.env.database ? process.env.database : "trees";
-  const PG_PASSWORD = process.env.password ? process.env.password : "ent";
-  const PG_PORT = process.env.port ? parseInt(process.env.port, 10) : 5432;
-  const PG_HOST = process.env.host ? process.env.host : "localhost";
+	const SUPABASE_URL = process.env.SUPABASE_URL;
+	const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
+	const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-  const jwksUri = process.env.jwksuri;
-  // const audienceFrontend = process.env.AUTH0_AUDIENCE_FRONTEND;
-  const audience = process.env.audience;
-  const issuer = process.env.issuer;
+	const JWKS_URI = process.env.jwksuri;
+	const AUDIENCE = process.env.audience;
+	const ISSUER = process.env.issuer;
 
-  if (!jwksUri) throw new Error("Could not find jwksUri");
-  if (!audience) throw new Error("Could not find audience");
-  if (!issuer) throw new Error("Could not find issuer");
+	if (SUPABASE_URL === undefined) throw new Error("SUPABASE_URL is undefined");
+	if (SUPABASE_ANON_KEY === undefined)
+		throw new Error("SUPABASE_ANON_KEY is undefined");
+	if (SUPABASE_SERVICE_ROLE_KEY === undefined)
+		throw new Error("SUPABASE_SERVICE_ROLE_KEY is undefined");
 
-  return {
-    PG_USER,
-    PG_DATABASE,
-    PG_PASSWORD,
-    PG_PORT,
-    PG_HOST,
-    audience,
-    issuer,
-    jwksUri,
-  };
+	if (!JWKS_URI) throw new Error("Could not find jwksUri");
+	if (!AUDIENCE) throw new Error("Could not find audience");
+	if (!ISSUER) throw new Error("Could not find issuer");
+
+	return {
+		SUPABASE_URL,
+		SUPABASE_ANON_KEY,
+		SUPABASE_SERVICE_ROLE_KEY,
+		AUDIENCE,
+		ISSUER,
+		JWKS_URI,
+	};
 }
