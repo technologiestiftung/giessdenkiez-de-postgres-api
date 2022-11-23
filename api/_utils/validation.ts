@@ -2,7 +2,16 @@ import Ajv from "ajv";
 
 const ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
 
-export const schema = {
+interface AjvSchema {
+	type: string;
+	properties: {
+		[key: string]: unknown;
+	};
+	required: string[];
+	additionalProperties: boolean;
+}
+
+export const testSchema: AjvSchema = {
 	type: "object",
 	properties: {
 		foo: { type: "integer" },
@@ -12,7 +21,7 @@ export const schema = {
 	additionalProperties: false,
 };
 
-export const waterSchema = {
+export const waterSchema: AjvSchema = {
 	type: "object",
 	properties: {
 		uuid: { type: "string" },
@@ -25,7 +34,7 @@ export const waterSchema = {
 	additionalProperties: false,
 };
 
-export const adoptSchema = {
+export const adoptSchema: AjvSchema = {
 	type: "object",
 	properties: {
 		uuid: { type: "string" },
@@ -37,7 +46,7 @@ export const adoptSchema = {
 
 export { ajv };
 
-export const validate = (body: any, schema: any) => {
+export const validate = (body: Record<string, unknown>, schema: AjvSchema) => {
 	const validate = ajv.compile(schema);
 	const valid = validate(body);
 
