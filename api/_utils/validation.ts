@@ -2,7 +2,7 @@ import Ajv from "ajv";
 
 const ajv = new Ajv(); // options can be passed, e.g. {allErrors: true}
 
-interface AjvSchema {
+export interface AjvSchema {
 	type: string;
 	properties: {
 		[key: string]: unknown;
@@ -44,6 +44,27 @@ export const adoptSchema: AjvSchema = {
 	additionalProperties: false,
 };
 
+export const unadoptSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		uuid: { type: "string" },
+		tree_id: { type: "string" },
+	},
+	required: ["uuid", "tree_id"],
+	additionalProperties: false,
+};
+
+export const unwaterSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		watering_id: { type: "number" },
+		uuid: { type: "string" },
+		tree_id: { type: "string" },
+	},
+	required: ["uuid", "tree_id"],
+	additionalProperties: false,
+};
+
 export { ajv };
 
 export const validate = (body: Record<string, unknown>, schema: AjvSchema) => {
@@ -51,7 +72,7 @@ export const validate = (body: Record<string, unknown>, schema: AjvSchema) => {
 	const valid = validate(body);
 
 	if (!valid) {
-		return false;
+		return [false, validate.errors];
 	}
-	return true;
+	return [true, null];
 };
