@@ -50,7 +50,6 @@ export default async function (
 		default: {
 			return response.status(400).json({ error: "invalid query type" });
 		}
-		// TODO: Test what happens on conflict
 		// https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues/159
 
 		case "adopt": {
@@ -62,7 +61,8 @@ export default async function (
 						tree_id,
 						uuid,
 					},
-					{ onConflict: "user_id" },
+
+					{ onConflict: "uuid,tree_id" },
 				)
 				.select();
 			if (error) {

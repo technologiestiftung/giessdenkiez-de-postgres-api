@@ -5,6 +5,10 @@ import { requestTestToken } from "../__test-utils/req-test-token.js";
 process.env.NODE_ENV = "test";
 import { config } from "dotenv";
 import { supabase } from "../_utils/supabase.js";
+import {
+	truncateTreesAdopted,
+	truncateTreesWaterd,
+} from "../__test-utils/postgres.js";
 const envs = config({ path: path.resolve(process.cwd(), ".env") });
 
 const body = {
@@ -38,7 +42,6 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify(body),
 		});
-		console.log(response.status);
 		assert(response.status === 400);
 	});
 
@@ -54,7 +57,21 @@ describe("api/post/[type]", () => {
 		assert(response.status === 400);
 	});
 
+	test("should make a request to post/adopt and fail due wrong body", async () => {
+		const token = await requestTestToken();
+		const response = await fetch("http://localhost:3000/post/adopt", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({}),
+		});
+		assert(response.status === 400);
+	});
+
 	test("should make a request to post/water and succeed", async () => {
+		await truncateTreesWaterd();
 		const token = await requestTestToken();
 		const { data: trees, error } = await supabase.from("trees").select("*");
 		if (error) {
@@ -85,16 +102,44 @@ describe("api/post/[type]", () => {
 		assert(response.status === 201);
 	});
 
-	test("should make a request to post/adopt and fail due wrong body", async () => {
+	test("should not create double adoption in trees_adopted", async () => {
+		await truncateTreesAdopted();
 		const token = await requestTestToken();
+		const { data: trees, error: treeError } = await supabase
+			.from("trees")
+			.select("id")
+			.limit(1);
+		assert(treeError === null);
+		assert(trees.length > 0);
+		assert(trees !== null);
+		const treeId = trees[0].id;
 		const response = await fetch("http://localhost:3000/post/adopt", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
 			},
-			body: JSON.stringify({}),
+			body: JSON.stringify({ tree_id: treeId, uuid: "mememe" }),
 		});
-		assert(response.status === 400);
+		assert(response.status === 201);
+		const response2 = await fetch("http://localhost:3000/post/adopt", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${token}`,
+			},
+			body: JSON.stringify({ tree_id: treeId, uuid: "mememe" }),
+		});
+		const json = await response2.json();
+		console.log(json);
+		console.log(response2.status);
+		assert(response2.status === 201);
+
+		const { data: treesAdopted, error: treesAdoptedError } = await supabase
+			.from("trees_adopted")
+			.select("*")
+			.eq("uuid", "mememe");
+		assert(treesAdoptedError === null);
+		assert(treesAdopted.length === 1);
 	});
 });

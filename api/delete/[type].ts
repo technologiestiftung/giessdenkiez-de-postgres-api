@@ -68,7 +68,7 @@ export default async function (
 				.delete()
 				.eq("tree_id", tree_id)
 				.eq("uuid", uuid)
-				.eq("watering_id", watering_id);
+				.eq("id", watering_id);
 			if (error) {
 				return response.status(500).json({ error });
 			}
