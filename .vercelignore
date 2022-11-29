@@ -1,6 +1,5 @@
-node_modules
-**/*.md
-*.test.ts
+node*modules \**/\_.md
+\*.test.ts
 .env
 .eslnitignore
 .eslintrc.js
@@ -13,3 +12,13 @@ jest.config.js
 renovate.json
 deprecated
 .github
+.env.example
+.vercelignore
+LICENSE
+jest.setup.js
+docs
+.eslintignore
+prettier.config.js
+.vscode
+prisma
+terraform
