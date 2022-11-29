@@ -16,15 +16,10 @@
   },
   "scripts": {
     "test": "inpyjamas-scripts test --runInBand",
-    "test:db:start": "cd test; docker-compose -f docker-compose.test.yml up -d",
-    "test:db:stop": "cd test; docker-compose down && docker kill postgresdb-integration",
-    "prisma:seed:dangerously": "prisma db seed --preview-feature",
-    "prisma:push:dangerously": "prisma db push --preview-feature --skip-generate",
-    "prisma:pull": "prisma db pull",
     "vercel:dev": "vercel dev"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
@@ -41,7 +36,6 @@
     "mock-jwks": "1.0.1",
     "nock": "13.1.2",
     "pg-format": "1.0.4",
-    "prisma": "2.29.1",
     "typescript": "3.9.5",
     "vercel": "28.5.4",
     "wait-on": "6.0.0"
