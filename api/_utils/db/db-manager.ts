@@ -256,9 +256,9 @@ export async function waterTree(opts: WaterTreeProps): Promise<string> {
   await pool.query(
     `
     INSERT INTO trees_watered (tree_id, time, uuid, amount, timestamp, username)
-    VALUES ($1, $4::text, $2, $3, TO_TIMESTAMP ($4, 'YYYY-MM-DD HH24:MI:ss'), $5)
+    VALUES ($1, $4::text, $2, $3, TO_TIMESTAMP ($4, 'YYYY-MM-DD HH24:MI:SS.MS')::timestamp with time zone, $5)
   `,
-    [tree_id, uuid, amount, timestamp, username],
+    [tree_id, uuid, amount, timestamp.replace("T", " "), username],
   );
   return `Tree with tree_id ${tree_id} was watered by user ${uuid}/${username} with ${amount}l of water`;
 }
