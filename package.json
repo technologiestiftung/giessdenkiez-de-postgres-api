@@ -42,7 +42,7 @@
     "nock": "13.1.2",
     "pg-format": "1.0.4",
     "prisma": "2.29.1",
-    "vercel": "23.1.2",
+    "vercel": "28.5.4",
     "wait-on": "6.0.0"
   },
   "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
