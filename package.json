@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "2.29.1",
+    "@prisma/client": "4.6.1",
     "@vercel/node": "1.12.1",
     "core-js": "3.16.2",
     "jsonwebtoken": "8.5.1",
