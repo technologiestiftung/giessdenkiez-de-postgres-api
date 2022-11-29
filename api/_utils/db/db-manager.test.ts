@@ -21,9 +21,10 @@ import pg from "pg";
 
 import format from "pg-format";
 const client = new pg.Client({
-  user: "fangorn",
-  database: "trees",
-  password: "ent",
+  user: "postgres",
+  database: "postgres",
+  password: "postgres",
+  port: 54322,
   host: "127.0.01",
 });
 
@@ -31,10 +32,10 @@ jest.mock("../envs", () => {
   return {
     getEnvs: () => {
       return {
-        PG_USER: process.env.user ? process.env.user : "fangorn",
-        PG_DATABASE: process.env.database ? process.env.database : "trees",
-        PG_PASSWORD: process.env.password ? process.env.password : "ent",
-        PG_PORT: process.env.port ? parseInt(process.env.port, 10) : 5432,
+        PG_USER: process.env.user ? process.env.user : "postgres",
+        PG_DATABASE: process.env.database ? process.env.database : "postgres",
+        PG_PASSWORD: process.env.password ? process.env.password : "postgres",
+        PG_PORT: process.env.port ? parseInt(process.env.port, 10) : 54322,
         PG_HOST: process.env.host ? process.env.host : "localhost",
         jwksUri: "",
         audience: "",
@@ -420,7 +421,7 @@ describe("db-manager", () => {
   });
 
   test("unwaterTree", async () => {
-    const today = new Date("2020-01-01T00:00:00.000Z").toISOString();
+    const today = new Date("2020-01-01 00:00:00").toISOString();
     const values: [number, string, string][] = [
       [1, "_08be12a72n", "auth0|G65iUi8WGI"],
       [2, "_R447NTgmyk", "auth0|TDilMAYKVk"],

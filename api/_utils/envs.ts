@@ -16,10 +16,10 @@ interface Envs {
   // auth0ManagementApiUrl: string;
 }
 export function getEnvs(): Envs {
-  const PG_USER = process.env.user ? process.env.user : "fangorn";
-  const PG_DATABASE = process.env.database ? process.env.database : "trees";
-  const PG_PASSWORD = process.env.password ? process.env.password : "ent";
-  const PG_PORT = process.env.port ? parseInt(process.env.port, 10) : 5432;
+  const PG_USER = process.env.user ? process.env.user : "postgres";
+  const PG_DATABASE = process.env.database ? process.env.database : "postgres";
+  const PG_PASSWORD = process.env.password ? process.env.password : "postgres";
+  const PG_PORT = process.env.port ? parseInt(process.env.port, 10) : 54322;
   const PG_HOST = process.env.host ? process.env.host : "localhost";
 
   const jwksUri = process.env.jwksuri;
