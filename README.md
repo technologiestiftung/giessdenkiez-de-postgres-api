@@ -4,8 +4,7 @@
 
 Build with Typescript, Prisma and Auth0.com, runs on vercel.com
 
-- [Giessdenkiez.de Postgres API](#giessdenkiezde-postgres-api)
-
+- [Giess den Kiez Postgres API](#giess-den-kiez-postgres-api)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
     - [Auth0](#auth0)
@@ -45,7 +44,7 @@ If you want some initial data in your DB for testing run also `npm run prisma:se
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
 
-We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. *The dangerously is here to remind you that this will change your DB without migration.* This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to 
+We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
 If you want some more data in your DB for testing run also npm `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight.
 
 ##### Vercel Environment Variables
@@ -61,7 +60,7 @@ vercel env add plain database
 vercel env add plain password
 # the host of the db, aws? render.com? localhost?
 vercel env add plain host
-# defaults to 5432
+# defaults to 54322
 vercel env add plain port
 # below are all taken from auth0.com
 vercel env add plain jwksuri
