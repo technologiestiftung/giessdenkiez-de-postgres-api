@@ -23,6 +23,8 @@
   },
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
+    "@saithodev/semantic-release-backmerge": "2.1.2",
+    "@technologiestiftung/semantic-release-config": "1.1.0",
     "@types/jest-in-case": "1.0.5",
     "@types/jsonwebtoken": "8.5.5",
     "@types/micro": "7.3.6",
@@ -37,7 +39,7 @@
     "nock": "13.1.2",
     "pg-format": "1.0.4",
     "typescript": "3.9.5",
-    "vercel": "28.5.4",
+    "vercel": "28.7.1",
     "wait-on": "6.0.0"
   },
   "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",
