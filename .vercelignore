@@ -20,5 +20,4 @@ docs
 .eslintignore
 prettier.config.js
 .vscode
-prisma
 terraform
