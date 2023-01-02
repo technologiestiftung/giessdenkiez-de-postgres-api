@@ -4,7 +4,6 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "2.29.1",
     "@vercel/node": "1.12.1",
     "core-js": "3.16.2",
     "jsonwebtoken": "8.5.1",
@@ -16,18 +15,15 @@
   },
   "scripts": {
     "test": "inpyjamas-scripts test --runInBand",
-    "test:db:start": "cd test; docker-compose -f docker-compose.test.yml up -d",
-    "test:db:stop": "cd test; docker-compose down && docker kill postgresdb-integration",
-    "prisma:seed:dangerously": "prisma db seed --preview-feature",
-    "prisma:push:dangerously": "prisma db push --preview-feature --skip-generate",
-    "prisma:pull": "prisma db pull",
     "vercel:dev": "vercel dev"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "devDependencies": {
     "@inpyjamas/scripts": "0.1.5-alpha",
+    "@saithodev/semantic-release-backmerge": "2.1.2",
+    "@technologiestiftung/semantic-release-config": "1.1.0",
     "@types/jest-in-case": "1.0.5",
     "@types/jsonwebtoken": "8.5.5",
     "@types/micro": "7.3.6",
@@ -41,8 +37,8 @@
     "mock-jwks": "1.0.1",
     "nock": "13.1.2",
     "pg-format": "1.0.4",
-    "prisma": "2.29.1",
-    "vercel": "23.1.2",
+    "typescript": "3.9.5",
+    "vercel": "28.7.1",
     "wait-on": "6.0.0"
   },
   "description": "vercel functions for the giessdenkiez.de project to interact with the postgres database",

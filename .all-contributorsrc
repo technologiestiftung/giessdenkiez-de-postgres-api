@@ -1,0 +1,72 @@
+{
+  "projectName": "giessdenkiez-de-postgres-api",
+  "projectOwner": "technologiestiftung",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 64,
+  "commit": true,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "ff6347",
+      "name": "Fabian Morón Zirfas",
+      "avatar_url": "https://avatars.githubusercontent.com/u/315106?v=4",
+      "profile": "https://fabianmoronzirfas.me/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "fdnklg",
+      "name": "Fabian",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9034032?v=4",
+      "profile": "https://github.com/fdnklg",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "warenix",
+      "name": "warenix",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1849536?v=4",
+      "profile": "https://github.com/warenix",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "danielsippel",
+      "name": "Daniel Sippel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7558075?v=4",
+      "profile": "https://it-freelancer.berlin/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "sebastian-meier",
+      "name": "Sebastian Meier",
+      "avatar_url": "https://avatars.githubusercontent.com/u/302789?v=4",
+      "profile": "http://www.sebastianmeier.eu/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "vogelino",
+      "name": "Lucas Vogel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2759340?v=4",
+      "profile": "https://github.com/vogelino",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}

@@ -238,6 +238,8 @@ export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
     queryType: "water",
     body: {
       tree_id: "_abc",
+      time: "2022-04-19T00:00:00Z",
+      timestamp: "2022-04-19T00:00:00Z",
       amount: 100,
       uuid: "auth0|123",
     },
@@ -250,6 +252,8 @@ export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
     queryType: "water",
     body: {
       username: "foo",
+      time: "2022-04-19T00:00:00Z",
+      timestamp: "2022-04-19T00:00:00Z",
       amount: 100,
       uuid: "auth0|123",
     },
@@ -262,6 +266,8 @@ export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
     queryType: "water",
     body: {
       username: "foo",
+      time: "2022-04-19T00:00:00Z",
+      timestamp: "2022-04-19T00:00:00Z",
       tree_id: "_abc",
       uuid: "auth0|123",
     },
@@ -274,6 +280,8 @@ export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
     queryType: "water",
     body: {
       username: "foo",
+      time: "2022-04-19T00:00:00Z",
+      timestamp: "2022-04-19T00:00:00Z",
       tree_id: "_abc",
       amount: 100,
     },
@@ -286,6 +294,8 @@ export const caseCollectionPOST: VerifiedReqCaseOptionPOST[] = setupNames([
     queryType: "water",
     body: {
       username: "foo",
+      time: "2022-04-19T00:00:00Z",
+      timestamp: "2022-04-19T00:00:00Z",
       tree_id: "_abc",
       amount: 100,
       uuid: "auth0|123",
