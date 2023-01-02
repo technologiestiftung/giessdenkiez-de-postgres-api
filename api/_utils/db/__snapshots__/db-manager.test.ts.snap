@@ -1,49 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`db-manager getTreesWateredAndAdopted 1`] = `
-Array [
-  Object {
-    "adopted": "1",
-    "tree_id": "_dCCFXUp0M5",
-    "watered": "0",
-  },
-  Object {
-    "adopted": "1",
-    "tree_id": "_cBw9mi9_VG",
-    "watered": "0",
-  },
-  Object {
-    "adopted": "1",
-    "tree_id": "_08be12a72n",
-    "watered": "1",
-  },
-]
+{
+  "res": [
+    {
+      "adopted": "1",
+      "tree_id": "_dCCFXUp0M5",
+      "watered": "0",
+    },
+    {
+      "adopted": "1",
+      "tree_id": "_cBw9mi9_VG",
+      "watered": "0",
+    },
+    {
+      "adopted": "1",
+      "tree_id": "_08be12a72n",
+      "watered": "1",
+    },
+  ],
+}
 `;
 
 exports[`db-manager getting trees watered by user 1`] = `
-Array [
-  Object {
-    "amount": null,
-    "id": Any<Number>,
-    "time": Any<String>,
-    "timestamp": Any<Date>,
-    "tree_id": "_08be12a72n",
-    "username": null,
-    "uuid": "auth0|G65iUi8WGI",
-  },
-]
+{
+  "res": [
+    {
+      "amount": null,
+      "id": Any<Number>,
+      "time": Any<String>,
+      "timestamp": Any<Date>,
+      "tree_id": "_08be12a72n",
+      "username": null,
+      "uuid": "auth0|G65iUi8WGI",
+    },
+  ],
+}
 `;
 
 exports[`db-manager getting watered trees by id 1`] = `
-Array [
-  Object {
-    "amount": null,
-    "id": Any<Number>,
-    "time": "2020-01-01T00:00:00.000Z",
-    "timestamp": 2020-01-01T00:00:00.000Z,
-    "tree_id": "_abc",
-    "username": null,
-    "uuid": null,
-  },
-]
+{
+  "res": [
+    {
+      "amount": null,
+      "id": Any<Number>,
+      "time": "2020-01-01T00:00:00.000Z",
+      "timestamp": 2020-01-01T00:00:00.000Z,
+      "tree_id": "_abc",
+      "username": null,
+      "uuid": null,
+    },
+  ],
+}
 `;

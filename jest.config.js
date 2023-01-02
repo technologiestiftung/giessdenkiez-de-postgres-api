@@ -1,22 +1,20 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const defaultConfig = require("@inpyjamas/scripts/jest");
-const utlities = require("@inpyjamas/scripts/dist/utlities");
-const path = require("path");
-
-module.exports = defaultConfig;
-
-module.exports = utlities.merge(defaultConfig, {
+module.exports = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  preset: "ts-jest",
+  testEnvironment: "node",
+  collectCoverage: true,
+  coverageReporters: ["lcov", "text"],
+
   collectCoverageFrom: ["api/**/*.{ts,tsx}", "api/*.{ts,tsx}"],
-  // globalSetup: "./jest.setup.js",
-  // globalTeardown : "./jest.global-teardown.js",
+  testMatch: ["<rootDir>/**/?(*.)+(test).ts?(x)"],
+  testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/dist"],
   coveragePathIgnorePatterns: [
-    "/node_modules/",
-    "dist",
+  "/node_modules/",
+  "dist",
     "deprecated",
     "api/__test-utils/",
   ],
-  // TODO: [GDK-70] API: Increase test coverage to at least 75%
   coverageThreshold: {
     global: {
       branches: 50,
@@ -25,4 +23,5 @@ module.exports = utlities.merge(defaultConfig, {
       statements: 75,
     },
   },
-});
+
+};
