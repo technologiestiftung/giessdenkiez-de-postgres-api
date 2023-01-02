@@ -17,9 +17,17 @@ export default async function (
 		);
 		await verifyRequest(request, response);
 	} catch (error) {
-		await errorHandler({ response, error, statusCode: 500 }).catch(
-			(err) => err,
-		);
-		return;
+		if (error instanceof Error) {
+			await errorHandler({ response, error, statusCode: 500 }).catch(
+				(err) => err,
+			);
+		} else {
+			await errorHandler({
+				response,
+				error: new Error(JSON.stringify(error)),
+				statusCode: 500,
+			}).catch((err) => err);
+		}
 	}
+	return;
 }

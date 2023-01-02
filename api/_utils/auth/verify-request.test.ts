@@ -111,7 +111,7 @@ describe("verifing requests", () => {
 		const res = setupResponse({ setHeader: jest.fn() });
 		await verifyRequest(req, res);
 		expect(auth.verifyAuth0Token).toHaveBeenCalledWith("foo", undefined);
-		expect(micro.send).toHaveBeenCalledWith(res, 500, {});
+		expect(micro.send).toHaveBeenCalledWith(res, 500, "something went wrong");
 		expect(requests.handleVerifiedRequest).toHaveBeenCalledWith(req, res);
 	});
 });

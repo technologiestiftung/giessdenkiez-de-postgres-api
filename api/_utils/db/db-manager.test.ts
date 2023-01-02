@@ -1,4 +1,3 @@
-/* eslint-disable jest/prefer-inline-snapshots */
 /* eslint-disable jest/no-hooks */
 import {
 	getTreeById,

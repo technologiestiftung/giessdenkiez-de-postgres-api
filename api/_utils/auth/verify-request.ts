@@ -36,19 +36,23 @@ export async function verifyRequest(
 			// token should be valid now
 			await handleVerifiedRequest(request, response);
 		}
-	} catch (error) {
-		statusCode = 500;
-		let data = {};
-		if (process.env.NODE_ENV === "development") {
-			console.error(error);
-			data = { ...setupResponseData({ error: error.message }) };
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			statusCode = 500;
+			let data = {};
+			if (process.env.NODE_ENV === "development") {
+				console.error(error);
+				data = { ...setupResponseData({ error: error.message }) };
+			}
+			if (process.env.NODE_ENV === "test") {
+				data = {};
+			}
+			if (process.env.NODE_ENV === "production") {
+				data = { error: error.message };
+			}
+			return send(response, statusCode, data);
+		} else {
+			return send(response, 500, "something went wrong");
 		}
-		if (process.env.NODE_ENV === "test") {
-			data = {};
-		}
-		if (process.env.NODE_ENV === "production") {
-			data = { error: error.message };
-		}
-		return send(response, statusCode, data);
 	}
 }

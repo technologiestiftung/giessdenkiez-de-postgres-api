@@ -215,8 +215,16 @@ export default async function (
 			data: result ? result : {},
 		});
 		return send(response, statusCode, data);
-	} catch (error) {
-		await errorHandler({ response, error, statusCode }).catch((err) => err);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			await errorHandler({ response, error, statusCode }).catch((err) => err);
+		} else {
+			await errorHandler({
+				response,
+				error: new Error(JSON.stringify(error)),
+				statusCode,
+			}).catch((err) => err);
+		}
 		return;
 	}
 }

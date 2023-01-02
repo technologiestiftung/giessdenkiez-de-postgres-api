@@ -76,9 +76,9 @@ describe("post tests", () => {
 					// eslint-disable-next-line jest/valid-expect-in-promise
 					post(req, res)
 						.then(() => {
-							// eslint-disable-next-line jest/no-standalone-expect
+							// eslint-disable-next-line jest/no-standalone-expect, jest/no-conditional-expect
 							expect(auth.verifyRequest).toHaveBeenCalledWith(req, res);
-							// eslint-disable-next-line jest/no-standalone-expect
+							// eslint-disable-next-line jest/no-standalone-expect, jest/no-conditional-expect
 							expect(micro.send).toHaveBeenCalledWith(res, 500, opts.response);
 							// expect(mockConsole).toHaveBeenCalledWith("error");
 						})
