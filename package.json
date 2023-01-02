@@ -21,7 +21,7 @@
     "node": ">=18"
   },
   "devDependencies": {
-    "@inpyjamas/scripts": "0.1.5-alpha",
+    "@inpyjamas/scripts": "1.0.0",
     "@saithodev/semantic-release-backmerge": "2.1.2",
     "@technologiestiftung/semantic-release-config": "1.1.0",
     "@types/jest-in-case": "1.0.5",
