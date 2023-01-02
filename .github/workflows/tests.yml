@@ -2,40 +2,95 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js CI
-env:
-  CONTAINERNAME: "postgresdb-integration"
-  CI: "true"
-  NODE_ENV: "test"
+
 on:
   push:
-    branches: [master, dev]
+    branches: [master, staging]
   pull_request:
-    branches: [master, dev]
+    branches: [master, staging]
 
 jobs:
   build:
+    environment: ci_test
+    env:
+      CI: "true"
+      NODE_ENV: "test"
+      SUPABASE_INTERNAL_IMAGE_REGISTRY: docker.io
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.625_WdcF3KHqz5amU0x2X5WWHP-OEs_4qj0ssLNHzTs
+      SUPABASE_URL: http://localhost:54321
+      SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSJ9.vI9obAHOGyVVKa3pD--kJlyxp-Z2zV9UUMAhKpNLAcU
+      host: localhost
+      port: 54322
+      password: postgres
+      user: postgres
+      database: postgres
+      client_secret: ${{ secrets.CLIENT_SECRET }}
+      client_id: ${{ secrets.CLIENT_ID }}
+      issuer: ${{ secrets.ISSUER }}
+      jwt_secret: ${{ secrets.JWT_SECRET }}
+      jwksuri: ${{ secrets.JWKSURI }}
+      audience: ${{ secrets.AUDIENCE }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
-
-    services:
-      postgres:
-        image: postgis/postgis:11-3.0
-        env:
-          POSTGRES_PASSWORD: ent
-          POSTGRES_USER: fangorn
-          POSTGRES_DB: trees
-        ports:
-          - 5432:5432
+        node-version: [16.x, 18.x]
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PAT }}
+      - name: Checkout technologiestiftung/giessdenkiez-de-supabase#staging
+        uses: actions/checkout@v3
+        # check the supabase setup for staging
+        if: github.event.pull_request.base.ref == 'staging' || github.ref == 'refs/heads/staging'
+        with:
+          repository: technologiestiftung/giessdenkiez-de-supabase
+          path: gdk-supabase
+          ref: staging
+      - name: Checkout technologiestiftung/giessdenkiez-de-supabase#main
+        uses: actions/checkout@v3
+        # check the supabase setup for master
+        if: github.event.pull_request.base.ref == 'master' || github.ref == 'refs/heads/master'
+        with:
+          repository: technologiestiftung/giessdenkiez-de-supabase
+          path: gdk-supabase
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.8.7
+      - run: cd gdk-supabase && supabase start && cd ..
       - run: npm ci
       - run: npm run build --if-present
       # - run: PGPASSWORD=ent psql -h localhost -d trees -U fangorn -q -f test/sql/build-schema.sql
       - run: npm test
+      - run: cd gdk-supabase && supabase stop && cd ..
+  release:
+    name: semantic-release
+    needs: [build]
+    runs-on: ubuntu-latest
+    outputs:
+      new-release-published: ${{ steps.semantic-release.outputs.new_release_published }}
+      new-release-version: ${{ steps.semantic-release.outputs.new_release_version }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - run: npm ci
+      - id: semantic-release
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          semantic_version: 18
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

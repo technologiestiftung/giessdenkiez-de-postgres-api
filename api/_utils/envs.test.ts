@@ -30,11 +30,11 @@ describe("testing env values", () => {
           PG_PASSWORD,
           PG_DATABASE,
         } = module.getEnvs();
-        expect(PG_PORT).toBe(5432);
-        expect(PG_USER).toBe("fangorn");
+        expect(PG_PORT).toBe(54322);
+        expect(PG_USER).toBe("postgres");
         expect(PG_HOST).toBe("localhost");
-        expect(PG_PASSWORD).toBe("ent");
-        expect(PG_DATABASE).toBe("trees");
+        expect(PG_PASSWORD).toBe("postgres");
+        expect(PG_DATABASE).toBe("postgres");
       })
       .catch((err) => {
         throw err;

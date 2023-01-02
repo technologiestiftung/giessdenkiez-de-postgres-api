@@ -65,3 +65,4 @@ typings/
 .now
 .vercel
 quokka-playground.ts
+.env.back

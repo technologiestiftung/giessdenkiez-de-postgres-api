@@ -21,10 +21,10 @@ jest.mock("./_utils/envs", () => {
   return {
     getEnvs: () => {
       return {
-        PG_USER: process.env.user ? process.env.user : "fangorn",
-        PG_DATABASE: process.env.database ? process.env.database : "trees",
-        PG_PASSWORD: process.env.password ? process.env.password : "ent",
-        PG_PORT: process.env.port ? parseInt(process.env.port, 10) : 5432,
+        PG_USER: process.env.user ? process.env.user : "postgres",
+        PG_DATABASE: process.env.database ? process.env.database : "postgres",
+        PG_PASSWORD: process.env.password ? process.env.password : "postgres",
+        PG_PORT: process.env.port ? parseInt(process.env.port, 10) : 54322,
         PG_HOST: process.env.host ? process.env.host : "localhost",
         jwksUri: "",
         audience: "",
