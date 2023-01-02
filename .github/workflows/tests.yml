@@ -71,6 +71,12 @@ jobs:
       - run: npm run build --if-present
       # - run: PGPASSWORD=ent psql -h localhost -d trees -U fangorn -q -f test/sql/build-schema.sql
       - run: npm test
+      - name: Setup tmate session
+        if: ${{ failure() }}
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 5
+        with:
+          limit-access-to-actor: true
       - run: cd gdk-supabase && supabase stop && cd ..
   release:
     name: semantic-release
