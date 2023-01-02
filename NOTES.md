@@ -22,9 +22,9 @@ Edit `index.js`
 
 ```js
 app.get("/get", (req, res, next) => {
-  res.json({
-    version: process.env.VERSION,
-  });
+	res.json({
+		version: process.env.VERSION,
+	});
 });
 ```
 
@@ -36,7 +36,7 @@ Edit `index.js`
 
 ```js
 app.post("/post", function (request, response) {
-  response.send(request.body);
+	response.send(request.body);
 });
 ```
 
