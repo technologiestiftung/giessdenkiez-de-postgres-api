@@ -39,8 +39,9 @@ describe("setup-response", () => {
 			.then((module) => {
 				const overrides = { main: "index.js" };
 				const res = module.setupResponseData(overrides);
-				// eslint-disable-next-line jest/prefer-called-with
+				// eslint-disable-next-line jest/prefer-called-with, jest/no-conditional-expect
 				expect(pkg.getPackage).toHaveBeenCalled();
+				// eslint-disable-next-line jest/no-conditional-expect
 				expect(res.main).toBe("index.js");
 			})
 			.catch((err) => {

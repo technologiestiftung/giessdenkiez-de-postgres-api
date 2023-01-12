@@ -1,14 +1,12 @@
-import assert from "node:assert/strict";
-import { describe, test } from "node:test";
 import path from "node:path";
-import { requestTestToken } from "../__test-utils/req-test-token.js";
+import { requestTestToken } from "../__test-utils/req-test-token";
 process.env.NODE_ENV = "test";
 import { config } from "dotenv";
-import { supabase } from "../_utils/supabase.js";
+import { supabase } from "../_utils/supabase";
 import {
 	truncateTreesAdopted,
 	truncateTreesWaterd,
-} from "../__test-utils/postgres.js";
+} from "../__test-utils/postgres";
 const envs = config({ path: path.resolve(process.cwd(), ".env") });
 
 const body = {
@@ -29,7 +27,7 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify(body),
 		});
-		assert(response.status === 401);
+		expect(response.status).toBe(401);
 	});
 
 	test("should make a request to post/[type] and fail due to wrong query type", async () => {
@@ -42,7 +40,7 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify(body),
 		});
-		assert(response.status === 400);
+		expect(response.status).toBe(400);
 	});
 
 	test("should make a request to post/water and fail due to missing body", async () => {
@@ -54,7 +52,7 @@ describe("api/post/[type]", () => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		assert(response.status === 400);
+		expect(response.status).toBe(400);
 	});
 
 	test("should make a request to post/adopt and fail due wrong body", async () => {
@@ -67,7 +65,8 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify({}),
 		});
-		assert(response.status === 400);
+
+		expect(response.status).toBe(400);
 	});
 
 	test("should make a request to post/water and succeed", async () => {
@@ -77,7 +76,7 @@ describe("api/post/[type]", () => {
 		if (error) {
 			throw error;
 		}
-		assert(trees.length > 0);
+		expect(trees.length).toBeGreaterThan(0);
 
 		// clone body into new variables and add tree_id
 		const { tree_id, ...bodyWithoutTreeId } = body;
@@ -98,8 +97,7 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify(bodyWithTreeIdAndDate),
 		});
-
-		assert(response.status === 201);
+		expect(response.status).toBe(201);
 	});
 
 	test("should not create double adoption in trees_adopted", async () => {
@@ -109,9 +107,11 @@ describe("api/post/[type]", () => {
 			.from("trees")
 			.select("id")
 			.limit(1);
-		assert(treeError === null);
-		assert(trees.length > 0);
-		assert(trees !== null);
+		if (!trees) throw new Error("trees is null");
+		expect(treeError).toBe(null);
+		expect(trees).not.toBe(null);
+		expect(trees.length).toBeGreaterThan(0);
+
 		const treeId = trees[0].id;
 		const response = await fetch("http://localhost:3000/post/adopt", {
 			method: "POST",
@@ -121,7 +121,8 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify({ tree_id: treeId, uuid: "mememe" }),
 		});
-		assert(response.status === 201);
+		expect(response.status).toBe(201);
+
 		const response2 = await fetch("http://localhost:3000/post/adopt", {
 			method: "POST",
 			headers: {
@@ -130,16 +131,15 @@ describe("api/post/[type]", () => {
 			},
 			body: JSON.stringify({ tree_id: treeId, uuid: "mememe" }),
 		});
-		const json = await response2.json();
-		console.log(json);
-		console.log(response2.status);
-		assert(response2.status === 201);
+		expect(response2.status).toBe(201);
 
 		const { data: treesAdopted, error: treesAdoptedError } = await supabase
 			.from("trees_adopted")
 			.select("*")
 			.eq("uuid", "mememe");
-		assert(treesAdoptedError === null);
-		assert(treesAdopted.length === 1);
+		expect(treesAdoptedError).toBe(null);
+		if (!treesAdopted) throw new Error("treesAdopted is null");
+		expect(treesAdopted).not.toBe(null);
+		expect(treesAdopted.length).toBe(1);
 	});
 });

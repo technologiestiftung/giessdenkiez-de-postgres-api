@@ -1,5 +1,3 @@
-import assert from "node:assert/strict";
-import { describe, test } from "node:test";
 import path from "node:path";
 
 import { faker } from "@faker-js/faker";
@@ -23,7 +21,7 @@ describe("api/delete/[type]", () => {
 				"Content-Type": "application/json",
 			},
 		});
-		assert(response.status === 401);
+		expect(response.status).toBe(401);
 	});
 	test("should make a request to api/delete/unwater and fail due to missing body", async () => {
 		const token = await requestTestToken();
@@ -34,7 +32,7 @@ describe("api/delete/[type]", () => {
 				Authorization: `Bearer ${token}`,
 			},
 		});
-		assert(response.status === 400);
+		expect(response.status).toBe(400);
 	});
 
 	test("should make a request to api/delete/unwater and fail due to wrong body", async () => {
@@ -47,7 +45,7 @@ describe("api/delete/[type]", () => {
 			},
 			body: JSON.stringify({}),
 		});
-		assert(response.status === 400);
+		expect(response.status).toBe(400);
 	});
 
 	test("should make request to delete/unwater and succeed", async () => {
@@ -62,9 +60,9 @@ describe("api/delete/[type]", () => {
 			.from("trees")
 			.select("id")
 			.limit(1);
-		console.error(treeError);
-		assert(treeError === null);
-		assert(treeData !== null);
+		expect(treeError).toBe(null);
+		expect(treeData).not.toBe(null);
+		if (treeData === null) throw new Error("treeData is null");
 		const tree_id = treeData[0].id;
 
 		// insert watering into trees_waterd and get watering id
@@ -79,8 +77,10 @@ describe("api/delete/[type]", () => {
 				username: uuid,
 			})
 			.select("id");
-		assert(waterError === null);
-		assert(waterData !== null);
+		expect(waterError).toBe(null);
+		expect(waterData).not.toBe(null);
+		if (waterData === null) throw new Error("waterData is null");
+
 		const watering_id = waterData[0].id;
 
 		const token = await requestTestToken();
@@ -96,7 +96,7 @@ describe("api/delete/[type]", () => {
 				watering_id,
 			}),
 		});
-		assert(response.status === 204);
+		expect(response.status).toBe(204);
 	});
 
 	test("should make request to delete/unadopt and succeed", async () => {
@@ -108,9 +108,10 @@ describe("api/delete/[type]", () => {
 			.from("trees")
 			.select("id")
 			.limit(1);
-		console.error(treeError);
-		assert(treeError === null);
-		assert(treeData !== null);
+
+		expect(treeError).toBe(null);
+		expect(treeData).not.toBe(null);
+		if (treeData === null) throw new Error("treeData is null");
 		const tree_id = treeData[0].id;
 
 		// insert adoption into trees_adopted and
@@ -122,9 +123,9 @@ describe("api/delete/[type]", () => {
 				uuid,
 			})
 			.select();
-		console.log(adoptError);
-		assert(adoptError === null);
-		assert(adoptData !== null);
+		expect(adoptError).toBe(null);
+		expect(adoptData).not.toBe(null);
+		if (adoptData === null) throw new Error("adoptData is null");
 
 		const token = await requestTestToken();
 		const response = await fetch("http://localhost:3000/delete/unadopt", {
@@ -138,7 +139,6 @@ describe("api/delete/[type]", () => {
 				uuid,
 			}),
 		});
-
-		assert(response.status === 204);
+		expect(response.status).toBe(204);
 	});
 });
