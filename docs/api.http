@@ -5,7 +5,7 @@
 
 @API_HOST = {{protocol}}://{{host}}:{{port}}
 
-@TREE_ID = _00049a79p
+@TREE_ID = _2100186a5c
 @USER_ID = auth0|abc
 @USER_NAME = foo
 
@@ -36,30 +36,32 @@
 ### Healthcheck
 GET {{API_HOST}}
 
-### GET tree by its id byid
+### GET tree by its id byid ✓
 
-GET {{API_HOST}}/get?queryType=byid&id={{TREE_ID}}
+GET {{API_HOST}}/get/byid&id={{TREE_ID}}
 
-### GET a list of all waterd trees
+### GET a list of all waterd trees ✓
 
-GET {{API_HOST}}/get?queryType=watered
+GET {{API_HOST}}/get/watered
+
+### GET list of trees from an list of ids ✓
+
+GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_00096p5ra
+
+### GET a list of trees with the properities ✓
+# adopted (how many users)
+# waterd how often in the last 30days
+
+GET {{API_HOST}}/get/wateredandadopted
 
 ### get all trees with id, lat, lon, radolan_sum
 #  with pagination
 
-GET {{API_HOST}}/get?queryType=all&limit=10&offset=10
+GET {{API_HOST}}/get/all&limit=10&offset=10
 
 
-### GET list of trees from an list of ids
-
-GET {{API_HOST}}/get?queryType=treesbyids&tree_ids={{TREE_ID}},_00096p5ra
 
 
-### GET a list of trees with the properities
-# adopted (how many users)
-# waterd how often in the last 30days
-
-GET {{API_HOST}}/get?queryType=wateredandadopted
 
 
 ### GET count of trees by age
