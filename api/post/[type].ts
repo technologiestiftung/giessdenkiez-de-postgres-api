@@ -23,7 +23,7 @@ const schemas: Record<string, AjvSchema> = {
 type TreesWatered = Database["public"]["Tables"]["trees_watered"]["Insert"];
 export default async function (
 	request: VercelRequest,
-	response: VercelResponse,
+	response: VercelResponse
 ) {
 	setHeaders(response, "POST");
 	if (request.method === "OPTIONS") {
@@ -62,7 +62,7 @@ export default async function (
 						uuid,
 					},
 
-					{ onConflict: "uuid,tree_id" },
+					{ onConflict: "uuid,tree_id" }
 				)
 				.select();
 			if (error) {

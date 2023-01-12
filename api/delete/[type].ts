@@ -19,7 +19,7 @@ const schemas: Record<string, AjvSchema> = {
 // req.query.name -> "lee"
 export default async function (
 	request: VercelRequest,
-	response: VercelResponse,
+	response: VercelResponse
 ) {
 	setHeaders(response, "DELETE");
 	if (request.method === "OPTIONS") {
@@ -48,7 +48,7 @@ export default async function (
 			return response.status(400).json({ error: "invalid query type" });
 		case "unadopt": {
 			const { tree_id, uuid } = request.body;
-			const { data: _, error } = await supabase
+			const { error } = await supabase
 				.from("trees_adopted")
 				.delete()
 				.eq("tree_id", tree_id)
@@ -63,7 +63,7 @@ export default async function (
 		}
 		case "unwater": {
 			const { tree_id, uuid, watering_id } = request.body;
-			const { data: _, error } = await supabase
+			const { error } = await supabase
 				.from("trees_watered")
 				.delete()
 				.eq("tree_id", tree_id)
