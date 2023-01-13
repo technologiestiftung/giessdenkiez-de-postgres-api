@@ -28,6 +28,7 @@
 		"@faker-js/faker": "7.6.0",
 		"@saithodev/semantic-release-backmerge": "2.1.2",
 		"@technologiestiftung/semantic-release-config": "1.1.0",
+		"@types/geojson": "7946.0.10",
 		"@types/jest": "29.2.5",
 		"@types/jest-in-case": "1.0.6",
 		"@types/node": "18.11.9",

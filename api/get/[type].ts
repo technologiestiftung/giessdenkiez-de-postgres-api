@@ -1,3 +1,8 @@
+import { VercelRequest, VercelResponse } from "@vercel/node";
+import setHeaders from "../_utils/set-headers";
+import { setupResponseData } from "../_utils/setup-response";
+import { supabase } from "../_utils/supabase";
+import type { Point } from "geojson";
 const queryTypes = [
 	"byid",
 	"treesbyids",
@@ -11,12 +16,6 @@ const queryTypes = [
 	"lastwatered",
 	"wateredbyuser",
 ];
-
-import { VercelRequest, VercelResponse } from "@vercel/node";
-import { Database } from "../_types/database";
-import setHeaders from "../_utils/set-headers";
-import { setupResponseData } from "../_utils/setup-response";
-import { supabase } from "../_utils/supabase";
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
@@ -158,7 +157,16 @@ export default async function (
 			}
 			const { data: trees, error } = await supabase
 				.from("trees")
-				.select("id,lat,lng,radolan_sum")
+				.select<
+					"id,radolan_sum,geom",
+					{
+						id: string;
+					} & {
+						radolan_sum: number | null;
+					} & {
+						geom: Point;
+					}
+				>("id,radolan_sum,geom")
 				.range(offset, offset + limit);
 			if (error) {
 				return response.status(500).json({ error });
@@ -166,13 +174,28 @@ export default async function (
 			if (!trees) {
 				return response.status(500).json({ error: "trees not found" });
 			}
-			const data = setupResponseData({ url: request.url, data: trees, error });
+			// to match the old structure we need to transform the data a little
+			// FIXME: [GDK-217] API (with supabase): GET "all" should work with result that is returned without transforming the data into the current structure
+			const watered = trees.map((tree) => {
+				return [
+					tree.id,
+					tree.geom.coordinates[0] ? tree.geom.coordinates[0] : 0,
+					tree.geom.coordinates[1] ? tree.geom.coordinates[1] : 0,
+					tree.radolan_sum ? tree.radolan_sum : 0,
+				];
+			});
+
+			const data = setupResponseData({
+				url: request.url,
+				data: watered,
+				error,
+			});
 			return response.status(200).json(data);
 		}
-		case "adopted":
-			return response.status(200).json({ message: "adopted" });
 		case "countbyage":
 			return response.status(200).json({ message: "countbyage" });
+		case "adopted":
+			return response.status(200).json({ message: "adopted" });
 		case "istreeadopted":
 			return response.status(200).json({ message: "istreeadopted" });
 		case "byage":
