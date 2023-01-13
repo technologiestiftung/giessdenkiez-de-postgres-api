@@ -61,8 +61,9 @@ GET {{API_HOST}}/get/all&limit=2&offset=1
 
 
 
+### GET trees by age
 
-
+GET {{API_HOST}}/get/byage&start=1800&end=2023
 
 ### GET count of trees by age ✓
 
@@ -124,7 +125,7 @@ Content-Type: application/json
 #     # #     #    #    #     #
 #     #  #####     #    #     #
 
-### GET trees that where watered by aq specific user
+### GET trees that where watered by aq specific user ✓
 
 GET {{API_HOST}}/get/wateredbyuser&uuid={{USER_ID}}
 Authorization: Bearer {{token}}

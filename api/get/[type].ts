@@ -243,6 +243,8 @@ export default async function (
 			});
 			return response.status(200).json(data);
 		}
+		case "byage":
+			return response.status(200).json({ message: "byage" });
 		//TODO: [GDK-218] API (with supabase) Should GET lastwatered be only available for authenticated users?
 		case "lastwatered":
 			return response.status(200).json({ message: "lastwatered" });
@@ -326,9 +328,38 @@ export default async function (
 
 			return response.status(200).json(data);
 		}
-		case "byage":
-			return response.status(200).json({ message: "byage" });
-		case "wateredbyuser":
-			return response.status(200).json({ message: "wateredbyuser" });
+
+		case "wateredbyuser": {
+			const authorized = await verifyRequest(request);
+			if (!authorized) {
+				return response.status(401).json({ error: "unauthorized" });
+			}
+			const { uuid } = request.query;
+			if (!uuid) {
+				return response.status(400).json({ error: "uuid query is required" });
+			}
+			if (Array.isArray(uuid)) {
+				return response
+					.status(400)
+					.json({ error: "uuid needs to be a string" });
+			}
+			const { data: trees, error } = await supabase
+				.from("trees_watered")
+				.select("*")
+				.eq("uuid", uuid);
+
+			if (error) {
+				return response.status(500).json({ error });
+			}
+			if (!trees) {
+				return response.status(500).json({ error: "trees not found" });
+			}
+			const data = setupResponseData({
+				url: request.url,
+				data: trees,
+				error,
+			});
+			return response.status(200).json(data);
+		}
 	}
 }
