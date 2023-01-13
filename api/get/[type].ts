@@ -281,8 +281,51 @@ export default async function (
 
 			return response.status(200).json(data);
 		}
-		case "istreeadopted":
-			return response.status(200).json({ message: "istreeadopted" });
+		case "istreeadopted": {
+			const authorized = await verifyRequest(request);
+			if (!authorized) {
+				return response.status(401).json({ error: "unauthorized" });
+			}
+			const { uuid, id } = request.query;
+			if (!uuid) {
+				return response.status(400).json({ error: "uuid query is required" });
+			}
+			if (!id) {
+				return response
+					.status(400)
+					.json({ error: "tree_id query is required" });
+			}
+			if (Array.isArray(uuid)) {
+				return response
+					.status(400)
+					.json({ error: "uuid needs to be a string" });
+			}
+			if (Array.isArray(id)) {
+				return response
+					.status(400)
+					.json({ error: "tree_id needs to be a string" });
+			}
+			const { data: trees, error } = await supabase
+				.from("trees_adopted")
+				.select("uuid,tree_id")
+				.eq("uuid", uuid)
+				.eq("tree_id", id);
+
+			if (error) {
+				return response.status(500).json({ error });
+			}
+			if (!trees) {
+				return response.status(500).json({ error: "trees not found" });
+			}
+
+			const data = setupResponseData({
+				url: request.url,
+				data: trees.length > 0 ? true : false,
+				error,
+			});
+
+			return response.status(200).json(data);
+		}
 		case "byage":
 			return response.status(200).json({ message: "byage" });
 		case "wateredbyuser":

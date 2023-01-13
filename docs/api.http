@@ -129,7 +129,7 @@ Content-Type: application/json
 GET {{API_HOST}}/get/wateredbyuser&uuid={{USER_ID}}
 Authorization: Bearer {{token}}
 
-### GET check if a tree is adopted by a specific user
+### GET check if a tree is adopted by a specific user ✓
 
 {{API_HOST}}/get/istreeadopted&uuid={{USER_ID}}&id={{TREE_ID}}
 Authorization: Bearer {{token}}
