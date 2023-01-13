@@ -192,8 +192,56 @@ export default async function (
 			});
 			return response.status(200).json(data);
 		}
-		case "countbyage":
-			return response.status(200).json({ message: "countbyage" });
+		case "countbyage": {
+			const { start: start_str, end: end_str } = request.query;
+			if (!start_str) {
+				return response.status(400).json({ error: "start query is required" });
+			}
+			if (!end_str) {
+				return response.status(400).json({ error: "end query is required" });
+			}
+			if (Array.isArray(start_str)) {
+				return response
+					.status(400)
+					.json({ error: "start needs to be a string" });
+			}
+			if (Array.isArray(end_str)) {
+				return response.status(400).json({ error: "end needs to be a string" });
+			}
+			const start = isNaN(parseInt(start_str, 10))
+				? undefined
+				: parseInt(start_str, 10);
+			const end = isNaN(parseInt(end_str, 10))
+				? undefined
+				: parseInt(end_str, 10);
+			if (start === undefined) {
+				return response
+					.status(400)
+					.json({ error: "start needs to be a number" });
+			}
+			if (end === undefined) {
+				return response.status(400).json({ error: "end needs to be a number" });
+			}
+
+			const { data: count, error } = await supabase.rpc("count_by_age", {
+				start_year: start,
+				end_year: end,
+			});
+			if (error) {
+				return response.status(500).json({ error });
+			}
+			if (!count) {
+				return response
+					.status(500)
+					.json({ error: "could not call function count_by_age" });
+			}
+			const data = setupResponseData({
+				url: request.url,
+				data: { count },
+				error,
+			});
+			return response.status(200).json(data);
+		}
 		case "adopted":
 			return response.status(200).json({ message: "adopted" });
 		case "istreeadopted":
