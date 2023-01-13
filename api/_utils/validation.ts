@@ -29,6 +29,7 @@ export const waterSchema: AjvSchema = {
 		username: { type: "string" },
 		timestamp: { type: "string" },
 		amount: { type: "number" },
+		queryType: { type: "string" },
 	},
 	required: ["uuid", "tree_id", "username", "timestamp", "amount"],
 	additionalProperties: false,
@@ -39,6 +40,7 @@ export const adoptSchema: AjvSchema = {
 	properties: {
 		uuid: { type: "string" },
 		tree_id: { type: "string" },
+		queryType: { type: "string" },
 	},
 	required: ["uuid", "tree_id"],
 	additionalProperties: false,
@@ -49,6 +51,7 @@ export const unadoptSchema: AjvSchema = {
 	properties: {
 		uuid: { type: "string" },
 		tree_id: { type: "string" },
+		queryType: { type: "string" },
 	},
 	required: ["uuid", "tree_id"],
 	additionalProperties: false,
@@ -60,6 +63,7 @@ export const unwaterSchema: AjvSchema = {
 		watering_id: { type: "number" },
 		uuid: { type: "string" },
 		tree_id: { type: "string" },
+		queryType: { type: "string" },
 	},
 	required: ["uuid", "tree_id"],
 	additionalProperties: false,
