@@ -3,6 +3,7 @@ import setHeaders from "../_utils/set-headers";
 import { setupResponseData } from "../_utils/setup-response";
 import { supabase } from "../_utils/supabase";
 import type { Point } from "geojson";
+import { verifyRequest } from "../_utils/auth/verify";
 const queryTypes = [
 	"byid",
 	"treesbyids",
@@ -242,14 +243,48 @@ export default async function (
 			});
 			return response.status(200).json(data);
 		}
-		case "adopted":
-			return response.status(200).json({ message: "adopted" });
+		//TODO: [GDK-218] API (with supabase) Should GET lastwatered be only available for authenticated users?
+		case "lastwatered":
+			return response.status(200).json({ message: "lastwatered" });
+		// All requests below this line are only available for authenticated users
+
+		case "adopted": {
+			const authorized = await verifyRequest(request);
+			if (!authorized) {
+				return response.status(401).json({ error: "unauthorized" });
+			}
+			const { uuid } = request.query;
+			if (!uuid) {
+				return response.status(400).json({ error: "uuid query is required" });
+			}
+			if (Array.isArray(uuid)) {
+				return response
+					.status(400)
+					.json({ error: "uuid needs to be a string" });
+			}
+			const { data: trees, error } = await supabase
+				.from("trees_adopted")
+				.select("tree_id,uuid")
+				.eq("uuid", uuid);
+
+			if (error) {
+				return response.status(500).json({ error });
+			}
+			if (!trees) {
+				return response.status(500).json({ error: "trees not found" });
+			}
+			const data = setupResponseData({
+				url: request.url,
+				data: trees.map((tree) => tree.tree_id),
+				error,
+			});
+
+			return response.status(200).json(data);
+		}
 		case "istreeadopted":
 			return response.status(200).json({ message: "istreeadopted" });
 		case "byage":
 			return response.status(200).json({ message: "byage" });
-		case "lastwatered":
-			return response.status(200).json({ message: "lastwatered" });
 		case "wateredbyuser":
 			return response.status(200).json({ message: "wateredbyuser" });
 	}

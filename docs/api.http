@@ -64,9 +64,9 @@ GET {{API_HOST}}/get/all&limit=2&offset=1
 
 
 
-### GET count of trees by age
+### GET count of trees by age ✓
 
-GET {{API_HOST}}/get/countbyage&start=1800&end=2020
+GET {{API_HOST}}/get/countbyage&start=1800&end=2023
 
 
   #####  ####### #######
@@ -126,24 +126,24 @@ Content-Type: application/json
 
 ### GET trees that where watered by aq specific user
 
-GET {{API_HOST}}/get?queryType=wateredbyuser&uuid={{USER_ID}}
+GET {{API_HOST}}/get/wateredbyuser&uuid={{USER_ID}}
 Authorization: Bearer {{token}}
 
 ### GET check if a tree is adopted by a specific user
 
-{{API_HOST}}/get?queryType=istreeadopted&uuid={{USER_ID}}&id={{TREE_ID}}
+{{API_HOST}}/get/istreeadopted&uuid={{USER_ID}}&id={{TREE_ID}}
 Authorization: Bearer {{token}}
 
 
-### GET trees that are adopted by a specific user
+### GET trees that are adopted by a specific user ✓
 
-{{API_HOST}}/get?queryType=adopted&uuid={{USER_ID}}
+{{API_HOST}}/get/adopted&uuid={{USER_ID}}
 Authorization: Bearer {{token}}
 
 
 ### GET the last watering of a specific tree with all the users
 
-{{API_HOST}}/get?queryType=lastwatered&id={{TREE_ID}}
+{{API_HOST}}/get/lastwatered&id={{TREE_ID}}
 
  ######  #######  #####  #######
  #     # #     # #     #    #
@@ -164,12 +164,11 @@ Authorization: Bearer {{token}}
 
 ### POST water a tree
 
-POST {{API_HOST}}/post
+POST {{API_HOST}}/post/water
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "queryType":"water",
     "timestamp":"{{$datetime "YYYY-MM-DD HH:mm:ss"}}",
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}",
@@ -179,12 +178,11 @@ Content-Type: application/json
 
 ### Adopt a tree
 
-POST {{API_HOST}}/post
+POST {{API_HOST}}/post/adopt
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "queryType":"adopt",
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}"
 }
@@ -207,12 +205,11 @@ Content-Type: application/json
 
 ### DELETE a tree adoption
 
-DELETE {{API_HOST}}/delete
+DELETE {{API_HOST}}/delete/unadopt
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "queryType":"unadopt",
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}"
 }
