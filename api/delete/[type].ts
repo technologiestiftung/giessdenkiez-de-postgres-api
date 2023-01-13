@@ -44,8 +44,9 @@ export default async function (
 	}
 
 	switch (type) {
-		default:
+		default: {
 			return response.status(400).json({ error: "invalid query type" });
+		}
 		case "unadopt": {
 			const { tree_id, uuid } = request.body;
 			const { error } = await supabase
@@ -62,6 +63,9 @@ export default async function (
 				.json({ message: `unadopted tree ${tree_id}` });
 		}
 		case "unwater": {
+			// FIXME: [GDK-221] API (with supabase) Find out why delete/unwater route does not work
+			console.log("request in delete", request.url);
+
 			const { tree_id, uuid, watering_id } = request.body;
 			const { error } = await supabase
 				.from("trees_watered")

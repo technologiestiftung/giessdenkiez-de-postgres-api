@@ -142,7 +142,7 @@ Authorization: Bearer {{token}}
 Authorization: Bearer {{token}}
 
 
-### GET the last watering of a specific tree with all the users
+### GET the last watering of a specific tree with all the users ✓
 
 {{API_HOST}}/get/lastwatered&id={{TREE_ID}}
 
@@ -213,4 +213,16 @@ Content-Type: application/json
 {
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}"
+}
+
+### DELETE a tree watering
+
+DELETE {{API_HOST}}/delete/unwater
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "tree_id":"{{TREE_ID}}",
+    "uuid": "{{USER_ID}}"
+    "watering_id": 1
 }
