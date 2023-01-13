@@ -76,9 +76,8 @@ export default async function (
 			const { data, error } = await supabase
 				.from("trees_watered")
 				.insert<Database["public"]["Tables"]["trees_watered"]["Insert"]>({
-					// TODO: Remove time from db schema trees_watered  it is a legacy value not used anymore
+					// TODO: [GDK-220] Remove time from db schema trees_watered  it is a legacy value not used anymore
 					// https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues/160
-					time: timestamp!,
 					tree_id,
 					username,
 					timestamp,

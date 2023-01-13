@@ -208,28 +208,28 @@ export interface Database {
       }
       trees_watered: {
         Row: {
-          amount: number | null
+          amount: number
           id: number
-          time: string
-          timestamp: string | null
+          time: string | null
+          timestamp: string
           tree_id: string
           username: string | null
           uuid: string | null
         }
         Insert: {
-          amount?: number | null
+          amount: number
           id?: number
-          time: string
-          timestamp?: string | null
+          time?: string | null
+          timestamp: string
           tree_id: string
           username?: string | null
           uuid?: string | null
         }
         Update: {
-          amount?: number | null
+          amount?: number
           id?: number
-          time?: string
-          timestamp?: string | null
+          time?: string | null
+          timestamp?: string
           tree_id?: string
           username?: string | null
           uuid?: string | null
