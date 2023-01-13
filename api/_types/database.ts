@@ -119,7 +119,7 @@ export interface Database {
           kronedurch: string | null
           lat: string | null
           lng: string | null
-          pflanzjahr: string | null
+          pflanzjahr: number | null
           radolan_days: number[] | null
           radolan_sum: number | null
           stammumfg: string | null
@@ -148,7 +148,7 @@ export interface Database {
           kronedurch?: string | null
           lat?: string | null
           lng?: string | null
-          pflanzjahr?: string | null
+          pflanzjahr?: number | null
           radolan_days?: number[] | null
           radolan_sum?: number | null
           stammumfg?: string | null
@@ -177,7 +177,7 @@ export interface Database {
           kronedurch?: string | null
           lat?: string | null
           lng?: string | null
-          pflanzjahr?: string | null
+          pflanzjahr?: number | null
           radolan_days?: number[] | null
           radolan_sum?: number | null
           stammumfg?: string | null
@@ -240,6 +240,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      count_by_age: {
+        Args: { start_year: number; end_year: number }
+        Returns: number
+      }
       get_watered_and_adopted: {
         Args: Record<PropertyKey, never>
         Returns: { tree_id: string; adopted: number; watered: number }[]
