@@ -98,6 +98,6 @@ describe("post tests", () => {
 				response: setupResponseData({ error: "error" }),
 			},
 			{ name: "production", env: "production", response: { error: "error" } },
-		],
+		]
 	);
 });

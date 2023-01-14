@@ -142,7 +142,7 @@ describe("test GET request handlers", () => {
 		jest
 			.spyOn(manager, "getAllTrees")
 			.mockImplementation((_offset, _limit) =>
-				Promise.resolve({ watered: [] as TreeReduced[] }),
+				Promise.resolve({ watered: [] as TreeReduced[] })
 			);
 		const req = setupRequest({
 			query: { queryType: "all", offset: "1", limit: "1" },
@@ -157,7 +157,7 @@ describe("test GET request handlers", () => {
 		jest
 			.spyOn(manager, "getAllTrees")
 			.mockImplementation((_offset, _limit) =>
-				Promise.resolve({ watered: [] as TreeReduced[] }),
+				Promise.resolve({ watered: [] as TreeReduced[] })
 			);
 		const req = setupRequest({
 			query: { queryType: "all", limit: "1" },
@@ -172,7 +172,7 @@ describe("test GET request handlers", () => {
 		jest
 			.spyOn(manager, "getAllTrees")
 			.mockImplementation((_offset, _limit) =>
-				Promise.resolve({ watered: [] as TreeReduced[] }),
+				Promise.resolve({ watered: [] as TreeReduced[] })
 			);
 		const req = setupRequest({
 			query: { queryType: "all", offset: "1" },
@@ -344,5 +344,5 @@ cases(
 			query: { queryType: "foo", wateredandadopted: [] },
 			statusCode: 400,
 		},
-	],
+	]
 );
