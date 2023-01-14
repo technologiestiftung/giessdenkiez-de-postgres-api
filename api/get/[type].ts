@@ -20,7 +20,7 @@ const queryTypes = [
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
-export default async function (
+export default async function handler(
 	request: VercelRequest,
 	response: VercelResponse
 ) {
