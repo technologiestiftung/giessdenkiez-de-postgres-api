@@ -1,3 +1,5 @@
+import { test, describe, expect, afterAll, jest } from "@jest/globals";
+
 import * as pkg from "../_utils/package";
 jest.mock("../_utils/envs", () => {
 	return {

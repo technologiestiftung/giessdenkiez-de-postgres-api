@@ -5,6 +5,8 @@ module.exports = {
 	testMatch: ["**/*.spec.ts", "**/*.test.ts"],
 	collectCoverage: true,
 	collectCoverageFrom: ["api/**/*.ts"],
+	// setupFiles: ["./jest.env.cjs"],
+	setupFilesAfterEnv: ["./jest.setup.cjs"],
 	coveragePathIgnorePatterns: [
 		"<rootDir>/dist/",
 		"<rootDir>/node_modules/",
