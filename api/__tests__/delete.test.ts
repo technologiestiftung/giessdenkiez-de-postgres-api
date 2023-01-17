@@ -1,43 +1,59 @@
-import path from "node:path";
+// import path from "node:path";
 
 import { faker } from "@faker-js/faker";
 
-import { requestTestToken } from "../__test-utils/req-test-token.js";
+import { requestTestToken } from "../__test-utils/req-test-token";
 process.env.NODE_ENV = "test";
-import { config } from "dotenv";
-import { supabase } from "../_utils/supabase.js";
-import { Database } from "../_types/database.js";
+// import { config } from "dotenv";
+import { supabase } from "../_utils/supabase";
+import { Database } from "../_types/database";
 import {
 	truncateTreesAdopted,
 	truncateTreesWaterd,
-} from "../__test-utils/postgres.js";
-const envs = config({ path: path.resolve(process.cwd(), ".env") });
+} from "../__test-utils/postgres";
+import { createTestServer } from "../__test-utils/create-test-server";
+import deleteHandler from "../delete/[type]";
+// const envs = config({ path: path.resolve(process.cwd(), ".env") });
 
 describe("api/delete/[type]", () => {
 	test("should make a request to delete/unwater and fail unauthorized", async () => {
-		const response = await fetch("http://localhost:3000/delete/unwater", {
+		const { server, url } = await createTestServer(
+			{ type: "unwater" },
+			deleteHandler
+		);
+		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
 			},
 		});
+		server.close();
 		expect(response.status).toBe(401);
 	});
 	test("should make a request to api/delete/unwater and fail due to missing body", async () => {
+		const { server, url } = await createTestServer(
+			{ type: "unwater" },
+			deleteHandler
+		);
 		const token = await requestTestToken();
-		const response = await fetch("http://localhost:3000/delete/unwater", {
+		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bearer ${token}`,
 			},
 		});
+		server.close();
 		expect(response.status).toBe(400);
 	});
 
 	test("should make a request to api/delete/unwater and fail due to wrong body", async () => {
+		const { server, url } = await createTestServer(
+			{ type: "unwater" },
+			deleteHandler
+		);
 		const token = await requestTestToken();
-		const response = await fetch("http://localhost:3000/delete/unwater", {
+		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -45,6 +61,7 @@ describe("api/delete/[type]", () => {
 			},
 			body: JSON.stringify({}),
 		});
+		server.close();
 		expect(response.status).toBe(400);
 	});
 
@@ -82,9 +99,12 @@ describe("api/delete/[type]", () => {
 		if (waterData === null) throw new Error("waterData is null");
 
 		const watering_id = waterData[0].id;
-
+		const { server, url } = await createTestServer(
+			{ type: "unwater" },
+			deleteHandler
+		);
 		const token = await requestTestToken();
-		const response = await fetch("http://localhost:3000/delete/unwater", {
+		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -96,6 +116,7 @@ describe("api/delete/[type]", () => {
 				watering_id,
 			}),
 		});
+		server.close();
 		expect(response.status).toBe(204);
 	});
 
@@ -127,8 +148,12 @@ describe("api/delete/[type]", () => {
 		expect(adoptData).not.toBe(null);
 		if (adoptData === null) throw new Error("adoptData is null");
 
+		const { server, url } = await createTestServer(
+			{ type: "unadopt" },
+			deleteHandler
+		);
 		const token = await requestTestToken();
-		const response = await fetch("http://localhost:3000/delete/unadopt", {
+		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -139,6 +164,7 @@ describe("api/delete/[type]", () => {
 				uuid,
 			}),
 		});
+		server.close();
 		expect(response.status).toBe(204);
 	});
 });
