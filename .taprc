@@ -1,4 +1,0 @@
-test-regex: ((\/|^)api/(__tests?__)\/.*|\.(spec))\.(ts)$
-timeout: 30
-nyc-arg: "--exclude=./**/*.test.ts"
-ts: true
