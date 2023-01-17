@@ -1,7 +1,7 @@
 const queryTypes = ["unadopt", "unwater"];
 
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { verifyRequest } from "../_utils/auth/verify";
+import { verifyRequest } from "../_utils/verify";
 import setHeaders from "../_utils/set-headers";
 import { supabase } from "../_utils/supabase";
 import {
@@ -17,7 +17,7 @@ const schemas: Record<string, AjvSchema> = {
 };
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
-export default async function (
+export default async function deleteHandler(
 	request: VercelRequest,
 	response: VercelResponse
 ) {
@@ -64,7 +64,6 @@ export default async function (
 		}
 		case "unwater": {
 			// FIXME: [GDK-221] API (with supabase) Find out why delete/unwater route does not work
-			console.log("request in delete", request.url);
 
 			const { tree_id, uuid, watering_id } = request.body;
 			const { error } = await supabase

@@ -3,7 +3,7 @@ import setHeaders from "../_utils/set-headers";
 import { setupResponseData } from "../_utils/setup-response";
 import { supabase } from "../_utils/supabase";
 import type { Point } from "geojson";
-import { verifyRequest } from "../_utils/auth/verify";
+import { verifyRequest } from "../_utils/verify";
 const queryTypes = [
 	"byid",
 	"treesbyids",

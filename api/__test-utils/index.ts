@@ -1,4 +1,4 @@
-import { Generic } from "../_utils/common/interfaces";
+import { Generic } from "../_deprecated/interfaces";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 
 export function setupRequest(overrides?: Generic): VercelRequest {

@@ -9,7 +9,7 @@ import {
 	waterSchema,
 } from "../_utils/validation";
 import { Database } from "../_types/database";
-import { verifyRequest } from "../_utils/auth/verify";
+import { verifyRequest } from "../_utils/verify";
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
@@ -21,7 +21,7 @@ const schemas: Record<string, AjvSchema> = {
 
 // type TreesAdopted = Database["public"]["Tables"]["trees_adopted"]["Insert"];
 type TreesWatered = Database["public"]["Tables"]["trees_watered"]["Insert"];
-export default async function (
+export default async function postHandler(
 	request: VercelRequest,
 	response: VercelResponse
 ) {
