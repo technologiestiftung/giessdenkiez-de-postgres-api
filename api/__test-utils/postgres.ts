@@ -12,3 +12,16 @@ export async function truncateTreesAdopted() {
 	await sql`TRUNCATE TABLE trees_adopted`;
 	sql.end();
 }
+
+export async function createWateredTrees() {
+	const sql = postgres(url);
+	await sql`
+		INSERT INTO trees_watered (uuid, tree_id, amount, timestamp)
+		VALUES
+			('test', '_2100294b1f', 1, '2023-01-01 00:00:00'),
+			('test', '_2100294b1f', 1, '2023-01-01 00:00:00'),
+			('test', '_2100186c08', 1, '2023-01-01 00:00:00'),
+			('test', '_2100186c08', 1, '2023-01-01 00:00:00');
+			`;
+	sql.end();
+}
