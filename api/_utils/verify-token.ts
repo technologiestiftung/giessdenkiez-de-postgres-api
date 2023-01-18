@@ -22,6 +22,7 @@ export function getKey(header: JwtHeader, callback: SigningKeyCallback): void {
 	if (!header.kid) {
 		throw new Error("Header.kid is missing");
 	}
+
 	client.getSigningKey(
 		header.kid,
 
