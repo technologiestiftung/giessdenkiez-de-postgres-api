@@ -198,15 +198,22 @@ each([
 	[400, "all", { limit: 10000000 }, "due to limit being to large"],
 	[400, "all", { offset: "abc" }, "due to offset being NaN"],
 	[400, "all", { offset: ["1", "2", "3"] }, "due to offset being not a string"],
+	[400, "byid", {}, "due to missing id serachParam"],
+	[
+		400,
+		"treesbyids",
+		{},
+		"due to missing tree_ids list serachParam (_2100294b1f,_210028b9c8)",
+	],
 ]).describe.only(
-	"should return %d on route %s",
+	"error tests for routes",
 	(
 		statusCode: number,
 		type: string,
 		overrides: Record<string, unknown>,
 		description: string
 	) => {
-		test(`returns ${statusCode} ${description}`, async () => {
+		test(`should return ${statusCode} on route "${type}" ${description}`, async () => {
 			const { server, url } = await createTestServer(
 				{ type, ...overrides },
 				handler
