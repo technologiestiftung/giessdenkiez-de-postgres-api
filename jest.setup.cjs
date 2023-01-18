@@ -1,5 +1,4 @@
-module.exports = async () => {
-	console.log(`============ testSetupFile Loaded ===========`);
-	jest.useFakeTimers();
-	jest.setTimeout(10000);
-};
+// module.exports = async () => {
+// jest.useFakeTimers();
+jest.setTimeout(10000);
+// };
