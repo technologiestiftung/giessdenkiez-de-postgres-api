@@ -85,7 +85,9 @@ export default async function handler(
 				});
 			}
 			if (!tree_ids) {
-				return response.status(400).json({ error: "ids query is required" });
+				return response
+					.status(400)
+					.json({ error: "tree_ids query is required" });
 			}
 			const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
 			const { data: trees, error } = await supabase
@@ -243,8 +245,56 @@ export default async function handler(
 			});
 			return response.status(200).json(data);
 		}
-		case "byage":
-			return response.status(200).json({ message: "byage" });
+		case "byage": {
+			const { start: start_str, end: end_str } = request.query;
+			if (!start_str) {
+				return response.status(400).json({ error: "start query is required" });
+			}
+			if (!end_str) {
+				return response.status(400).json({ error: "end query is required" });
+			}
+			if (Array.isArray(start_str)) {
+				return response
+					.status(400)
+					.json({ error: "start needs to be a string" });
+			}
+			if (Array.isArray(end_str)) {
+				return response.status(400).json({ error: "end needs to be a string" });
+			}
+			const start = isNaN(parseInt(start_str, 10))
+				? undefined
+				: parseInt(start_str, 10);
+			const end = isNaN(parseInt(end_str, 10))
+				? undefined
+				: parseInt(end_str, 10);
+			if (start === undefined) {
+				return response
+					.status(400)
+					.json({ error: "start needs to be a number" });
+			}
+			if (end === undefined) {
+				return response.status(400).json({ error: "end needs to be a number" });
+			}
+
+			const { data: trees, error } = await supabase
+				.from("trees")
+				.select("id")
+				.gte("pflanzjahr", start)
+				.lte("pflanzjahr", end);
+			if (error) {
+				return response.status(500).json({ error });
+			}
+			if (!trees) {
+				return response.status(500).json({ error: "trees not found" });
+			}
+			const data = setupResponseData({
+				url: request.url,
+				data: trees,
+				error,
+			});
+
+			return response.status(200).json(data);
+		}
 		//TODO: [GDK-218] API (with supabase) Should GET lastwatered be only available for authenticated users?
 		case "lastwatered": {
 			const { id } = request.query;
