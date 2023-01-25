@@ -24,6 +24,7 @@ function returnErrorResponse(
 	error: PostgrestError | null,
 	status: number
 ) {
+	if (!error) return;
 	return response.status(status).json({ error });
 }
 
@@ -39,7 +40,7 @@ export default async function handler(
 	}
 	const { type } = request.query;
 	if (Array.isArray(type)) {
-		return response.status(400).json({ error: "type needs to be a string" });
+		return response.status(400).json({ error: `${type} needs to be a string` });
 	}
 	if (!queryTypes.includes(type)) {
 		return response.status(404).json({ error: `invalid route ${type}` });
@@ -50,9 +51,7 @@ export default async function handler(
 			return response.status(400).json({ error: "invalid query type" });
 		case "byid": {
 			const { id } = request.query;
-			if (Array.isArray(id)) {
-				return response.status(400).json({ error: "id needs to be a string" });
-			}
+
 			if (!id) {
 				return response.status(400).json({ error: "id query is required" });
 			}
@@ -91,12 +90,8 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "treesbyids": {
-			const { tree_ids } = request.query;
-			if (Array.isArray(tree_ids)) {
-				return response.status(400).json({
-					error: "ids needs to be a a comma separated list of tree_ids",
-				});
-			}
+			const { tree_ids } = <{ tree_ids: string }>request.query;
+
 			if (!tree_ids) {
 				return response
 					.status(400)
@@ -139,17 +134,10 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "all": {
-			let { limit: limit_str, offset: offset_str } = request.query;
-			if (Array.isArray(limit_str)) {
-				return response
-					.status(400)
-					.json({ error: "limit needs to be a string" });
-			}
-			if (Array.isArray(offset_str)) {
-				return response
-					.status(400)
-					.json({ error: "offset needs to be a string" });
-			}
+			let { limit: limit_str, offset: offset_str } = <
+				{ limit: string; offset: string }
+			>request.query;
+
 			if (!limit_str) {
 				limit_str = "100";
 			}
@@ -211,21 +199,16 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "countbyage": {
-			const { start: startStr, end: endStr } = request.query;
+			const { start: startStr, end: endStr } = <{ start: string; end: string }>(
+				request.query
+			);
 			if (!startStr) {
 				return response.status(400).json({ error: "start query is required" });
 			}
 			if (!endStr) {
 				return response.status(400).json({ error: "end query is required" });
 			}
-			if (Array.isArray(startStr)) {
-				return response
-					.status(400)
-					.json({ error: "start needs to be a string" });
-			}
-			if (Array.isArray(endStr)) {
-				return response.status(400).json({ error: "end needs to be a string" });
-			}
+
 			const start = isNaN(parseInt(startStr, 10))
 				? undefined
 				: parseInt(startStr, 10);
@@ -261,18 +244,16 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "byage": {
-			const { start: startStr, end: endStr } = request.query;
+			const { start: startStr, end: endStr } = <{ start: string; end: string }>(
+				request.query
+			);
 			if (!startStr) {
 				return response.status(400).json({ error: "start query is required" });
 			}
 			if (!endStr) {
 				return response.status(400).json({ error: "end query is required" });
 			}
-			if (Array.isArray(startStr)) {
-				return response
-					.status(400)
-					.json({ error: "start needs to be a string" });
-			}
+
 			if (Array.isArray(endStr)) {
 				return response.status(400).json({ error: "end needs to be a string" });
 			}
@@ -312,13 +293,11 @@ export default async function handler(
 		}
 		//TODO: [GDK-218] API (with supabase) Should GET lastwatered be only available for authenticated users?
 		case "lastwatered": {
-			const { id } = request.query;
+			const { id } = <{ id: string }>request.query;
 			if (!id) {
 				return response.status(400).json({ error: "id query is required" });
 			}
-			if (Array.isArray(id)) {
-				return response.status(400).json({ error: "id needs to be a string" });
-			}
+
 			const { data, error } = await supabase
 				.from("trees_watered")
 				.select("id,timestamp,amount,username,tree_id")
@@ -344,15 +323,11 @@ export default async function handler(
 			if (!authorized) {
 				return response.status(401).json({ error: "unauthorized" });
 			}
-			const { uuid } = request.query;
+			const { uuid } = <{ uuid: string }>request.query;
 			if (!uuid) {
 				return response.status(400).json({ error: "uuid query is required" });
 			}
-			if (Array.isArray(uuid)) {
-				return response
-					.status(400)
-					.json({ error: "uuid needs to be a string" });
-			}
+
 			const { data, error } = await supabase
 				.from("trees_adopted")
 				.select("tree_id,uuid")
@@ -376,7 +351,7 @@ export default async function handler(
 			if (!authorized) {
 				return response.status(401).json({ error: "unauthorized" });
 			}
-			const { uuid, id } = request.query;
+			const { uuid, id } = <{ uuid: string; id: string }>request.query;
 			if (!uuid) {
 				return response.status(400).json({ error: "uuid query is required" });
 			}
@@ -385,16 +360,7 @@ export default async function handler(
 					.status(400)
 					.json({ error: "tree_id query is required" });
 			}
-			if (Array.isArray(uuid)) {
-				return response
-					.status(400)
-					.json({ error: "uuid needs to be a string" });
-			}
-			if (Array.isArray(id)) {
-				return response
-					.status(400)
-					.json({ error: "tree_id needs to be a string" });
-			}
+
 			const { data, error } = await supabase
 				.from("trees_adopted")
 				.select("uuid,tree_id")
@@ -421,15 +387,11 @@ export default async function handler(
 			if (!authorized) {
 				return response.status(401).json({ error: "unauthorized" });
 			}
-			const { uuid } = request.query;
+			const { uuid } = <{ uuid: string }>request.query;
 			if (!uuid) {
 				return response.status(400).json({ error: "uuid query is required" });
 			}
-			if (Array.isArray(uuid)) {
-				return response
-					.status(400)
-					.json({ error: "uuid needs to be a string" });
-			}
+
 			const { data, error } = await supabase
 				.from("trees_watered")
 				.select("*")
