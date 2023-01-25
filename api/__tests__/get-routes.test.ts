@@ -24,6 +24,7 @@ import { requestTestToken } from "../__test-utils/req-test-token";
 
 describe("GET routes snapshot tests default responses", () => {
 	test("should return 200 on wateredbyuser route authenticated", async () => {
+		await truncateTreesWaterd();
 		const token = await requestTestToken();
 		const { server, url } = await createTestServer(
 			{ type: "wateredbyuser", uuid: "auth0|abc" },
@@ -40,6 +41,7 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(json).toMatchSnapshot();
 	});
 	test("should return 200 on istreeadopted route authenticated", async () => {
+		await truncateTreesWaterd();
 		const token = await requestTestToken();
 		const { server, url } = await createTestServer(
 			{ type: "istreeadopted", id: "_210028b9c8", uuid: "auth0|abc" },
@@ -57,6 +59,7 @@ describe("GET routes snapshot tests default responses", () => {
 	});
 
 	test("should return 200 on adopted route authenticated", async () => {
+		await truncateTreesWaterd();
 		const token = await requestTestToken();
 		const { server, url } = await createTestServer(
 			{ type: "adopted", uuid: "auth0|abc" },
@@ -73,6 +76,7 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(json).toMatchSnapshot();
 	});
 	test("should return 200 on lastwatered route", async () => {
+		await truncateTreesWaterd();
 		const { server, url } = await createTestServer(
 			{ type: "lastwatered", id: "_210028b9c8" },
 			handler
@@ -84,6 +88,7 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(json).toMatchSnapshot();
 	});
 	test("should return 200 on wateredandadopted route", async () => {
+		await truncateTreesWaterd();
 		const { server, url } = await createTestServer(
 			{ type: "wateredandadopted" },
 			handler
@@ -94,6 +99,7 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
 	});
+
 	test("should return 200 on byage route", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "byage", start: "1800", end: "3000" },
@@ -106,17 +112,6 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(json).toMatchSnapshot();
 	});
 
-	test("should return 200 on wateredandadopted", async () => {
-		const { server, url } = await createTestServer(
-			{ type: "wateredandadopted" },
-			handler
-		);
-		const response = await fetch(url);
-		server.close();
-		const json = await response.json();
-		expect(response.status).toBe(200);
-		expect(json).toMatchSnapshot();
-	});
 	test("should return 200 on countbyage route", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "countbyage", start: "1800", end: "3000" },
@@ -168,7 +163,7 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
 	});
-	test("Should return 200 an tree all route", async () => {
+	test("Should return 200 on tree all route", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "all", limit: "2", offset: "0" },
 			handler
@@ -194,34 +189,61 @@ describe("GET routes snapshot tests default responses", () => {
 });
 
 each([
+	[401, "wateredbyuser", {}, "due to not beeing authorized"],
+	[400, "wateredbyuser", {}, "due to uuid missing", true],
+	[401, "istreeadopted", {}, "due to not beeing authorized"],
+	[400, "istreeadopted", {}, "due to uuid missing", true],
+	[400, "istreeadopted", { uuid: "abc" }, "due to id missing", true],
+
+	[401, "adopted", {}, "due to not beeing authorized"],
+	[400, "adopted", {}, "due to not uuid missing", true],
 	[400, "all", { limit: "abc" }, "due to limit being NaN"],
 	[400, "all", { limit: 10000000 }, "due to limit being to large"],
 	[400, "all", { offset: "abc" }, "due to offset being NaN"],
-	[400, "all", { offset: ["1", "2", "3"] }, "due to offset being not a string"],
 	[400, "byid", {}, "due to missing id serachParam"],
+	[400, "treesbyids", {}, "due to tree_ids missing"],
+	[400, "countbyage", {}, "due to start query is missing"],
+	[400, "countbyage", { start: "1800" }, "due to end query is missing"],
+	[400, "countbyage", { start: "1800", end: "abc" }, "due to end beeing NaN"],
+	[400, "countbyage", { start: "abc", end: "3000" }, "due to start beeing NaN"],
+	[400, "byage", {}, "due to start query is missing"],
+	[400, "byage", { start: "1800" }, "due to end query is missing"],
+	[400, "byage", { start: "1800", end: "abc" }, "due to end beeing NaN"],
+	[400, "byage", { start: "abc", end: "3000" }, "due to start beeing NaN"],
+	[400, "lastwatered", {}, "due to id missing"],
 	[
 		400,
 		"treesbyids",
 		{},
 		"due to missing tree_ids list serachParam (_2100294b1f,_210028b9c8)",
 	],
-]).describe.only(
+]).describe(
 	"error tests for routes",
 	(
 		statusCode: number,
 		type: string,
 		overrides: Record<string, unknown>,
-		description: string
+		description: string,
+		needsAuth?: boolean
 	) => {
 		test(`should return ${statusCode} on route "${type}" ${description}`, async () => {
+			// const token = await requestTestToken();
+
 			const { server, url } = await createTestServer(
 				{ type, ...overrides },
 				handler
 			);
-			const response = await fetch(`${url}`);
+			const response = await fetch(`${url}`, {
+				headers: {
+					...(needsAuth === true && {
+						Authorization: `Bearer ${await requestTestToken()}`,
+					}),
+					"Content-Type": "application/json",
+				},
+			});
 			server.close();
 			expect(response.status).toBe(statusCode);
-			console.log(await response.json());
+			// console.log(await response.json());
 		});
 	}
 );

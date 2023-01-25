@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET routes snapshot tests default responses Should return 200 an tree all route 1`] = `
+exports[`GET routes snapshot tests default responses Should return 200 on tree all route 1`] = `
 {
   "data": [
     [
@@ -2425,19 +2425,15 @@ exports[`GET routes snapshot tests default responses should return 200 on trees_
 }
 `;
 
-exports[`GET routes snapshot tests default responses should return 200 on wateredandadopted 1`] = `
-{
-  "data": [],
-  "error": null,
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "url": "/",
-  "version": "2.0.0",
-}
-`;
-
 exports[`GET routes snapshot tests default responses should return 200 on wateredandadopted route 1`] = `
 {
-  "data": [],
+  "data": [
+    {
+      "adopted": 1,
+      "tree_id": "_2100294b1f",
+      "watered": 0,
+    },
+  ],
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "url": "/",
