@@ -6,24 +6,23 @@ Build with Typescript connects to Supabase, runs on vercel.com.
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
 
-- [Giess den Kiez Postgres API](#giess-den-kiez-postgres-api)
+Build with Typescript, Supabase and Auth0.com, runs on vercel.com
 
-  - [Prerequisites](#prerequisites)
-  - [Setup](#setup)
-  - [Development](#development)
-  - [Deploy](#deploy)
-    - [Vercel](#vercel)
-    - [Vercel Environment Variables](#vercel-environment-variables)
-  - [API Routes](#api-routes)
-    - [API Authorization](#api-authorization)
-  - [Tests](#tests)
+
+
+## W.I.P. API Migration
+
+![](./docs/wip.png)
+
+We are in the process of migrating the API fully to supabase. These docs are not up to date yet.
 
 ## Prerequisites
 
 - [Vercel.com](https://vercel.com) Account
 - [Auth0.com](https://auth0.com) Account
 - [Supabase](https://supabase.com) Account
-- [Supabase CLI](https://supabase.com/docs/guides/cli) installed
+- Supabase CLI install with brew `brew install supabase/tap/supabase`
+- [Docker](https://www.docker.com/) Dependency for Supabase
 
 ## Setup
 
@@ -68,25 +67,22 @@ in your `giessdenkiez-de-postgres-api` repo run
 npx vercel dev
 ```
 
-<!--
-### Postgres DB with Prisma
-
-Setup your Postgres + Postgis Database. Maybe on render.com, AWS or whereever you like your relational databases. Take your values for `user`, `database`, `password`, `port` and `host` and also add them to the `.env` file. Make sure that the `DATABASE_URL` environment variable in the `.env` file is set right. The pattern is `postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA`. The `DATABASE_URL` is used by [Prisma](https://www.prisma.io/) to connect to your DB. You can have several predefiend URLs in the .env file and just comment them in or out depending with which DB you want to connect.
-
-Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup and development. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
-If you want some initial data in your DB for testing run also `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight. -->
 
 ## Deploy
+
+### Postgres DB with Supabase
+
+We use [Supabase](https://supabase.io/) to connect to our Postgres DB. Supabase is a free and open source alternative to Firebase. It is a hosted Postgres DB with a REST API and a realtime websocket API. It also comes with a web based GUI to manage your data. You can see some detailed information about our setup in this repo [https://github.com/technologiestiftung/giessdenkiez-de-supabase/][gdk-supabase]
+>>>>>>> e21b7fce6234dcd955d99c6d19e07bc57ec2007c
 
 ### Vercel
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
 Deploy your application with `npx vercel`. This will create a new project on vercel.com and deploy the application.
 
-<!-- We use [Prisma](https://www.prisma.io/) to provision and maintain the database. Run `npm run prisma:push:dangerously`. _The dangerously is here to remind you that this will change your DB without migration._ This should only be used for the setup. All later changes need to be controlled using `prisma migrate` or done manually with SQL and synced with `prisma pull` to
-If you want some more data in your DB for testing run also npm `npm run prisma:seed:dangerously`. Read the prisma docs for an deeper insight. -->
 
-### Vercel Environment Variables
+
+##### Vercel Environment Variables
 
 Add all your environment variables to the Vercel project by running the commands below. The cli will prompt for the values as input and lets you select if they should be added to `development`, `preview` and `production`. For local development you can overwrite these value with an `.env` file in the root of your project. It is wise to have one Supabase project for production and one for preview. The preview will then be used in deployment previews on GitHub. You can connect your vercel project with your GitHub repository on the vercel backend.
 
@@ -95,6 +91,11 @@ Add all your environment variables to the Vercel project by running the commands
 vercel env add SUPABASE_SERVICE_ROLE_KEY
 # the url to your supabase project
 vercel env add SUPABASE_URL
+# the user for the postgres db
+# below are all taken from auth0.com
+vercel env add jwksuri
+vercel env add audience
+vercel env add issuer
 ```
 
 To let these variables take effect you need to deploy your application once more.
@@ -109,7 +110,7 @@ vercel --prod
 
 There are 3 main routes `/get`, `/post` and `/delete`.
 
-On the `/get` route all actions are controlled by passing query strings. On the `/post` and `/delete` route you will work with the POST body. You will always have the `queryType` and sometimes aditional values in all three of them. For example to fetch a specific tree run the following command.
+On the `/get` route all actions are controlled by passing query strings. On the `/post` and `/delete` route you will work with the POST body. You will always have the `queryType` and sometimes additional values in all three of them. For example to fetch a specific tree run the following command.
 
 ```bash
 curl --request GET \
@@ -121,7 +122,7 @@ curl --request GET \
 
 ### API Authorization
 
-Some of the request will need an authoriziation header. You can obtain a token by making a request to your auth0 token issuer.
+Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
 
 ```bash
 curl --request POST \
@@ -131,7 +132,7 @@ curl --request POST \
 # fill in the dummy fields
 ```
 
-This will respond with an `access_token`. Use it to make autheticated requests.
+This will respond with an `access_token`. Use it to make authenticated requests.
 
 ```bash
 curl --request POST \
@@ -142,6 +143,17 @@ curl --request POST \
 ```
 
 Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+
+## Develop
+
+```bash
+# clone the supabase repo
+git clone https://github.com/technologiestiftung/giessdenkiez-de-supabase/
+cd giessdenkiez-de-supabase
+# start the db
+supabase start
+```
 
 ## Tests
 
@@ -154,3 +166,62 @@ supabase start
 cd giessdenkiez-de-postgres-api
 npm test
 ```
+
+On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
+
+<!-- redeploy dev 2021-03-15 16:00:51 -->
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://fabianmoronzirfas.me/"><img src="https://avatars.githubusercontent.com/u/315106?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Fabian Morón Zirfas</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=ff6347" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=ff6347" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/fdnklg"><img src="https://avatars.githubusercontent.com/u/9034032?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Fabian</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=fdnklg" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=fdnklg" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/warenix"><img src="https://avatars.githubusercontent.com/u/1849536?v=4?s=64" width="64px;" alt=""/><br /><sub><b>warenix</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=warenix" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=warenix" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://it-freelancer.berlin/"><img src="https://avatars.githubusercontent.com/u/7558075?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Daniel Sippel</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=danielsippel" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://www.sebastianmeier.eu/"><img src="https://avatars.githubusercontent.com/u/302789?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Sebastian Meier</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=sebastian-meier" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/vogelino"><img src="https://avatars.githubusercontent.com/u/2759340?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Lucas Vogel</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=vogelino" title="Documentation">📖</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## Credits
+
+<table>
+  <tr>
+    <td>
+      <a src="https://citylab-berlin.org/en/start/">
+        <br />
+        <br />
+        <img width="200" src="https://logos.citylab-berlin.org/logo-citylab-berlin.svg" />
+      </a>
+    </td>
+    <td>
+      A project by: <a src="https://www.technologiestiftung-berlin.de/en/">
+        <br />
+        <br />
+        <img width="150" src="https://logos.citylab-berlin.org/logo-technologiestiftung-berlin-en.svg" />
+      </a>
+    </td>
+    <td>
+      Supported by:
+      <br />
+      <br />
+      <img width="120" src="https://logos.citylab-berlin.org/logo-berlin.svg" />
+    </td>
+  </tr>
+</table>
+
+[gdk-supabase]: https://github.com/technologiestiftung/giessdenkiez-de-supabase/
+[supabase]: https://supabase.com/
