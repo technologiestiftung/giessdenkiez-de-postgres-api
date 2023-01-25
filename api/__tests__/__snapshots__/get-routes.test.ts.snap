@@ -2427,13 +2427,7 @@ exports[`GET routes snapshot tests default responses should return 200 on trees_
 
 exports[`GET routes snapshot tests default responses should return 200 on wateredandadopted route 1`] = `
 {
-  "data": [
-    {
-      "adopted": 1,
-      "tree_id": "_2100294b1f",
-      "watered": 0,
-    },
-  ],
+  "data": [],
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "url": "/",
