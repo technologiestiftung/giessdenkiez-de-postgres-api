@@ -1,14 +1,35 @@
 ![](https://img.shields.io/badge/Built%20with%20%E2%9D%A4%EF%B8%8F-at%20Technologiestiftung%20Berlin-blue)
 
-# Giess den Kiez Postgres API
+- [Giess den Kiez API](#giess-den-kiez-api)
+  - [W.I.P. API Migration](#wip-api-migration)
+  - [Prerequisites](#prerequisites)
+  - [Setup](#setup)
+  - [Development](#development)
+  - [Deploy](#deploy)
+    - [Postgres DB with Supabase](#postgres-db-with-supabase)
+    - [Vercel](#vercel)
+        - [Vercel Environment Variables](#vercel-environment-variables)
+  - [API Routes](#api-routes)
+    - [API Authorization](#api-authorization)
+  - [Develop](#develop)
+  - [Tests](#tests)
+  - [Giessdenkiez.de Supabase](#giessdenkiezde-supabase)
+    - [Prerequisites](#prerequisites-1)
+    - [Installation](#installation)
+    - [Usage or Deployment](#usage-or-deployment)
+    - [Radolan Harvester](#radolan-harvester)
+    - [Development](#development-1)
+    - [Tests](#tests-1)
+  - [Contributors ✨](#contributors-)
+  - [Credits](#credits)
+
+# Giess den Kiez API
 
 Build with Typescript connects to Supabase, runs on vercel.com.
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
 
 Build with Typescript, Supabase and Auth0.com, runs on vercel.com
-
-
 
 ## W.I.P. API Migration
 
@@ -29,15 +50,12 @@ We are in the process of migrating the API fully to supabase. These docs are not
 Clone this repo and the Supabase repo
 
 ```bash
-# supabase only needed for local development
-git clone git@github.com:technologiestiftung/giessdenkiez-de-supabase.git
-cd giessdenkiez-de-supabase
-npm ci
-supabase start
 # for more info on supabase check out the giessdenkiez-de-supabase repo
 git clone git@github.com:technologiestiftung/giessdenkiez-de-postgres-api.git
 cd ../giessdenkiez-de-postgres-api
 npm ci
+# supabase only needed for local development
+supabase start
 # create .env file and populate with ENV variables from the supabase start command
 cp .env.example .env
 # SERVICE_ROLE_KEY=...
@@ -67,20 +85,16 @@ in your `giessdenkiez-de-postgres-api` repo run
 npx vercel dev
 ```
 
-
 ## Deploy
 
 ### Postgres DB with Supabase
 
-We use [Supabase](https://supabase.io/) to connect to our Postgres DB. Supabase is a free and open source alternative to Firebase. It is a hosted Postgres DB with a REST API and a realtime websocket API. It also comes with a web based GUI to manage your data. You can see some detailed information about our setup in this repo [https://github.com/technologiestiftung/giessdenkiez-de-supabase/][gdk-supabase]
->>>>>>> e21b7fce6234dcd955d99c6d19e07bc57ec2007c
+We use [Supabase](https://supabase.io/) to connect to our Postgres DB. Supabase is a free and open source alternative to Firebase. It is a hosted Postgres DB with a REST API and a realtime websocket API. It also comes with a web based GUI to manage your data.
 
 ### Vercel
 
 Setup your vercel account. You might need to login. Run `npx vercel login`.
 Deploy your application with `npx vercel`. This will create a new project on vercel.com and deploy the application.
-
-
 
 ##### Vercel Environment Variables
 
@@ -144,7 +158,6 @@ curl --request POST \
 
 Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
-
 ## Develop
 
 ```bash
@@ -170,6 +183,94 @@ npm test
 On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
 
 <!-- redeploy dev 2021-03-15 16:00:51 -->
+
+## Giessdenkiez.de Supabase
+
+<!--
+
+
+Bonus:
+
+Use all-contributors
+
+npx all-contributors-cli check
+npx all-contributors-cli add ff6347 doc
+
+You can use it on GitHub just by commeting on PRs and issues:
+
+```
+@all-contributors please add @ff6347 for infrastructure, tests and code
+```
+Read more here https://allcontributors.org/
+
+
+Get fancy shields at https://shields.io
+ -->
+
+Running the giessdenkiez.de stack on supabase. WIP please ignore.
+
+### Prerequisites
+
+- Supabase account
+- Docker
+- Supabase CLI installed
+
+### Installation
+
+- Clone this repo
+- install dependencies with `npm ci`
+- Login into supabase with `supabase login`
+
+### Usage or Deployment
+
+- Create a project on supabase.com
+- Configure your GitHub actions to deploy all migrations to staging and production. See [.github/workflows/deploy-to-supabase-staging.yml](.github/workflows/deploy-to-supabase-staging.yml) and [.github/workflows/deploy-to-supabase-production.yml](.github/workflows/deploy-to-supabase-production.yml) for an example. We are using actions environments to deploy to different environments. You can read more about it here: https://docs.github.com/en/actions/reference/environments.
+  - Needed variables are:
+    - `DB_PASSWORD`
+    - `PROJECT_ID`
+    - `SUPABASE_ACCESS_TOKEN`
+- **(Not recommended but possible)** Link your local project directly to the remote `supabase link --project-ref <YOUR PROJECT REF>` (will ask you for your database password from the creation process)
+- **(Not recommended but possible)** Push your local state directly to your remote project `supabase db push` (will ask you for your database password from the creation process)
+
+### Radolan Harvester
+
+if you want to use the [DWD Radolan harvester](https://github.com/technologiestiftung/giessdenkiez-de-dwd-harvester) you need to prepare some data in your database
+
+- Update the table `radolan_harvester` with a time range for the last 30 days
+
+```sql
+INSERT INTO "public"."radolan_harvester" ("id", "collection_date", "start_date", "end_date")
+	VALUES (1, (
+			SELECT
+				CURRENT_DATE - INTEGER '1' AS yesterday_date),
+		(
+			SELECT
+				(
+					SELECT
+						CURRENT_DATE - INTEGER '31')::timestamp + '00:50:00'),
+				(
+					SELECT
+						(
+							SELECT
+								CURRENT_DATE - INTEGER '1')::timestamp + '23:50:00'));
+```
+
+- Update the table `radolan_geometry` with sql file [radolan_geometry.sql](sql/radolan_geometry.sql) This geometry is Berlin only.
+- Populate the table radolan_data with the content of [radolan_data.sql](sql/radolan_data.sql)
+
+This process is actually a little blackbox we need to solve.
+
+### Development
+
+- Run `supabase start` to start the supabase stack
+- Run `supabase stop` to stop the supabase stack (all changes not included in a migration will be lost)
+- make changes to your db using sql and run `supabase db diff --file <MIGRATION FILE NAME> --schema public --use-migra` to create migrations
+- Run `supabase gen types typescript --local > ./scripts/db-types.ts` to generate typescript types for your db
+
+### Tests
+
+- Run `npm test` to run the tests
+-
 
 ## Contributors ✨
 
