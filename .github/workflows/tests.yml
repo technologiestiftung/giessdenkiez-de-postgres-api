@@ -4,7 +4,6 @@
 # TODO: adjust ci workflow to use new testing setup (vercel and supabase)
 name: Node.js CI
 env:
-  CONTAINERNAME: "postgresdb-integration"
   CI: "true"
   NODE_ENV: "test"
 on:
@@ -15,36 +14,46 @@ on:
 
 jobs:
   test:
+    env:
+      SUPABASE_INTERNAL_IMAGE_REGISTRY: docker.io
+      SUPABASE_URL: http://localhost:54321
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+      SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+
+      issuer: ${{ secrets.issuer }}
+      audience: ${{ secrets.audience }}
+      jwksuri: ${{ secrets.jwksuri }}
+      jwt_secret: ${{ secrets.jwt_secret }}
+      client_secret: ${{ secrets.client_secret }}
+      client_id: ${{ secrets.client_id }}
+
     runs-on: ubuntu-latest
+    environment: ci_test
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [16.x, 18.x]
 
-    services:
-      postgres:
-        image: postgis/postgis:11-3.0
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        env:
-          POSTGRES_PASSWORD: ent
-          POSTGRES_USER: fangorn
-          POSTGRES_DB: trees
-        ports:
-          - 5432:5432
     steps:
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME  }}
+          password: ${{ secrets.DOCKER_PASSWORD  }}
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.33.0
+      - run: supabase start
       - run: npm ci
       - run: npm run build --if-present
       # - run: PGPASSWORD=ent psql -h localhost -d trees -U fangorn -q -f test/sql/build-schema.sql
       - run: npm test
+      - run: supabase stop
   release:
     name: semantic-release
     needs: [test]
@@ -66,4 +75,4 @@ jobs:
           semantic_version: 18
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
