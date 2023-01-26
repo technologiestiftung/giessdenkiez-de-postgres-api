@@ -5,6 +5,7 @@ import handler from "../get/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import {
 	createWateredTrees,
+	truncateTreesAdopted,
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
 import { requestTestToken } from "../__test-utils/req-test-token";
@@ -89,6 +90,7 @@ describe("GET routes snapshot tests default responses", () => {
 	});
 	test("should return 200 on wateredandadopted route", async () => {
 		await truncateTreesWaterd();
+		await truncateTreesAdopted();
 		const { server, url } = await createTestServer(
 			{ type: "wateredandadopted" },
 			handler
@@ -218,7 +220,7 @@ each([
 		"due to missing tree_ids list serachParam (_2100294b1f,_210028b9c8)",
 	],
 ]).describe(
-	"error tests for routes",
+	"error tests for GET routes",
 	(
 		statusCode: number,
 		type: string,

@@ -47,6 +47,7 @@ export default async function postHandler(
 			.json({ error: `invalid body: ${JSON.stringify(validationErrors)}` });
 	}
 	switch (type) {
+		// Since we safegaurd agains invalid types, we can safely assume that the type is valid. Should not be a fall through case
 		default: {
 			return response.status(400).json({ error: "invalid query type" });
 		}
@@ -66,6 +67,7 @@ export default async function postHandler(
 				)
 				.select();
 			if (error) {
+				// console.error(error);
 				return response.status(500).json({ error });
 			}
 			return response.status(201).json({ message: "adopted", data });
