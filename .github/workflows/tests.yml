@@ -50,8 +50,9 @@ jobs:
       - run: supabase start
       - run: npm ci
       - run: npm run build --if-present
-      # - run: PGPASSWORD=ent psql -h localhost -d trees -U fangorn -q -f test/sql/build-schema.sql
-      - run: npm test
+      #  Make sure to run tests in band and force exit to avoid hanging tests
+      # until we know where the open handles are
+      - run: npm test -- --runInBand --forceExit
       - run: supabase stop
   release:
     name: semantic-release
