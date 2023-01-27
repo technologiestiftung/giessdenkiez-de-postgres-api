@@ -326,3 +326,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [gdk-supabase]: https://github.com/technologiestiftung/giessdenkiez-de-supabase/
 [supabase]: https://supabase.com/
+<!-- bump -->
