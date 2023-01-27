@@ -1,10 +1,9 @@
 import { createClient } from "@supabase/supabase-js";
 import { Database } from "../_types/database";
-const url = process.env.SUPABASE_URL;
-const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+import { getEnvs } from "./envs";
+const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = getEnvs();
 
-if (!(url && key)) {
-	throw new Error("Missing environment variables for Supabase");
-}
-
-export const supabase = createClient<Database>(url, key);
+export const supabase = createClient<Database>(
+	SUPABASE_URL,
+	SUPABASE_SERVICE_ROLE_KEY
+);
