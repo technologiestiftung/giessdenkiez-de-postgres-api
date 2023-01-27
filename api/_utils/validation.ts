@@ -65,7 +65,7 @@ export const unwaterSchema: AjvSchema = {
 		tree_id: { type: "string" },
 		queryType: { type: "string" },
 	},
-	required: ["uuid", "tree_id"],
+	required: ["uuid", "tree_id", "watering_id"],
 	additionalProperties: false,
 };
 
