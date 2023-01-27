@@ -59,7 +59,7 @@ export default async function postHandler(
 			const { tree_id, uuid } = request.body;
 			const { data, error } = await supabase
 				.from("trees_adopted")
-				.upsert<{ tree_id: string; uuid: string }>(
+				.upsert(
 					{
 						tree_id,
 						uuid,
@@ -79,7 +79,7 @@ export default async function postHandler(
 			const { tree_id, username, timestamp, uuid, amount } = body;
 			const { data, error } = await supabase
 				.from("trees_watered")
-				.insert<Database["public"]["Tables"]["trees_watered"]["Insert"]>({
+				.insert({
 					// TODO: [GDK-220] Remove time from db schema trees_watered  it is a legacy value not used anymore
 					// https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues/160
 					tree_id,

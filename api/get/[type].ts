@@ -317,7 +317,6 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		// All requests below this line are only available for authenticated users
-
 		case "adopted": {
 			const authorized = await verifyRequest(request);
 			if (!authorized) {
