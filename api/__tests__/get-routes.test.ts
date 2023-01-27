@@ -191,13 +191,13 @@ describe("GET routes snapshot tests default responses", () => {
 });
 
 each([
-	[401, "wateredbyuser", {}, "due to not beeing authorized"],
+	[401, "wateredbyuser", {}, "due to not being authorized"],
 	[400, "wateredbyuser", {}, "due to uuid missing", true],
-	[401, "istreeadopted", {}, "due to not beeing authorized"],
+	[401, "istreeadopted", {}, "due to not being authorized"],
 	[400, "istreeadopted", {}, "due to uuid missing", true],
 	[400, "istreeadopted", { uuid: "abc" }, "due to id missing", true],
 
-	[401, "adopted", {}, "due to not beeing authorized"],
+	[401, "adopted", {}, "due to not being authorized"],
 	[400, "adopted", {}, "due to not uuid missing", true],
 	[400, "all", { limit: "abc" }, "due to limit being NaN"],
 	[400, "all", { limit: 10000000 }, "due to limit being to large"],
@@ -206,12 +206,12 @@ each([
 	[400, "treesbyids", {}, "due to tree_ids missing"],
 	[400, "countbyage", {}, "due to start query is missing"],
 	[400, "countbyage", { start: "1800" }, "due to end query is missing"],
-	[400, "countbyage", { start: "1800", end: "abc" }, "due to end beeing NaN"],
-	[400, "countbyage", { start: "abc", end: "3000" }, "due to start beeing NaN"],
+	[400, "countbyage", { start: "1800", end: "abc" }, "due to end being NaN"],
+	[400, "countbyage", { start: "abc", end: "3000" }, "due to start being NaN"],
 	[400, "byage", {}, "due to start query is missing"],
 	[400, "byage", { start: "1800" }, "due to end query is missing"],
-	[400, "byage", { start: "1800", end: "abc" }, "due to end beeing NaN"],
-	[400, "byage", { start: "abc", end: "3000" }, "due to start beeing NaN"],
+	[400, "byage", { start: "1800", end: "abc" }, "due to end being NaN"],
+	[400, "byage", { start: "abc", end: "3000" }, "due to start being NaN"],
 	[400, "lastwatered", {}, "due to id missing"],
 	[
 		400,

@@ -226,6 +226,7 @@ each([
 				body: JSON.stringify(body),
 			});
 			server.close();
+			// for debugging it is useful to log the results of the request
 			// const json = await response.json();
 			// console.log(json);
 			expect(response.status).toBe(statusCode);
