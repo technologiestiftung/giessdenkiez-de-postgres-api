@@ -47,8 +47,10 @@ export default async function postHandler(
 			.json({ error: `invalid body: ${JSON.stringify(validationErrors)}` });
 	}
 	switch (type) {
-		// Since we safegaurd agains invalid types, we can safely assume that the type is valid. Should not be a fall through case
 		default: {
+			// Since we safegaurd agains invalid types,
+			// we can safely assume that the type is valid.
+			// Should not be a fall through case.
 			return response.status(400).json({ error: "invalid query type" });
 		}
 		// https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues/159

@@ -45,6 +45,9 @@ export default async function deleteHandler(
 
 	switch (type) {
 		default: {
+			// this is here to be sure there is no fall through case,
+			// but we actually already checked for the type above.
+			// So this is actually unreachable
 			return response.status(400).json({ error: "invalid query type" });
 		}
 		case "unadopt": {
@@ -57,7 +60,6 @@ export default async function deleteHandler(
 			if (error) {
 				return response.status(500).json({ error });
 			}
-
 			return response
 				.status(204)
 				.json({ message: `unadopted tree ${tree_id}` });
