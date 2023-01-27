@@ -1,15 +1,15 @@
 const queryTypes = ["unadopt", "unwater"];
 
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { verifyRequest } from "../_utils/verify";
-import setHeaders from "../_utils/set-headers";
-import { supabase } from "../_utils/supabase";
+import { verifyRequest } from "../../_utils/verify";
+import setHeaders from "../../_utils/set-headers";
+import { supabase } from "../../_utils/supabase";
 import {
 	AjvSchema,
 	unadoptSchema,
 	unwaterSchema,
 	validate,
-} from "../_utils/validation";
+} from "../../_utils/validation";
 
 const schemas: Record<string, AjvSchema> = {
 	unadopt: unadoptSchema,

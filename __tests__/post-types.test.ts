@@ -1,7 +1,7 @@
 import { test, describe, expect } from "@jest/globals";
 import each from "jest-each";
 import fetch from "cross-fetch";
-import handler from "../post/[type]";
+import handler from "../api/post/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import { requestTestToken } from "../__test-utils/req-test-token";
 import {

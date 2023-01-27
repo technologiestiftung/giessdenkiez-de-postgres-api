@@ -12,7 +12,7 @@ import {
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
 import { createTestServer } from "../__test-utils/create-test-server";
-import deleteHandler from "../delete/[type]";
+import deleteHandler from "../api/delete/[type]";
 // const envs = config({ path: path.resolve(process.cwd(), ".env") });
 
 describe("api/delete/[type]", () => {

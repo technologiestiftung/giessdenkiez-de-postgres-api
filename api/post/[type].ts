@@ -1,15 +1,15 @@
 const queryTypes = ["adopt", "water"];
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import setHeaders from "../_utils/set-headers";
-import { supabase } from "../_utils/supabase";
+import setHeaders from "../../_utils/set-headers";
+import { supabase } from "../../_utils/supabase";
 import {
 	adoptSchema,
 	AjvSchema,
 	validate,
 	waterSchema,
-} from "../_utils/validation";
-import { Database } from "../_types/database";
-import { verifyRequest } from "../_utils/verify";
+} from "../../_utils/validation";
+import { Database } from "../../_types/database";
+import { verifyRequest } from "../../_utils/verify";
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"

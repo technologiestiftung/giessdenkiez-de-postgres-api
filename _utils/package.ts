@@ -13,7 +13,7 @@ export interface Package {
 }
 export function getPackage(): Package {
 	const pkgStr = fs.readFileSync(
-		path.resolve(__dirname, "../../package.json"),
+		path.resolve(__dirname, "../package.json"),
 		"utf8"
 	);
 	const pkg = JSON.parse(pkgStr);

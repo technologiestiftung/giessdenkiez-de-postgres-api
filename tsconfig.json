@@ -1,13 +1,20 @@
 {
 	"exclude": [
 		"node_modules",
-		"api/__tests__"
+		"__tests__"
+	],
+	"include": [
+		"api/**/*.ts",
+		"_utils/**/*.ts",
+		"__tests__/**/*.ts",
+		"__test-utils__/**/*.ts",
+		"_types/**/*.ts"
 	],
 	"compilerOptions": {
 		"target": "ESNext",
 		"module": "ESNext",
 		"outDir": "./dist",
-		"rootDir": "api",
+		// "rootDir": "api",
 		"strict": true,
 		"typeRoots": [
 			"node_modules/@types"

@@ -1,7 +1,7 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
 import { test, describe, expect } from "@jest/globals";
-import handler from "../get/[type]";
+import handler from "../api/get/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import {
 	createWateredTrees,

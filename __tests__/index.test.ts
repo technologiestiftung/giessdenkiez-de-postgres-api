@@ -1,7 +1,7 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
 import { test, describe, expect } from "@jest/globals";
-import handler from "../index";
+import handler from "../api/index";
 import { createTestServer } from "../__test-utils/create-test-server";
 
 describe("GET routes index", () => {

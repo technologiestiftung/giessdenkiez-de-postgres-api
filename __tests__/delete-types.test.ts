@@ -1,14 +1,9 @@
 import { test, describe, expect } from "@jest/globals";
 import each from "jest-each";
 import fetch from "cross-fetch";
-import handler from "../delete/[type]";
-import * as sb from "../_utils/supabase";
+import handler from "../api/delete/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import { requestTestToken } from "../__test-utils/req-test-token";
-import {
-	truncateTreesWaterd,
-	truncateTreesAdopted,
-} from "../__test-utils/postgres";
 
 describe("deleting data", () => {
 	test("should return 200 on options route", async () => {
