@@ -1,9 +1,9 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { setupResponseData } from "./_utils/setup-response";
 
-export default async function (
+export default async function handler(
 	_request: VercelRequest,
-	response: VercelResponse,
+	response: VercelResponse
 ) {
 	try {
 		return response
