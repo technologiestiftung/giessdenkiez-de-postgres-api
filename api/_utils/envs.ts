@@ -29,9 +29,11 @@ export function getEnvs(): Envs {
 	if (SUPABASE_SERVICE_ROLE_KEY === undefined)
 		throw new Error("SUPABASE_SERVICE_ROLE_KEY is undefined");
 
-	if (!JWKS_URI) throw new Error("Could not find jwksUri");
-	if (!AUDIENCE) throw new Error("Could not find audience");
-	if (!ISSUER) throw new Error("Could not find issuer");
+	if (JWKS_URI === undefined) throw new Error("jwksuri is undefined");
+
+	if (AUDIENCE === undefined) throw new Error("audience is undefined");
+
+	if (ISSUER === undefined) throw new Error("issuer is undefined");
 
 	return {
 		SUPABASE_URL,
