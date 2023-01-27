@@ -1,7 +1,7 @@
 {
 	"exclude": [
 		"node_modules",
-		"api/_utils/__tests__"
+		"api/__tests__"
 	],
 	"compilerOptions": {
 		"target": "ESNext",
