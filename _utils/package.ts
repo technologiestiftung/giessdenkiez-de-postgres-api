@@ -12,10 +12,7 @@ export interface Package {
 	};
 }
 export function getPackage(): Package {
-	const pkgStr = fs.readFileSync(
-		path.resolve(__dirname, "../package.json"),
-		"utf8"
-	);
+	const pkgStr = fs.readFileSync(path.resolve("./package.json"), "utf8");
 	const pkg = JSON.parse(pkgStr);
 	return pkg;
 }

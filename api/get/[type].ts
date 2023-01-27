@@ -1,10 +1,10 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import setHeaders from "../../_utils/set-headers";
-import { setupResponseData } from "../../_utils/setup-response";
-import { supabase } from "../../_utils/supabase";
-import type { Point } from "geojson";
-import { verifyRequest } from "../../_utils/verify";
 import { PostgrestError } from "@supabase/supabase-js";
+import type { Point } from "geojson";
+import setHeaders from "../../_utils/set-headers.js";
+import { setupResponseData } from "../../_utils/setup-response.js";
+import { supabase } from "../../_utils/supabase.js";
+import { verifyRequest } from "../../_utils/verify.js";
 const queryTypes = [
 	"byid",
 	"treesbyids",

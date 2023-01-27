@@ -6,7 +6,7 @@ import jwt, {
 	JwtHeader,
 	SigningKeyCallback,
 } from "jsonwebtoken";
-import { getEnvs } from "./envs";
+import { getEnvs } from "./envs.js";
 const { JWKS_URI: jwksUri, AUDIENCE: audience, ISSUER: issuer } = getEnvs();
 const client = jwksClient({
 	jwksUri,

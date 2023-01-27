@@ -1,7 +1,7 @@
 import { test, describe, expect, afterAll, jest } from "@jest/globals";
 
-import * as pkg from "../_utils/package";
-jest.mock("../_utils/envs", () => {
+import * as pkg from "../_utils/package.js";
+jest.mock("../_utils/envs.js", () => {
 	return {
 		getEnvs: () => {
 			return {
@@ -18,7 +18,7 @@ jest.mock("../_utils/envs", () => {
 		},
 	};
 });
-jest.mock("../_utils/package", () => {
+jest.mock("../_utils/package.js", () => {
 	return {
 		getPackage: jest.fn().mockImplementation(() => {
 			return {
@@ -37,7 +37,7 @@ describe("setup-response", () => {
 	});
 	test("should call package.ts", () => {
 		// eslint-disable-next-line jest/valid-expect-in-promise
-		import("../_utils/setup-response")
+		import("../_utils/setup-response.js")
 			.then((module) => {
 				const overrides = { main: "index.js" };
 				const res = module.setupResponseData<{ main: string }>(overrides);

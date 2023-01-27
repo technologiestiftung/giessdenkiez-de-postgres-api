@@ -1,4 +1,4 @@
-import { getPackage, Package } from "./package";
+import { getPackage, Package } from "./package.js";
 
 const pkg = getPackage();
 

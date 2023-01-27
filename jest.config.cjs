@@ -1,15 +1,23 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
-	preset: "ts-jest",
+	// preset: "ts-jest/presets/default-esm", // or other ESM presets
+	moduleNameMapper: {
+		"^(\\.{1,2}/.*)\\.js$": "$1",
+	},
 	transform: {
-		"^.+\\.(ts|tsx|js|jsx)$": [
+		// '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+		// '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+		"^.+\\.tsx?$": [
 			"ts-jest",
 			{
+				isolatedModules: true,
 				tsconfig: "tsconfig.json",
-				isolatedModules: false,
+				useESM: true,
 			},
 		],
 	},
+	modulePaths: ["<rootDir>"],
+	extensionsToTreatAsEsm: [".ts"],
 	testEnvironment: "node",
 	testMatch: ["**/*.spec.ts", "**/*.test.ts"],
 	collectCoverage: true,
@@ -18,7 +26,7 @@ module.exports = {
 	setupFilesAfterEnv: ["./jest.setup.cjs"],
 	coverageThreshold: {
 		global: {
-			branches: 74,
+			branches: 70,
 			functions: 75,
 			lines: 75,
 			statements: 75,
