@@ -21,7 +21,7 @@ module.exports = {
 	testEnvironment: "node",
 	testMatch: ["**/*.spec.ts", "**/*.test.ts"],
 	collectCoverage: true,
-	collectCoverageFrom: ["api/**/*.ts"],
+	collectCoverageFrom: ["api/**/*.ts", "_utils/**/*.ts"],
 	// setupFiles: ["./jest.env.cjs"],
 	setupFilesAfterEnv: ["./jest.setup.cjs"],
 	coverageThreshold: {
