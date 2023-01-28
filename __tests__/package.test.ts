@@ -1,6 +1,6 @@
 import fs from "fs";
 import { test, describe, expect, afterAll, jest } from "@jest/globals";
-import { getPackage } from "../_utils/package";
+import { getPackage } from "../_utils/package.js";
 // make jest spy on fs.readFileSync
 
 describe("package module", () => {

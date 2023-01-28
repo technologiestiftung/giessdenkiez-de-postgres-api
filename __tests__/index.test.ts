@@ -1,8 +1,8 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
 import { test, describe, expect } from "@jest/globals";
-import handler from "../api/index";
-import { createTestServer } from "../__test-utils/create-test-server";
+import handler from "../api/index.js";
+import { createTestServer } from "../__test-utils/create-test-server.js";
 
 describe("GET routes index", () => {
 	test.todo("make a test fail with 500");
