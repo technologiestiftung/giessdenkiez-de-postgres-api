@@ -9,4 +9,4 @@ default:
 
 
 generate-types:
-    supabase gen types typescript --local > ./src/db-types.ts
+    supabase gen types typescript --local > ./_types/database.ts

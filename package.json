@@ -7,8 +7,9 @@
 	"scripts": {
 		"test": "jest --runInBand",
 		"vercel:dev": "vercel dev",
-		"lint": "eslint ./api/**/*.ts",
-		"format": "prettier ./api/**/*.ts --write"
+		"lint": "eslint ./**/*.ts ",
+		"format": "prettier ./**/*.ts --write",
+		"generate:types": "npx just generate-types"
 	},
 	"engines": {
 		"node": ">=18"
@@ -44,6 +45,7 @@
 		"jest": "29.4.1",
 		"jest-each": "29.3.1",
 		"jest-in-case": "1.0.2",
+		"just-install": "1.0.11",
 		"mock-jwks": "1.0.9",
 		"next": "13.1.2",
 		"postgres": "3.3.2",
