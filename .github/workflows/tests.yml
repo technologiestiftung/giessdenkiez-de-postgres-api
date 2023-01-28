@@ -37,7 +37,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME  }}
           password: ${{ secrets.DOCKER_PASSWORD  }}
       - uses: actions/checkout@v3
-      - name: Use Node.js 
+      - name: Use Node.js
         uses: actions/setup-node@v2
         with:
           node-version-file: ".nvmrc"
@@ -51,6 +51,7 @@ jobs:
       # until we know where the open handles are
       - run: npm test -- --runInBand --forceExit
       - run: supabase stop
+      - run: npm run lint
   release:
     name: semantic-release
     needs: [test]
