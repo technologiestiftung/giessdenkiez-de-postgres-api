@@ -1,5 +1,4 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { PostgrestError } from "@supabase/supabase-js";
 import type { Point } from "geojson";
 import setHeaders from "../../_utils/set-headers.js";
 import { setupResponseData } from "../../_utils/setup-response.js";
@@ -19,14 +18,13 @@ const queryTypes = [
 	"wateredbyuser",
 ];
 
-function returnErrorResponse(
-	response: VercelResponse,
-	error: PostgrestError | null,
-	status: number
-) {
-	if (!error) return;
-	return response.status(status).json({ error });
-}
+// function {return response.status(500).json({error})}
+// 	response: VercelResponse,
+// 	error: PostgrestError | null,
+// 	status: number
+// ) {
+// 	return response.status(status).json({ error });
+// }
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
@@ -55,12 +53,16 @@ export default async function handler(
 			if (!id) {
 				return response.status(400).json({ error: "id query is required" });
 			}
+			// FIXME: Request could be done from the frontend
+
 			const { data, error } = await supabase
 				.from("trees")
 				.select("*")
 				.eq("id", id);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "tree not found" });
@@ -73,11 +75,14 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "watered": {
+			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees_watered")
 				.select("tree_id");
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees_watered not found" });
@@ -97,13 +102,16 @@ export default async function handler(
 					.status(400)
 					.json({ error: "tree_ids query is required" });
 			}
+			// FIXME: Request could be done from the frontend
 			const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
 			const { data, error } = await supabase
 				.from("trees")
 				.select("*")
 				.in("id", trimmed_tree_ids);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
@@ -117,9 +125,12 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "wateredandadopted": {
+			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase.rpc("get_watered_and_adopted");
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({
@@ -161,6 +172,7 @@ export default async function handler(
 					error: "limit needs to be smaller than 10000",
 				});
 			}
+			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees")
 				.select<
@@ -175,7 +187,9 @@ export default async function handler(
 				>("id,radolan_sum,geom")
 				.range(offset, offset + limit);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
@@ -223,13 +237,15 @@ export default async function handler(
 			if (end === undefined) {
 				return response.status(400).json({ error: "end needs to be a number" });
 			}
-
+			// FIXME: Request could be done from the frontend
 			const { data: count, error } = await supabase.rpc("count_by_age", {
 				start_year: start,
 				end_year: end,
 			});
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!count) {
 				return response
@@ -271,14 +287,16 @@ export default async function handler(
 			if (end === undefined) {
 				return response.status(400).json({ error: "end needs to be a number" });
 			}
-
+			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees")
 				.select("id")
 				.gte("pflanzjahr", start)
 				.lte("pflanzjahr", end);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
@@ -297,14 +315,16 @@ export default async function handler(
 			if (!id) {
 				return response.status(400).json({ error: "id query is required" });
 			}
-
+			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees_watered")
 				.select("id,timestamp,amount,username,tree_id")
 				.eq("tree_id", id)
 				.order("timestamp", { ascending: false });
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
@@ -332,7 +352,9 @@ export default async function handler(
 				.select("tree_id,uuid")
 				.eq("uuid", uuid);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
@@ -366,7 +388,9 @@ export default async function handler(
 				.eq("uuid", uuid)
 				.eq("tree_id", id);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
@@ -396,7 +420,9 @@ export default async function handler(
 				.select("*")
 				.eq("uuid", uuid);
 
-			returnErrorResponse(response, error, 500);
+			if (error) {
+				return response.status(500).json({ error });
+			}
 
 			if (!data) {
 				return response.status(500).json({ error: "trees not found" });
