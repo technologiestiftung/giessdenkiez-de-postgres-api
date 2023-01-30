@@ -78,7 +78,8 @@ export default async function handler(
 			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees_watered")
-				.select("tree_id");
+				.select("tree_id")
+				.order("tree_id", { ascending: true });
 
 			if (error) {
 				return response.status(500).json({ error });
@@ -107,7 +108,8 @@ export default async function handler(
 			const { data, error } = await supabase
 				.from("trees")
 				.select("*")
-				.in("id", trimmed_tree_ids);
+				.in("id", trimmed_tree_ids)
+				.order("id", { ascending: true });
 
 			if (error) {
 				return response.status(500).json({ error });
@@ -185,7 +187,8 @@ export default async function handler(
 						geom: Point;
 					}
 				>("id,radolan_sum,geom")
-				.range(offset, offset + limit);
+				.range(offset, offset + limit)
+				.order("id", { ascending: true });
 
 			if (error) {
 				return response.status(500).json({ error });
@@ -292,7 +295,8 @@ export default async function handler(
 				.from("trees")
 				.select("id")
 				.gte("pflanzjahr", start)
-				.lte("pflanzjahr", end);
+				.lte("pflanzjahr", end)
+				.order("id", { ascending: true });
 
 			if (error) {
 				return response.status(500).json({ error });
@@ -350,7 +354,8 @@ export default async function handler(
 			const { data, error } = await supabase
 				.from("trees_adopted")
 				.select("tree_id,uuid")
-				.eq("uuid", uuid);
+				.eq("uuid", uuid)
+				.order("uuid", { ascending: true });
 
 			if (error) {
 				return response.status(500).json({ error });
@@ -418,7 +423,8 @@ export default async function handler(
 			const { data, error } = await supabase
 				.from("trees_watered")
 				.select("*")
-				.eq("uuid", uuid);
+				.eq("uuid", uuid)
+				.order("timestamp", { ascending: false });
 
 			if (error) {
 				return response.status(500).json({ error });
