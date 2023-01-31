@@ -31,6 +31,7 @@ describe("GET routes snapshot tests default responses", () => {
 			{ type: "wateredbyuser", uuid: "auth0|abc" },
 			handler
 		);
+		// console.log(url);
 		const response = await fetch(url, {
 			headers: {
 				authorization: `Bearer ${token}`,
@@ -38,6 +39,7 @@ describe("GET routes snapshot tests default responses", () => {
 		});
 		server.close();
 		const json = await response.json();
+		// console.log(json);
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
 	});
@@ -134,7 +136,6 @@ describe("GET routes snapshot tests default responses", () => {
 		const response = await fetch(`${url}`);
 		server.close();
 		const json = await response.json();
-
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
 	});
@@ -191,14 +192,21 @@ describe("GET routes snapshot tests default responses", () => {
 });
 
 each([
-	[401, "wateredbyuser", {}, "due to not being authorized"],
+	[401, "wateredbyuser", { uuid: "123" }, "due to not being authorized"],
 	[400, "wateredbyuser", {}, "due to uuid missing", true],
-	[401, "istreeadopted", {}, "due to not being authorized"],
+
 	[400, "istreeadopted", {}, "due to uuid missing", true],
 	[400, "istreeadopted", { uuid: "abc" }, "due to id missing", true],
+	[
+		401,
+		"istreeadopted",
+		{ uuid: "abc", id: "_21000c10a9" },
+		"due to not being authorized",
+	],
 
-	[401, "adopted", {}, "due to not being authorized"],
-	[400, "adopted", {}, "due to not uuid missing", true],
+	[400, "adopted", {}, "due to not uuid missing"],
+	[401, "adopted", { uuid: "123" }, "due to not being authorized"],
+
 	[400, "all", { limit: "abc" }, "due to limit being NaN"],
 	[400, "all", { limit: 10000000 }, "due to limit being to large"],
 	[400, "all", { offset: "abc" }, "due to offset being NaN"],

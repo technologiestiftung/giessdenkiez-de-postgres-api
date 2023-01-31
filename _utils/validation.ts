@@ -11,14 +11,146 @@ export interface AjvSchema {
 	additionalProperties: boolean;
 }
 
-export const testSchema: AjvSchema = {
+// export const testSchema: AjvSchema = {
+// 	type: "object",
+// 	properties: {
+// 		foo: { type: "integer" },
+// 		bar: { type: "string" },
+// 	},
+// 	required: ["foo"],
+// 	additionalProperties: false,
+// };
+
+/**
+ * This is the automatically added property by vercel.
+ */
+const type = {
+	type: "string",
+	description:
+		"The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+};
+export const byidSchema: AjvSchema = {
 	type: "object",
 	properties: {
-		foo: { type: "integer" },
-		bar: { type: "string" },
+		type,
+		id: { type: "string" },
 	},
-	required: ["foo"],
+	required: ["id"],
 	additionalProperties: false,
+};
+
+export const wateredSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+	},
+	required: [],
+	additionalProperties: false,
+};
+
+export const treesbyidsSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		tree_ids: { type: "string" },
+	},
+	required: ["tree_ids"],
+	additionalProperties: false,
+};
+
+export const wateredandadoptedSchemata: AjvSchema = {
+	type: "object",
+	properties: { type },
+	required: [],
+	additionalProperties: false,
+};
+
+export const allSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		limit: { type: "string" },
+		offset: { type: "string" },
+	},
+	required: [],
+	additionalProperties: false,
+};
+
+export const countbyageSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		start: { type: "string" },
+		end: { type: "string" },
+	},
+	required: ["start", "end"],
+	additionalProperties: false,
+};
+
+export const byageSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		start: { type: "string" },
+		end: { type: "string" },
+	},
+	required: ["start", "end"],
+	additionalProperties: false,
+};
+
+export const lastwateredSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		id: { type: "string" },
+	},
+	required: ["id"],
+	additionalProperties: false,
+};
+
+export const adoptedSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		uuid: { type: "string" },
+	},
+	required: ["uuid"],
+	additionalProperties: false,
+};
+
+export const istreeadoptedSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		uuid: { type: "string" },
+		id: { type: "string" },
+	},
+	required: ["uuid", "id"],
+	additionalProperties: false,
+};
+
+export const wateredbyuserSchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+		uuid: { type: "string" },
+	},
+	required: ["uuid"],
+	additionalProperties: false,
+};
+
+export const getSchemas: Record<string, AjvSchema> = {
+	byid: byidSchema,
+	watered: wateredSchema,
+	treesbyids: treesbyidsSchema,
+	wateredandadopted: wateredandadoptedSchemata,
+	all: allSchema,
+	countbyage: countbyageSchema,
+	byage: byageSchema,
+	lastwatered: lastwateredSchema,
+	adopted: adoptedSchema,
+	istreeadopted: istreeadoptedSchema,
+	wateredbyuser: wateredbyuserSchema,
 };
 
 export const waterSchema: AjvSchema = {
@@ -46,6 +178,11 @@ export const adoptSchema: AjvSchema = {
 	additionalProperties: false,
 };
 
+export const postSchemas: Record<string, AjvSchema> = {
+	adopt: adoptSchema,
+	water: waterSchema,
+};
+
 export const unadoptSchema: AjvSchema = {
 	type: "object",
 	properties: {
@@ -69,9 +206,11 @@ export const unwaterSchema: AjvSchema = {
 	additionalProperties: false,
 };
 
-export { ajv };
-
-export const validate = (body: Record<string, unknown>, schema: AjvSchema) => {
+export const deleteSchemas: Record<string, AjvSchema> = {
+	unadopt: unadoptSchema,
+	unwater: unwaterSchema,
+};
+export function validate(body: Record<string, unknown>, schema: AjvSchema) {
 	const validate = ajv.compile(schema);
 	const valid = validate(body);
 
@@ -79,4 +218,11 @@ export const validate = (body: Record<string, unknown>, schema: AjvSchema) => {
 		return [false, validate.errors];
 	}
 	return [true, null];
-};
+}
+
+export function paramsToObject(url: string) {
+	const urlParams = new URLSearchParams(url);
+	return Object.fromEntries(urlParams); // {abc: "foo", def: "[asf]", xyz: "5"}
+}
+
+export { ajv };

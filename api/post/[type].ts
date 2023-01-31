@@ -1,23 +1,20 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import setHeaders from "../../_utils/set-headers";
 import { supabase } from "../../_utils/supabase";
-import {
-	adoptSchema,
-	AjvSchema,
-	validate,
-	waterSchema,
-} from "../../_utils/validation";
+import { postSchemas, validate } from "../../_utils/validation";
 import { Database } from "../../_types/database";
 import { verifyRequest } from "../../_utils/verify";
-const queryTypes = ["adopt", "water"];
+import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
+
+const queryTypes = Object.keys(queryTypesList["POST"]);
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
 
-const schemas: Record<string, AjvSchema> = {
-	adopt: adoptSchema,
-	water: waterSchema,
-};
+// const schemas: Record<string, AjvSchema> = {
+// 	adopt: adoptSchema,
+// 	water: waterSchema,
+// };
 
 // type TreesAdopted = Database["public"]["Tables"]["trees_adopted"]["Insert"];
 type TreesWatered = Database["public"]["Tables"]["trees_watered"]["Insert"];
@@ -40,7 +37,10 @@ export default async function postHandler(
 	if (!queryTypes.includes(type)) {
 		return response.status(400).json({ error: "invalid query type" });
 	}
-	const [isBodyValid, validationErrors] = validate(request.body, schemas[type]);
+	const [isBodyValid, validationErrors] = validate(
+		request.body,
+		postSchemas[type]
+	);
 	if (!isBodyValid) {
 		return response
 			.status(400)

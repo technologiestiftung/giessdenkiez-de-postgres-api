@@ -5,15 +5,8 @@ import { setupResponseData } from "../../_utils/setup-response";
 import { supabase } from "../../_utils/supabase";
 import { verifyRequest } from "../../_utils/verify";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
+import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
 const queryTypes = Object.keys(queryTypesList["GET"]);
-
-// function {return response.status(500).json({error})}
-// 	response: VercelResponse,
-// 	error: PostgrestError | null,
-// 	status: number
-// ) {
-// 	return response.status(status).json({ error });
-// }
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
@@ -32,6 +25,16 @@ export default async function handler(
 	if (!queryTypes.includes(type)) {
 		return response.status(404).json({ error: `invalid route ${type}` });
 	}
+	if (!request.url) {
+		return response.status(500).json({ error: "request url not available" });
+	}
+	const params = paramsToObject(request.url.replace("/?", ""));
+	const [paramsAreValid, validationError] = validate(params, getSchemas[type]);
+	if (!paramsAreValid) {
+		return response
+			.status(400)
+			.json({ error: `invalid params: ${JSON.stringify(validationError)}` });
+	}
 
 	switch (type) {
 		default:
@@ -39,9 +42,9 @@ export default async function handler(
 		case "byid": {
 			const { id } = request.query;
 
-			if (!id) {
-				return response.status(400).json({ error: "id query is required" });
-			}
+			// if (!id) {
+			// 	return response.status(400).json({ error: "id query is required" });
+			// }
 			// FIXME: Request could be done from the frontend
 
 			const { data, error } = await supabase
@@ -86,12 +89,6 @@ export default async function handler(
 		}
 		case "treesbyids": {
 			const { tree_ids } = <{ tree_ids: string }>request.query;
-
-			if (!tree_ids) {
-				return response
-					.status(400)
-					.json({ error: "tree_ids query is required" });
-			}
 			// FIXME: Request could be done from the frontend
 			const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
 			const { data, error } = await supabase
@@ -208,13 +205,6 @@ export default async function handler(
 			const { start: startStr, end: endStr } = <{ start: string; end: string }>(
 				request.query
 			);
-			if (!startStr) {
-				return response.status(400).json({ error: "start query is required" });
-			}
-			if (!endStr) {
-				return response.status(400).json({ error: "end query is required" });
-			}
-
 			const start = isNaN(parseInt(startStr, 10))
 				? undefined
 				: parseInt(startStr, 10);
@@ -255,16 +245,7 @@ export default async function handler(
 			const { start: startStr, end: endStr } = <{ start: string; end: string }>(
 				request.query
 			);
-			if (!startStr) {
-				return response.status(400).json({ error: "start query is required" });
-			}
-			if (!endStr) {
-				return response.status(400).json({ error: "end query is required" });
-			}
 
-			if (Array.isArray(endStr)) {
-				return response.status(400).json({ error: "end needs to be a string" });
-			}
 			const start = isNaN(parseInt(startStr, 10))
 				? undefined
 				: parseInt(startStr, 10);
@@ -305,9 +286,7 @@ export default async function handler(
 		//TODO: [GDK-218] API (with supabase) Should GET lastwatered be only available for authenticated users?
 		case "lastwatered": {
 			const { id } = <{ id: string }>request.query;
-			if (!id) {
-				return response.status(400).json({ error: "id query is required" });
-			}
+
 			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees_watered")
@@ -336,10 +315,6 @@ export default async function handler(
 				return response.status(401).json({ error: "unauthorized" });
 			}
 			const { uuid } = <{ uuid: string }>request.query;
-			if (!uuid) {
-				return response.status(400).json({ error: "uuid query is required" });
-			}
-
 			const { data, error } = await supabase
 				.from("trees_adopted")
 				.select("tree_id,uuid")
@@ -367,14 +342,6 @@ export default async function handler(
 				return response.status(401).json({ error: "unauthorized" });
 			}
 			const { uuid, id } = <{ uuid: string; id: string }>request.query;
-			if (!uuid) {
-				return response.status(400).json({ error: "uuid query is required" });
-			}
-			if (!id) {
-				return response
-					.status(400)
-					.json({ error: "tree_id query is required" });
-			}
 
 			const { data, error } = await supabase
 				.from("trees_adopted")
@@ -405,9 +372,6 @@ export default async function handler(
 				return response.status(401).json({ error: "unauthorized" });
 			}
 			const { uuid } = <{ uuid: string }>request.query;
-			if (!uuid) {
-				return response.status(400).json({ error: "uuid query is required" });
-			}
 
 			const { data, error } = await supabase
 				.from("trees_watered")

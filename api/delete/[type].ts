@@ -1,20 +1,14 @@
-const queryTypes = ["unadopt", "unwater"];
-
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { verifyRequest } from "../../_utils/verify";
 import setHeaders from "../../_utils/set-headers";
 import { supabase } from "../../_utils/supabase";
-import {
-	AjvSchema,
-	unadoptSchema,
-	unwaterSchema,
-	validate,
-} from "../../_utils/validation";
+import { deleteSchemas, validate } from "../../_utils/validation";
 
-const schemas: Record<string, AjvSchema> = {
-	unadopt: unadoptSchema,
-	unwater: unwaterSchema,
-};
+export const queryTypes = ["unadopt", "unwater"];
+// const schemas: Record<string, AjvSchema> = {
+// 	unadopt: unadoptSchema,
+// 	unwater: unwaterSchema,
+// };
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
 export default async function deleteHandler(
@@ -36,7 +30,10 @@ export default async function deleteHandler(
 	if (!queryTypes.includes(type)) {
 		return response.status(400).json({ error: "invalid query type" });
 	}
-	const [isBodyValid, validationErrors] = validate(request.body, schemas[type]);
+	const [isBodyValid, validationErrors] = validate(
+		request.body,
+		deleteSchemas[type]
+	);
 	if (!isBodyValid) {
 		return response
 			.status(400)

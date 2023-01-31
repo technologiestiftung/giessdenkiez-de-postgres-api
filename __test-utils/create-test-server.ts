@@ -23,5 +23,6 @@ export async function createTestServer(
 		return apiResolver(req, res, query, handler, undefined as any, false);
 	});
 	const url = await listen(server);
-	return { server, url };
+	const urlWithParams = `${url}?${new URLSearchParams(query)}`;
+	return { server, url: urlWithParams };
 }
