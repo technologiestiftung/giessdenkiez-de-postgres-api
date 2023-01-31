@@ -1,13 +1,13 @@
 import { test, describe, expect } from "@jest/globals";
 import each from "jest-each";
 import fetch from "cross-fetch";
-import handler from "../api/post/[type].js";
-import { createTestServer } from "../__test-utils/create-test-server.js";
-import { requestTestToken } from "../__test-utils/req-test-token.js";
+import handler from "../api/post/[type]";
+import { createTestServer } from "../__test-utils/create-test-server";
+import { requestTestToken } from "../__test-utils/req-test-token";
 import {
 	truncateTreesWaterd,
 	truncateTreesAdopted,
-} from "../__test-utils/postgres.js";
+} from "../__test-utils/postgres";
 
 // adopt
 // water

@@ -1,13 +1,13 @@
 import { test, describe, expect } from "@jest/globals";
 
-import postHandler from "../api/post/[type].js";
-import { requestTestToken } from "../__test-utils/req-test-token.js";
-import { supabase } from "../_utils/supabase.js";
+import postHandler from "../api/post/[type]";
+import { requestTestToken } from "../__test-utils/req-test-token";
+import { supabase } from "../_utils/supabase";
 import {
 	truncateTreesAdopted,
 	truncateTreesWaterd,
-} from "../__test-utils/postgres.js";
-import { createTestServer } from "../__test-utils/create-test-server.js";
+} from "../__test-utils/postgres";
+import { createTestServer } from "../__test-utils/create-test-server";
 process.env.NODE_ENV = "test";
 // const envs = config({ path: path.resolve(process.cwd(), ".env") });
 

@@ -7,7 +7,7 @@ const issuer = process.env.issuer;
 
 describe("env loading tests", () => {
 	test("should load envs", async () => {
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 
 		const envs = getEnvs();
 		expect(envs).toBeDefined();
@@ -21,37 +21,37 @@ describe("env loading tests", () => {
 
 	test("should throw error if SUPABASE_URL is not defined", async () => {
 		delete process.env.SUPABASE_URL;
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 		expect(getEnvs).toThrow("SUPABASE_URL is undefined");
 		process.env.SUPABASE_URL = SUPABASE_URL;
 	});
 	test("should throw error if SUPABASE_ANON_KEY is not defined", async () => {
 		delete process.env.SUPABASE_ANON_KEY;
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 		expect(getEnvs).toThrow("SUPABASE_ANON_KEY is undefined");
 		process.env.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
 	});
 	test("should throw error if SUPABASE_SERVICE_ROLE_KEY is not defined", async () => {
 		delete process.env.SUPABASE_SERVICE_ROLE_KEY;
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 		expect(getEnvs).toThrow("SUPABASE_SERVICE_ROLE_KEY is undefined");
 		process.env.SUPABASE_SERVICE_ROLE_KEY = SUPABASE_SERVICE_ROLE_KEY;
 	});
 	test(`should throw error if "jwksuri" is not defined`, async () => {
 		delete process.env.jwksuri;
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 		expect(getEnvs).toThrow("jwksuri is undefined");
 		process.env.jwksuri = jwksuri;
 	});
 	test(`should throw error if "audience" is not defined`, async () => {
 		delete process.env.audience;
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 		expect(getEnvs).toThrow("audience is undefined");
 		process.env.audience = audience;
 	});
 	test(`should throw error if "issuer" is not defined`, async () => {
 		delete process.env.issuer;
-		const { getEnvs } = await import("../_utils/envs.js");
+		const { getEnvs } = await import("../_utils/envs");
 		expect(getEnvs).toThrow("issuer is undefined");
 		process.env.issuer = issuer;
 	});

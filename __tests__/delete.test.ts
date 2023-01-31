@@ -2,15 +2,15 @@
 import { test, describe, expect } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 
-import { requestTestToken } from "../__test-utils/req-test-token.js";
-import { supabase } from "../_utils/supabase.js";
-import { Database } from "../_types/database.js";
+import { requestTestToken } from "../__test-utils/req-test-token";
+import { supabase } from "../_utils/supabase";
+import { Database } from "../_types/database";
 import {
 	truncateTreesAdopted,
 	truncateTreesWaterd,
-} from "../__test-utils/postgres.js";
-import { createTestServer } from "../__test-utils/create-test-server.js";
-import deleteHandler from "../api/delete/[type].js";
+} from "../__test-utils/postgres";
+import { createTestServer } from "../__test-utils/create-test-server";
+import deleteHandler from "../api/delete/[type]";
 // const envs = config({ path: path.resolve(process.cwd(), ".env") });
 process.env.NODE_ENV = "test";
 

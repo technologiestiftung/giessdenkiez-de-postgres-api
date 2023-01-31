@@ -3,7 +3,7 @@ import { getEnvs } from "../_utils/envs";
 /* eslint-disable jest/no-hooks */
 import createJWKSMock from "mock-jwks";
 import { options, verifyAuth0Token } from "../_utils/verify-token";
-jest.mock("../_utils/envs.js", () => {
+jest.mock("../_utils/envs", () => {
 	return {
 		getEnvs: () => {
 			return {

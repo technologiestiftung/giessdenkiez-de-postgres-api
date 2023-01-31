@@ -1,14 +1,14 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
 import { test, describe, expect } from "@jest/globals";
-import handler from "../api/get/[type].js";
-import { createTestServer } from "../__test-utils/create-test-server.js";
+import handler from "../api/get/[type]";
+import { createTestServer } from "../__test-utils/create-test-server";
 import {
 	createWateredTrees,
 	truncateTreesAdopted,
 	truncateTreesWaterd,
-} from "../__test-utils/postgres.js";
-import { requestTestToken } from "../__test-utils/req-test-token.js";
+} from "../__test-utils/postgres";
+import { requestTestToken } from "../__test-utils/req-test-token";
 // byid ✓
 // watered ✓
 // all ✓

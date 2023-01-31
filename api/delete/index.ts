@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import setHeaders from "../../_utils/set-headers.js";
-import { setupResponseData } from "../../_utils/setup-response.js";
+import setHeaders from "../../_utils/set-headers";
+import { setupResponseData } from "../../_utils/setup-response";
 
 export default async function handler(
 	_request: VercelRequest,

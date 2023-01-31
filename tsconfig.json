@@ -25,6 +25,7 @@
 		],
 		"esModuleInterop": true,
 		"moduleResolution": "node",
+		"isolatedModules": true,
 		"forceConsistentCasingInFileNames": true
 	}
 }

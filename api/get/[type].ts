@@ -1,22 +1,11 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import type { Point } from "geojson";
-import setHeaders from "../../_utils/set-headers.js";
-import { setupResponseData } from "../../_utils/setup-response.js";
-import { supabase } from "../../_utils/supabase.js";
-import { verifyRequest } from "../../_utils/verify.js";
-const queryTypes = [
-	"byid",
-	"treesbyids",
-	"adopted",
-	"countbyage",
-	"watered",
-	"all",
-	"istreeadopted",
-	"wateredandadopted",
-	"byage",
-	"lastwatered",
-	"wateredbyuser",
-];
+import setHeaders from "../../_utils/set-headers";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
+import { verifyRequest } from "../../_utils/verify";
+import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
+const queryTypes = Object.keys(queryTypesList["GET"]);
 
 // function {return response.status(500).json({error})}
 // 	response: VercelResponse,
