@@ -65,3 +65,9 @@ export function listRoutes(method: Methods) {
 		}
 	}
 }
+
+export const routes = [
+	listRoutes("GET"),
+	listRoutes("POST"),
+	listRoutes("DELETE"),
+];
