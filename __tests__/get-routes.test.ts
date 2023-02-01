@@ -253,7 +253,6 @@ each([
 			});
 			server.close();
 			expect(response.status).toBe(statusCode);
-			// console.log(await response.json());
 		});
 	}
 );
