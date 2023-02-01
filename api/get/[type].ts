@@ -6,7 +6,8 @@ import { supabase } from "../../_utils/supabase";
 import { verifyRequest } from "../../_utils/verify";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
-const queryTypes = Object.keys(queryTypesList["GET"]);
+const method = "GET";
+const queryTypes = Object.keys(queryTypesList[method]);
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
@@ -14,7 +15,7 @@ export default async function handler(
 	request: VercelRequest,
 	response: VercelResponse
 ) {
-	setHeaders(response, "GET");
+	setHeaders(response, method);
 	if (request.method === "OPTIONS") {
 		return response.status(200).end();
 	}
@@ -28,7 +29,11 @@ export default async function handler(
 	if (!request.url) {
 		return response.status(500).json({ error: "request url not available" });
 	}
-	const params = paramsToObject(request.url.replace("/?", ""));
+	const params = paramsToObject(
+		request.url
+			.replace(`/${method.toLowerCase()}/${type}`, "")
+			.replace(`/?type=${type}`, "")
+	);
 	const [paramsAreValid, validationError] = validate(params, getSchemas[type]);
 	if (!paramsAreValid) {
 		return response
