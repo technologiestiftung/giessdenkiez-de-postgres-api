@@ -12,7 +12,7 @@
 	],
 	"compilerOptions": {
 		"target": "ESNext",
-		"module": "ESNext",
+		"module": "CommonJS",
 		"outDir": "./dist",
 		// "rootDir": "api",
 		"strict": true,
