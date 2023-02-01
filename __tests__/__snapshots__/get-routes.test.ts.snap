@@ -4,6 +4,12 @@ exports[`GET routes snapshot tests default responses Should return 200 on tree a
 {
   "data": [
     [
+      "_0mfm21mdc",
+      13.3883,
+      52.48415,
+      524,
+    ],
+    [
       "_2100186a5c",
       13.49968,
       52.64586,
@@ -13,12 +19,6 @@ exports[`GET routes snapshot tests default responses Should return 200 on tree a
       "_2100186c08",
       13.50331,
       52.64586,
-      205,
-    ],
-    [
-      "_2100186c09",
-      13.50323,
-      52.64582,
       205,
     ],
   ],
@@ -1566,6 +1566,9 @@ exports[`GET routes snapshot tests default responses should return 200 on byage 
 {
   "data": [
     {
+      "id": "_0mfm21mdc",
+    },
+    {
       "id": "_2100186a5c",
     },
     {
@@ -1595,6 +1598,15 @@ exports[`GET routes snapshot tests default responses should return 200 on byage 
     {
       "id": "_2100294b1f",
     },
+    {
+      "id": "_agi2nuc3l",
+    },
+    {
+      "id": "_gu1p1fon1",
+    },
+    {
+      "id": "_uip8uzpq0",
+    },
   ],
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
@@ -1606,7 +1618,7 @@ exports[`GET routes snapshot tests default responses should return 200 on byage 
 exports[`GET routes snapshot tests default responses should return 200 on countbyage route 1`] = `
 {
   "data": {
-    "count": 10,
+    "count": 14,
   },
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
