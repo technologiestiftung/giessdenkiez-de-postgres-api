@@ -43,7 +43,7 @@ jobs:
           node-version-file: ".nvmrc"
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.33.0
+          version: 1.36.6
       - run: supabase start
       - run: npm ci
       - run: npm run build --if-present
