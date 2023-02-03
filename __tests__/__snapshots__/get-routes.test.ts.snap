@@ -47,6 +47,12 @@ exports[`GET routes snapshot tests default responses Should return 200 on treesb
           13.50326,
           52.64844,
         ],
+        "crs": {
+          "properties": {
+            "name": "EPSG:4326",
+          },
+          "type": "name",
+        },
         "type": "Point",
       },
       "gmlid": "00008100:0028b9c8",
@@ -803,6 +809,12 @@ exports[`GET routes snapshot tests default responses Should return 200 on treesb
           13.50295,
           52.64778,
         ],
+        "crs": {
+          "properties": {
+            "name": "EPSG:4326",
+          },
+          "type": "name",
+        },
         "type": "Point",
       },
       "gmlid": "00008100:00294b1f",
@@ -1665,6 +1677,12 @@ exports[`GET routes snapshot tests default responses should return 200 on tree b
           13.50295,
           52.64778,
         ],
+        "crs": {
+          "properties": {
+            "name": "EPSG:4326",
+          },
+          "type": "name",
+        },
         "type": "Point",
       },
       "gmlid": "00008100:00294b1f",
