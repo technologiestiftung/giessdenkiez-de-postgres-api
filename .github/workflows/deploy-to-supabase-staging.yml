@@ -22,7 +22,7 @@ jobs:
 
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.8.7
+          version: 1.36.6
 
       - run: |
           supabase link --project-ref $STAGING_PROJECT_ID
