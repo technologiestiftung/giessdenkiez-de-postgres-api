@@ -36,7 +36,6 @@ export function getEnvs(): Envs {
 	if (AUDIENCE === undefined) throw new Error("audience is undefined");
 
 	if (ISSUER === undefined) throw new Error("issuer is undefined");
-
 	if (SUPABASE_MAX_ROWS_RAW === undefined)
 		throw new Error("SUPABASE_MAX_ROWS is undefined");
 	if (isNaN(parseInt(SUPABASE_MAX_ROWS_RAW)))
