@@ -1,6 +1,7 @@
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const SUPABASE_MAX_ROWS = process.env.SUPABASe_MAX_ROWS;
 const jwksuri = process.env.jwksuri;
 const audience = process.env.audience;
 const issuer = process.env.issuer;
@@ -17,6 +18,7 @@ describe("env loading tests", () => {
 		expect(envs.JWKS_URI).toBeDefined();
 		expect(envs.AUDIENCE).toBeDefined();
 		expect(envs.ISSUER).toBeDefined();
+		expect(envs.SUPABASE_MAX_ROWS).toBeDefined();
 	});
 
 	test("should throw error if SUPABASE_URL is not defined", async () => {
@@ -37,6 +39,20 @@ describe("env loading tests", () => {
 		expect(getEnvs).toThrow("SUPABASE_SERVICE_ROLE_KEY is undefined");
 		process.env.SUPABASE_SERVICE_ROLE_KEY = SUPABASE_SERVICE_ROLE_KEY;
 	});
+	test("should throw error if SUPABASE_MAX_ROWS is not defined", async () => {
+		delete process.env.SUPABASE_MAX_ROWS;
+		const { getEnvs } = await import("../_utils/envs");
+		expect(getEnvs).toThrow("SUPABASE_MAX_ROWS is undefined");
+		process.env.SUPABASE_MAX_ROWS = SUPABASE_MAX_ROWS;
+	});
+
+	test("should throw if SUPABASE_MAX_ROWS is not a number", async () => {
+		process.env.SUPABASE_MAX_ROWS = "not a number";
+		const { getEnvs } = await import("../_utils/envs");
+		expect(getEnvs).toThrow("SUPABASE_MAX_ROWS is not parseable to a number");
+		process.env.SUPABASE_MAX_ROWS = SUPABASE_MAX_ROWS;
+	});
+
 	test(`should throw error if "jwksuri" is not defined`, async () => {
 		delete process.env.jwksuri;
 		const { getEnvs } = await import("../_utils/envs");

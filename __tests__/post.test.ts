@@ -22,6 +22,7 @@ const body = {
 
 describe("api/post/[type]", () => {
 	test("should make a request to post/water and fail unauthorized", async () => {
+		await truncateTreesWaterd();
 		const { server, url } = await createTestServer(
 			{ type: "water" },
 			postHandler
@@ -56,6 +57,7 @@ describe("api/post/[type]", () => {
 	});
 
 	test("should make a request to post/water and fail due to missing body", async () => {
+		await truncateTreesWaterd();
 		const { server, url } = await createTestServer(
 			{ type: "water" },
 			postHandler

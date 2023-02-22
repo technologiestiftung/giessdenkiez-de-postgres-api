@@ -6,8 +6,10 @@ import { supabase } from "../../_utils/supabase";
 import { verifyRequest } from "../../_utils/verify";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
+import { getEnvs } from "../../_utils/envs";
 const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
+const { SUPABASE_MAX_ROWS } = getEnvs();
 
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
@@ -160,9 +162,9 @@ export default async function handler(
 					.status(400)
 					.json({ error: "offset needs to be a number" });
 			}
-			if (limit > 10000) {
+			if (limit > SUPABASE_MAX_ROWS) {
 				return response.status(400).json({
-					error: "limit needs to be smaller than 10000",
+					error: `limit needs to be smaller than ${SUPABASE_MAX_ROWS}`,
 				});
 			}
 			// FIXME: Request could be done from the frontend
