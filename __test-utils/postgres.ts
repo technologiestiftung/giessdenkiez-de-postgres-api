@@ -1,5 +1,8 @@
 // db.js
 import postgres from "postgres";
+// This is the local database spawned by supabase
+// You should not use your prodction database here. It will inject/remove data
+// Therefore this is currently hardcoded to localhost
 const url = "postgresql://postgres:postgres@localhost:54322/postgres";
 
 export async function truncateTreesWaterd() {
