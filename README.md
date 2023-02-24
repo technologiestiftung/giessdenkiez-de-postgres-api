@@ -4,6 +4,7 @@
   - [W.I.P. API Migration](#wip-api-migration)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+    - [Environments and Variables](#environments-and-variables)
     - [Auth0](#auth0)
     - [Vercel](#vercel)
         - [Vercel Environment Variables](#vercel-environment-variables)
@@ -45,6 +46,8 @@ cd ./giessdenkiez-de-postgres-api
 npm ci
 # supabase needed for local development
 supabase login
+# Check if docker is running
+docker --version
 # then run
 supabase start
 # After a few minutes you will have a local supabase instance running with
@@ -64,6 +67,12 @@ cp .env.example .env
 # you will also need some values from Auth0.com this will change in the future when
 # we are fully migrated to supabase.
 ```
+
+### Environments and Variables
+
+In the example code above the Postgres database Postgrest API are run locally. You **SHOULD NOT** use production variables in your local or CI environments. The tests will modify the database and also truncate tables through the API and also with direct calls.
+
+Again. Be a smart developer, read https://12factor.net/config, https://github.com/motdotla/dotenv#should-i-have-multiple-env-files and never ever touch production with your local code!
 
 ### Auth0
 
