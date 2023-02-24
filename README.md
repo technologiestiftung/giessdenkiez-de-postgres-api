@@ -6,7 +6,7 @@
   - [Setup](#setup)
     - [Auth0](#auth0)
     - [Vercel](#vercel)
-      - [Vercel Environment Variables](#vercel-environment-variables)
+        - [Vercel Environment Variables](#vercel-environment-variables)
   - [API Routes](#api-routes)
     - [API Authorization](#api-authorization)
   - [Tests](#tests)
@@ -61,14 +61,15 @@ cp .env.example .env
 # SUPABASE_URL=...
 # SUPABASE_ANON_KEY=...
 # SUPABASE_MAX_ROWS=1000
-
+# you will also need some values from Auth0.com this will change in the future when
+# we are fully migrated to supabase.
 ```
 
 ### Auth0
 
 **!Hint: We are working on replacing Auth0 with Supabase. This is not yet implemented.**
 
-Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values and add them to the `.env` file as well. The values for `client_id` and `client_secret` are only needed if you want to run local tests with tools like rest-client, Postman, Insomnia or Paw to obtain a token. This is explained later in this document.
+Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values and add them to the `.env` file as well. The values for `client_id` and `client_secret` are only needed if you want to run local integration tests and use tools like rest-client, Postman, Insomnia or Paw to obtain a token. This is explained later in this document.
 
 ### Vercel
 
@@ -157,16 +158,18 @@ Take a look into [docs/api.http](./docs/api.http). The requests in this file can
 
 ## Tests
 
-Locally you will need supabase running
+Locally you will need supabase running and a `.env` file with the right values in it.
 
 ```bash
 cd giessdenkiez-de-postgres-api
 supabase start
-# once the backaned is up and running, run the tests
+# Once the backaned is up and running, run the tests
+# Make sure to you habe your .env file setup right
+# with all the values from `supabase status` and your API from Auth0.com
 npm test
 ```
 
-On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
+On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml) you still need an API on Auth0.com
 
 ## Supabase
 
