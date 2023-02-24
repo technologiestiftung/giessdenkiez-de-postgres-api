@@ -27,7 +27,7 @@ export default {
 	collectCoverage: true,
 	collectCoverageFrom: ["api/**/*.ts", "_utils/**/*.ts"],
 	// setupFiles: ["./jest.env.cjs"],
-	setupFilesAfterEnv: ["./jest.setup.ts"],
+	setupFilesAfterEnv: ["dotenv/config", "./jest.setup.ts"],
 	coverageThreshold: {
 		global: {
 			branches: 70,
