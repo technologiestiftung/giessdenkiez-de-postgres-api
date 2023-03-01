@@ -7,6 +7,12 @@ import { verifyRequest } from "../../_utils/verify";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
 import { getEnvs } from "../../_utils/envs";
+
+const countOptions: {
+	head?: boolean | undefined;
+	count?: "exact" | "planned" | "estimated" | undefined;
+} = { count: "exact", head: true };
+
 const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
 const { SUPABASE_MAX_ROWS } = getEnvs();
@@ -49,9 +55,20 @@ export default async function handler(
 		case "byid": {
 			const { id } = request.query;
 
-			// if (!id) {
-			// 	return response.status(400).json({ error: "id query is required" });
-			// }
+			if (countError) {
+				return response.status(500).json({ error: countError });
+			}
+			if (!count) {
+				return response.status(404).json({ error: "could not count trees" });
+			}
+			if (count > SUPABASE_MAX_ROWS) {
+				console.info(
+					`[api/get/${type}] count ${count} exceeds SUPABASE_MAX_ROWS ${SUPABASE_MAX_ROWS}`
+				);
+			} else {
+				console.info(`[api/get/${type}] count ${count}`);
+			}
+
 			// FIXME: Request could be done from the frontend
 
 			const { data, error } = await supabase
@@ -74,6 +91,24 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "watered": {
+			const { count, error: countError } = await supabase
+				.from("trees_watered")
+				.select("tree_id", countOptions)
+				.order("tree_id", { ascending: true });
+			if (countError) {
+				return response.status(500).json({ error: countError });
+			}
+			if (!count) {
+				return response.status(404).json({ error: "could not count trees" });
+			}
+			if (count > SUPABASE_MAX_ROWS) {
+				console.info(
+					`[api/get/${type}] count ${count} exceeds SUPABASE_MAX_ROWS ${SUPABASE_MAX_ROWS}`
+				);
+			} else {
+				console.info(`[api/get/${type}] count ${count}`);
+			}
+
 			// FIXME: Request could be done from the frontend
 			const { data, error } = await supabase
 				.from("trees_watered")
