@@ -63,14 +63,23 @@ describe("parseContentRange util", () => {
 		expect(parseContentRange(header)).toEqual(expected);
 	});
 
-	test("parses a valid content range header with an asterisk for start, end, and total", () => {
+	test("parses a valid content range header with an asterisk for start, end, and zero total", () => {
 		const header = "*/0";
+		const expected: ContentRange = { start: -1, end: -1, total: 0 };
+		expect(parseContentRange(header)).toEqual(expected);
+	});
+test("parses a valid content range header with an asterisk for start, end, and total", () => {
+		const header = "*/*";
 		const expected: ContentRange = { start: -1, end: -1, total: -1 };
 		expect(parseContentRange(header)).toEqual(expected);
 	});
 
-	test("returns undefined for an invalid content range header", () => {
+	test("returns null for an invalid content range header", () => {
 		const header = "invalid";
-		expect(parseContentRange(header)).toBeUndefined();
+		expect(parseContentRange(header)).toBeNull();
+	});
+	test("returns null for an invalid content range header not numbers", () => {
+		const header = "foo/bah";
+		expect(parseContentRange(header)).toBeNull();
 	});
 });
