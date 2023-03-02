@@ -72,7 +72,7 @@ export const allSchema: AjvSchema = {
 		limit: { type: "string" },
 		offset: { type: "string" },
 	},
-	required: [],
+	required: ["limit", "offset"],
 	additionalProperties: false,
 };
 
