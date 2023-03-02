@@ -61,7 +61,12 @@ GET {{API_HOST}}/get/wateredandadopted
 ### get all trees with id, lat, lon, radolan_sum ✓
 #  with pagination
 
-GET {{API_HOST}}/get/all&limit=2&offset=1
+GET {{API_HOST}}/get/all&limit=4&offset=5
+
+
+### get all trees
+
+GET {{API_HOST}}/get/all
 
 
 
@@ -72,6 +77,7 @@ GET {{API_HOST}}/get/byage&start=1800&end=2023
 ### GET count of trees by age ✓
 
 GET {{API_HOST}}/get/countbyage&start=1800&end=2023
+
 
 
   #####  ####### #######
@@ -266,6 +272,7 @@ HEAD {{SUPABASE_URL}}/rest/v1/trees_watered
 apikey: {{SUPABASE_ANON_KEY}}
 Authorization: Bearer {{SUPABASE_SERVICE_ROLE_KEY}}
 Range-Unit: items
+Range: 33-300
 Prefer: count=exact
 
 
@@ -281,3 +288,4 @@ GET {{SUPABASE_URL}}/rest/v1/rpc/get_watered_and_adopted
 apikey: {{SUPABASE_ANON_KEY}}
 Range-Unit: items
 Prefer: count=exact
+
