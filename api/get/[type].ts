@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import type { Point } from "geojson";
+// import type { Point } from "geojson";
 import setHeaders from "../../_utils/set-headers";
 import { setupResponseData } from "../../_utils/setup-response";
 import { supabase } from "../../_utils/supabase";
@@ -7,18 +7,17 @@ import { verifyRequest } from "../../_utils/verify";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
 import { getEnvs } from "../../_utils/envs";
+import { getRange } from "../../_utils/parse-content-range";
+// import { createLinks } from "../../_utils/create-links";
+import allHandler from "./_requests/all";
+import byidHandler from "./_requests/byid";
 
-const countOptions: {
-	head?: boolean | undefined;
-	count?: "exact" | "planned" | "estimated" | undefined;
-} = { count: "exact", head: true };
-
-const method = "GET";
+export const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
-const { SUPABASE_MAX_ROWS } = getEnvs();
+const { SUPABASE_MAX_ROWS, SUPABASE_URL } = getEnvs();
 
-// api/[name].ts -> /api/lee
-// req.query.name -> "lee"
+// api/[type].ts -> /api/lee
+// req.query.type -> "lee"
 export default async function handler(
 	request: VercelRequest,
 	response: VercelResponse
@@ -53,60 +52,48 @@ export default async function handler(
 		default:
 			return response.status(400).json({ error: "invalid query type" });
 		case "byid": {
-			const { id } = request.query;
+			await byidHandler(request, response);
+			break;
+			// 	const { id } = request.query;
+			// 	// FIXME: Request could be done from the frontend
 
-			if (countError) {
-				return response.status(500).json({ error: countError });
-			}
-			if (!count) {
-				return response.status(404).json({ error: "could not count trees" });
-			}
-			if (count > SUPABASE_MAX_ROWS) {
-				console.info(
-					`[api/get/${type}] count ${count} exceeds SUPABASE_MAX_ROWS ${SUPABASE_MAX_ROWS}`
-				);
-			} else {
-				console.info(`[api/get/${type}] count ${count}`);
-			}
+			// 	const { data, error } = await supabase
+			// 		.from("trees")
+			// 		.select("*")
+			// 		.eq("id", id);
 
-			// FIXME: Request could be done from the frontend
+			// 	if (error) {
+			// 		return response.status(500).json({ error });
+			// 	}
 
-			const { data, error } = await supabase
-				.from("trees")
-				.select("*")
-				.eq("id", id);
-
-			if (error) {
-				return response.status(500).json({ error });
-			}
-
-			if (!data) {
-				return response.status(500).json({ error: "tree not found" });
-			}
-			const result = setupResponseData({
-				url: request.url,
-				data,
-				error,
-			});
-			return response.status(200).json(result);
+			// 	if (!data) {
+			// 		return response.status(500).json({ error: "tree not found" });
+			// 	}
+			// 	const result = setupResponseData({
+			// 		url: request.url,
+			// 		data,
+			// 		error,
+			// 	});
+			// 	return response.status(200).json(result);
 		}
 		case "watered": {
-			const { count, error: countError } = await supabase
-				.from("trees_watered")
-				.select("tree_id", countOptions)
-				.order("tree_id", { ascending: true });
-			if (countError) {
-				return response.status(500).json({ error: countError });
+			const { range, error: rangeError } = await getRange(
+				`${SUPABASE_URL}/rest/v1/trees_watered?select=tree_id&order=tree_id.asc`,
+				`${0}-${SUPABASE_MAX_ROWS}`
+			);
+			if (rangeError) {
+				return response.status(500).json({ error: rangeError });
 			}
-			if (!count) {
-				return response.status(404).json({ error: "could not count trees" });
+			if (!range) {
+				return response.status(500).json({ error: "range not found" });
 			}
-			if (count > SUPABASE_MAX_ROWS) {
+
+			if (range.total > SUPABASE_MAX_ROWS) {
 				console.info(
-					`[api/get/${type}] count ${count} exceeds SUPABASE_MAX_ROWS ${SUPABASE_MAX_ROWS}`
+					`[api/get/${type}] count ${range?.total} exceeds SUPABASE_MAX_ROWS ${SUPABASE_MAX_ROWS}`
 				);
 			} else {
-				console.info(`[api/get/${type}] count ${count}`);
+				console.info(`[api/get/${type}] range ${JSON.stringify(range)}`);
 			}
 
 			// FIXME: Request could be done from the frontend
@@ -131,6 +118,7 @@ export default async function handler(
 		}
 		case "treesbyids": {
 			const { tree_ids } = <{ tree_ids: string }>request.query;
+
 			// FIXME: Request could be done from the frontend
 			const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
 			const { data, error } = await supabase
@@ -175,73 +163,8 @@ export default async function handler(
 			return response.status(200).json(result);
 		}
 		case "all": {
-			let { limit: limit_str, offset: offset_str } = <
-				{ limit: string; offset: string }
-			>request.query;
-
-			if (!limit_str) {
-				limit_str = "100";
-			}
-			if (!offset_str) {
-				offset_str = "0";
-			}
-			const limit = parseInt(limit_str, 10);
-			const offset = parseInt(offset_str, 10);
-			if (isNaN(limit)) {
-				return response
-					.status(400)
-					.json({ error: "limit needs to be a number" });
-			}
-			if (isNaN(offset)) {
-				return response
-					.status(400)
-					.json({ error: "offset needs to be a number" });
-			}
-			if (limit > SUPABASE_MAX_ROWS) {
-				return response.status(400).json({
-					error: `limit needs to be smaller than ${SUPABASE_MAX_ROWS}`,
-				});
-			}
-			// FIXME: Request could be done from the frontend
-			const { data, error } = await supabase
-				.from("trees")
-				.select<
-					"id,radolan_sum,geom",
-					{
-						id: string;
-					} & {
-						radolan_sum: number | null;
-					} & {
-						geom: Point;
-					}
-				>("id,radolan_sum,geom")
-				.range(offset, offset + limit)
-				.order("id", { ascending: true });
-
-			if (error) {
-				return response.status(500).json({ error });
-			}
-
-			if (!data) {
-				return response.status(500).json({ error: "trees not found" });
-			}
-			// to match the old structure we need to transform the data a little
-			// FIXME: [GDK-217] API (with supabase): GET "all" should work with result that is returned without transforming the data into the current structure
-			const watered = data.map((tree) => {
-				return [
-					tree.id,
-					tree.geom.coordinates[0] ? tree.geom.coordinates[0] : 0,
-					tree.geom.coordinates[1] ? tree.geom.coordinates[1] : 0,
-					tree.radolan_sum ? tree.radolan_sum : 0,
-				];
-			});
-
-			const result = setupResponseData({
-				url: request.url,
-				data: watered,
-				error,
-			});
-			return response.status(200).json(result);
+			await allHandler(request, response);
+			break;
 		}
 		case "countbyage": {
 			const { start: startStr, end: endStr } = <{ start: string; end: string }>(
