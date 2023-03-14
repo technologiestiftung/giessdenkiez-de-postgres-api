@@ -50,13 +50,19 @@ GET {{API_HOST}}/get/watered
 
 ### GET list of trees from an list of ids ✓
 
-GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_00096p5ra
+GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_21002949fc
 
 ### GET a list of trees with the properities ✓
 # adopted (how many users)
 # waterd how often in the last 30days
 
 GET {{API_HOST}}/get/wateredandadopted
+
+### GET a list of trees with the properities ✓
+# adopted (how many users)
+# waterd how often in the last 30days
+
+GET {{API_HOST}}/get/wateredandadopted?limit=4&offset=5
 
 ### get all trees with id, lat, lon, radolan_sum ✓
 #  with pagination
