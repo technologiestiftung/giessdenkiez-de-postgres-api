@@ -1,27 +1,27 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-// import type { Point } from "geojson";
 import setHeaders from "../../_utils/set-headers";
 import { setupResponseData } from "../../_utils/setup-response";
 import { supabase } from "../../_utils/supabase";
 import { verifyRequest } from "../../_utils/verify";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
-import { getEnvs } from "../../_utils/envs";
-import { getRange } from "../../_utils/parse-content-range";
-// import { createLinks } from "../../_utils/create-links";
+
 import allHandler from "./_requests/all";
 import byidHandler from "./_requests/byid";
+import wateredHandler from "./_requests/watered";
+import treesbyidsHandler from "./_requests/treesbyids";
+import wateredandadoptedHandler from "./_requests/wateredandadopted";
+import { checkDataError } from "../../_utils/data-error-response";
 
 export const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
-const { SUPABASE_MAX_ROWS, SUPABASE_URL } = getEnvs();
 
 // api/[type].ts -> /api/lee
 // req.query.type -> "lee"
 export default async function handler(
 	request: VercelRequest,
 	response: VercelResponse
-) {
+): Promise<VercelResponse> {
 	setHeaders(response, method);
 	if (request.method === "OPTIONS") {
 		return response.status(200).end();
@@ -52,119 +52,19 @@ export default async function handler(
 		default:
 			return response.status(400).json({ error: "invalid query type" });
 		case "byid": {
-			await byidHandler(request, response);
-			break;
-			// 	const { id } = request.query;
-			// 	// FIXME: Request could be done from the frontend
-
-			// 	const { data, error } = await supabase
-			// 		.from("trees")
-			// 		.select("*")
-			// 		.eq("id", id);
-
-			// 	if (error) {
-			// 		return response.status(500).json({ error });
-			// 	}
-
-			// 	if (!data) {
-			// 		return response.status(500).json({ error: "tree not found" });
-			// 	}
-			// 	const result = setupResponseData({
-			// 		url: request.url,
-			// 		data,
-			// 		error,
-			// 	});
-			// 	return response.status(200).json(result);
+			return await byidHandler(request, response);
 		}
 		case "watered": {
-			const { range, error: rangeError } = await getRange(
-				`${SUPABASE_URL}/rest/v1/trees_watered?select=tree_id&order=tree_id.asc`,
-				`${0}-${SUPABASE_MAX_ROWS}`
-			);
-			if (rangeError) {
-				return response.status(500).json({ error: rangeError });
-			}
-			if (!range) {
-				return response.status(500).json({ error: "range not found" });
-			}
-
-			if (range.total > SUPABASE_MAX_ROWS) {
-				console.info(
-					`[api/get/${type}] count ${range?.total} exceeds SUPABASE_MAX_ROWS ${SUPABASE_MAX_ROWS}`
-				);
-			} else {
-				console.info(`[api/get/${type}] range ${JSON.stringify(range)}`);
-			}
-
-			// FIXME: Request could be done from the frontend
-			const { data, error } = await supabase
-				.from("trees_watered")
-				.select("tree_id")
-				.order("tree_id", { ascending: true });
-
-			if (error) {
-				return response.status(500).json({ error });
-			}
-
-			if (!data) {
-				return response.status(500).json({ error: "trees_watered not found" });
-			}
-			const result = setupResponseData({
-				url: request.url,
-				data,
-				error,
-			});
-			return response.status(200).json(result);
+			return await wateredHandler(request, response);
 		}
 		case "treesbyids": {
-			const { tree_ids } = <{ tree_ids: string }>request.query;
-
-			// FIXME: Request could be done from the frontend
-			const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
-			const { data, error } = await supabase
-				.from("trees")
-				.select("*")
-				.in("id", trimmed_tree_ids)
-				.order("id", { ascending: true });
-
-			if (error) {
-				return response.status(500).json({ error });
-			}
-
-			if (!data) {
-				return response.status(500).json({ error: "trees not found" });
-			}
-
-			const result = setupResponseData({
-				url: request.url,
-				data,
-				error,
-			});
-			return response.status(200).json(result);
+			return await treesbyidsHandler(request, response);
 		}
 		case "wateredandadopted": {
-			// FIXME: Request could be done from the frontend
-			const { data, error } = await supabase.rpc("get_watered_and_adopted");
-
-			if (error) {
-				return response.status(500).json({ error });
-			}
-
-			if (!data) {
-				return response.status(500).json({
-					error: "function trees_watered_and_adopted not found",
-				});
-			}
-			const result = setupResponseData({
-				url: request.url,
-				data,
-				error,
-			});
-			return response.status(200).json(result);
+			return await wateredandadoptedHandler(request, response);
 		}
 		case "all": {
-			await allHandler(request, response);
-			break;
+			return await allHandler(request, response);
 		}
 		case "countbyage": {
 			const { start: startStr, end: endStr } = <{ start: string; end: string }>(
@@ -233,13 +133,13 @@ export default async function handler(
 				.lte("pflanzjahr", end)
 				.order("id", { ascending: true });
 
-			if (error) {
-				return response.status(500).json({ error });
-			}
+			checkDataError({
+				data,
+				error,
+				response,
+				errorMessage: "trees not found",
+			});
 
-			if (!data) {
-				return response.status(500).json({ error: "trees not found" });
-			}
 			const result = setupResponseData({
 				url: request.url,
 				data,
