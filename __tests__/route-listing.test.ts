@@ -178,7 +178,10 @@ describe("route listing", () => {
 		            "type": "string",
 		          },
 		        },
-		        "required": [],
+		        "required": [
+		          "limit",
+		          "offset",
+		        ],
 		        "type": "object",
 		      },
 		      "url": "get/all",
@@ -313,6 +316,12 @@ describe("route listing", () => {
 		      "schema": {
 		        "additionalProperties": false,
 		        "properties": {
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
+		            "type": "string",
+		          },
 		          "type": {
 		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
 		            "type": "string",

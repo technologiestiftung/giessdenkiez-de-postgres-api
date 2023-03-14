@@ -15,15 +15,17 @@ exports[`GET routes snapshot tests default responses Should return 200 on tree a
       52.64586,
       205,
     ],
-    [
-      "_2100186c08",
-      13.50331,
-      52.64586,
-      205,
-    ],
   ],
   "error": null,
+  "links": {
+    "next": "/get/all?limit=2&offset=2",
+  },
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": 13,
+    "start": 0,
+    "total": 14,
+  },
   "url": "/?type=all&limit=2&offset=0",
   "version": "2.0.0",
 }
@@ -2449,7 +2451,13 @@ exports[`GET routes snapshot tests default responses should return 200 on trees_
     },
   ],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": 3,
+    "start": 0,
+    "total": 4,
+  },
   "url": "/?type=watered",
   "version": "2.0.0",
 }

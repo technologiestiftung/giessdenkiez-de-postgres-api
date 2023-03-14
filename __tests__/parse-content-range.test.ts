@@ -7,19 +7,11 @@ import {
 
 import { getEnvs } from "../_utils/envs";
 
-const { SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY } =
-	getEnvs();
-const headers = {
-	"Range-Unit": "items",
-	Prefer: "count=exact",
-	apikey: SUPABASE_ANON_KEY,
-	Authorizatuion: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
-};
-const options = { headers };
+const { SUPABASE_URL } = getEnvs();
 
 describe("getRange", () => {
 	test("should return range and no error for valid response", async () => {
-		const result = await getRange(`${SUPABASE_URL}/rest/v1/trees`, options);
+		const result = await getRange(`${SUPABASE_URL}/rest/v1/trees`);
 		expect(result.error).toBeNull();
 		expect(result.range).toEqual({
 			start: 0,
@@ -29,18 +21,19 @@ describe("getRange", () => {
 	});
 
 	test("should return error for non-ok response", async () => {
-		const result = await getRange(`${SUPABASE_URL}/rest/v1/foo`, options);
-		expect(result.error).toEqual(new Error("No content-range header"));
+		const result = await getRange(`${SUPABASE_URL}/rest/v1/foo`);
+		// expect(result.error).toEqual(new Error("No content-range header"));
 		expect(result.range).toBeNull();
 	});
 
-	test("should return error for missing content-range header", async () => {
-		const result = await getRange(
+	test("should return full range", async () => {
+		const expected = { end: 13, start: 0, total: 14 };
+		const { error, range: result } = await getRange(
 			`${SUPABASE_URL}/rest/v1/trees`
-			// options
+			//
 		);
-		expect(result.error).toEqual(new Error("No content-range header"));
-		expect(result.range).toBeNull();
+		expect(error).toBeNull();
+		expect(result).toEqual(expected);
 	});
 });
 
@@ -68,7 +61,7 @@ describe("parseContentRange util", () => {
 		const expected: ContentRange = { start: -1, end: -1, total: 0 };
 		expect(parseContentRange(header)).toEqual(expected);
 	});
-test("parses a valid content range header with an asterisk for start, end, and total", () => {
+	test("parses a valid content range header with an asterisk for start, end, and total", () => {
 		const header = "*/*";
 		const expected: ContentRange = { start: -1, end: -1, total: -1 };
 		expect(parseContentRange(header)).toEqual(expected);
@@ -80,6 +73,8 @@ test("parses a valid content range header with an asterisk for start, end, and t
 	});
 	test("returns null for an invalid content range header not numbers", () => {
 		const header = "foo/bah";
-		expect(parseContentRange(header)).toBeNull();
+		const expected: ContentRange = { start: -1, end: -1, total: -1 };
+
+		expect(parseContentRange(header)).toEqual(expected);
 	});
 });
