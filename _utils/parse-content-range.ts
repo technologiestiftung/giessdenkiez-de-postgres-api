@@ -15,7 +15,7 @@ const { SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ANON_KEY } = getEnvs();
  * 	});
  *
  */
-export async function getRange(url: string, rangeStr: string) {
+export async function getRange(url: string) {
 	let error: Error | null = null;
 	let range: ContentRange | null = null;
 
@@ -23,7 +23,6 @@ export async function getRange(url: string, rangeStr: string) {
 		headers: {
 			Authorization: `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
 			apikey: SUPABASE_ANON_KEY,
-			Range: rangeStr,
 			"Range-Unit": "items",
 			Prefer: "count=exact",
 		},
