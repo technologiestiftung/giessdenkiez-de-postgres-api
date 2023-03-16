@@ -1563,9 +1563,9 @@ exports[`GET routes snapshot tests default responses Should return 200 on treesb
   "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "range": {
-    "end": 13,
+    "end": 1,
     "start": 0,
-    "total": 14,
+    "total": 2,
   },
   "url": "/?type=treesbyids&tree_ids=_2100294b1f%2C_210028b9c8",
   "version": "2.0.0",

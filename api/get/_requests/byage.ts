@@ -17,11 +17,6 @@ export default async function handler(
 ) {
 	checkLimitAndOffset(request, response);
 	const { limit, offset } = getLimitAndOffeset(request.query);
-	const { range, error: rangeError } = await getRange(
-		`${SUPABASE_URL}/rest/v1/trees`
-	);
-	checkRangeError(response, rangeError, range);
-
 	const { start: startStr, end: endStr } = <{ start: string; end: string }>(
 		request.query
 	);
@@ -36,6 +31,11 @@ export default async function handler(
 	if (end === undefined) {
 		return response.status(400).json({ error: "end needs to be a number" });
 	}
+	const { range, error: rangeError } = await getRange(
+		`${SUPABASE_URL}/rest/v1/trees?pflanzjahr=gte.${start}&pflanzjahr=lte.${end}`
+	);
+	checkRangeError(response, rangeError, range);
+
 	// FIXME: Request could be done from the frontend
 	const { data, error } = await supabase
 		.from("trees")
