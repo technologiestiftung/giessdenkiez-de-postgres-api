@@ -101,6 +101,8 @@ export const byageSchema: AjvSchema = {
 		type,
 		start: { type: "string" },
 		end: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["start", "end"],
 	additionalProperties: false,
@@ -111,6 +113,8 @@ export const lastwateredSchema: AjvSchema = {
 	properties: {
 		type,
 		id: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["id"],
 	additionalProperties: false,
@@ -121,6 +125,8 @@ export const adoptedSchema: AjvSchema = {
 	properties: {
 		type,
 		uuid: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["uuid"],
 	additionalProperties: false,
