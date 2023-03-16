@@ -20,15 +20,14 @@ export default async function handler(
 ) {
 	checkLimitAndOffset(request, response);
 	const { limit, offset } = getLimitAndOffeset(request.query);
+	const { tree_ids } = <{ tree_ids: string }>request.query;
+	const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
 	const { range, error: rangeError } = await getRange(
-		`${SUPABASE_URL}/rest/v1/trees`
+		`${SUPABASE_URL}/rest/v1/trees?id=in.(${trimmed_tree_ids})`
 	);
 
 	checkRangeError(response, rangeError, range);
 
-	const { tree_ids } = <{ tree_ids: string }>request.query;
-
-	const trimmed_tree_ids = tree_ids.split(",").map((id) => id.trim());
 	const { data, error } = await supabase
 		.from("trees")
 		.select("*")

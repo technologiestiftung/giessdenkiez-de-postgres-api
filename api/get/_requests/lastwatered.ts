@@ -19,11 +19,11 @@ export default async function handler(
 ) {
 	checkLimitAndOffset(request, response);
 	const { limit, offset } = getLimitAndOffeset(request.query);
+	const { id } = <{ id: string }>request.query;
 	const { range, error: rangeError } = await getRange(
-		`${SUPABASE_URL}/rest/v1/trees_watered`
+		`${SUPABASE_URL}/rest/v1/trees_watered?tree_id=eq.${id}`
 	);
 	checkRangeError(response, rangeError, range);
-	const { id } = <{ id: string }>request.query;
 
 	// FIXME: Request could be done from the frontend
 	const { data, error } = await supabase

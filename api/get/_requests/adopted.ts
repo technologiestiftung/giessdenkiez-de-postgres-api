@@ -23,11 +23,11 @@ export default async function handler(
 
 	checkLimitAndOffset(request, response);
 	const { limit, offset } = getLimitAndOffeset(request.query);
+	const { uuid } = <{ uuid: string }>request.query;
 	const { range, error: rangeError } = await getRange(
-		`${SUPABASE_URL}/rest/v1/trees_adopted`
+		`${SUPABASE_URL}/rest/v1/trees_adopted?uuid=eq.${uuid}`
 	);
 	checkRangeError(response, rangeError, range);
-	const { uuid } = <{ uuid: string }>request.query;
 	const { data, error } = await supabase
 		.from("trees_adopted")
 		.select("tree_id,uuid")
