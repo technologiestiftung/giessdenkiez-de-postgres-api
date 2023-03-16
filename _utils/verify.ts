@@ -7,9 +7,13 @@ export async function verifyRequest(request: VercelRequest) {
 		return false;
 	}
 	const token = authorization.split(" ")[1];
-	const decoded = await verifyAuth0Token(token, options);
-	if (decoded === undefined) {
+	try {
+		const decoded = await verifyAuth0Token(token, options);
+		if (decoded === undefined) {
+			return false;
+		}
+		return true;
+	} catch (error) {
 		return false;
 	}
-	return true;
 }
