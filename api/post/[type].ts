@@ -26,8 +26,18 @@ export default async function postHandler(
 	if (request.method === "OPTIONS") {
 		return response.status(200).end();
 	}
-	const authorized = await verifyRequest(request);
-	if (!authorized) {
+	// const { data: userData, error } = await verifySupabaseToken(request);
+	// if (error) {
+	// 	console.error("error from supabase auth", error);
+	// 	return response.status(401).json({ error: "unauthorized" });
+	// }
+	// if (!userData) {
+	// 	console.error("no user data from supabase auth");
+	// 	return response.status(401).json({ error: "unauthorized" });
+	// }
+	/**
+	 * We will remove auth0 but for now we can auth with both
+	 */
 		return response.status(401).json({ error: "unauthorized" });
 	}
 	const { type } = request.query;
