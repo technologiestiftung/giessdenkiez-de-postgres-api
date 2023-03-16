@@ -1,11 +1,12 @@
-import { getPackage, Package } from "./package";
+import { getPackage } from "./package";
 
 const pkg = getPackage();
 
-interface ResponseData extends Package {
-	[key: string]: string | number | Record<string, unknown> | undefined;
-}
-export function setupResponseData<T>(overrides?: T): ResponseData {
+// interface ResponseData extends Package {
+// 	[key: string]: string | number | Record<string, unknown> | undefined;
+// 	range: ContentRange | undefined;
+// }
+export function setupResponseData<T>(overrides?: T) {
 	return {
 		version: pkg.version,
 		name: pkg.name,

@@ -20,7 +20,7 @@
 
 # Giess den Kiez API
 
-Build with Typescript connects to Supabase and (still) Auth0.com, runs on vercel.com.
+Built with Typescript connects to Supabase and (still) Auth0.com, runs on vercel.com.
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
 

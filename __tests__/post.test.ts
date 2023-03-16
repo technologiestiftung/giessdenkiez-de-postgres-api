@@ -22,7 +22,6 @@ const body = {
 
 describe("api/post/[type]", () => {
 	test("should make a request to post/water and fail unauthorized", async () => {
-		await truncateTreesWaterd();
 		const { server, url } = await createTestServer(
 			{ type: "water" },
 			postHandler
@@ -57,7 +56,6 @@ describe("api/post/[type]", () => {
 	});
 
 	test("should make a request to post/water and fail due to missing body", async () => {
-		await truncateTreesWaterd();
 		const { server, url } = await createTestServer(
 			{ type: "water" },
 			postHandler
@@ -127,6 +125,7 @@ describe("api/post/[type]", () => {
 		});
 		server.close();
 		expect(response.status).toBe(201);
+		await truncateTreesWaterd();
 	});
 
 	test("should not create double adoption in trees_adopted", async () => {
@@ -176,5 +175,6 @@ describe("api/post/[type]", () => {
 		if (!treesAdopted) throw new Error("treesAdopted is null");
 		expect(treesAdopted).not.toBe(null);
 		expect(treesAdopted.length).toBe(1);
+		await truncateTreesAdopted();
 	});
 });

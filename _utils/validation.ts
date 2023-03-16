@@ -43,6 +43,8 @@ export const wateredSchema: AjvSchema = {
 	type: "object",
 	properties: {
 		type,
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: [],
 	additionalProperties: false,
@@ -53,6 +55,8 @@ export const treesbyidsSchema: AjvSchema = {
 	properties: {
 		type,
 		tree_ids: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["tree_ids"],
 	additionalProperties: false,
@@ -60,7 +64,11 @@ export const treesbyidsSchema: AjvSchema = {
 
 export const wateredandadoptedSchemata: AjvSchema = {
 	type: "object",
-	properties: { type },
+	properties: {
+		type,
+		limit: { type: "string" },
+		offset: { type: "string" },
+	},
 	required: [],
 	additionalProperties: false,
 };
@@ -72,7 +80,7 @@ export const allSchema: AjvSchema = {
 		limit: { type: "string" },
 		offset: { type: "string" },
 	},
-	required: [],
+	required: ["limit", "offset"],
 	additionalProperties: false,
 };
 
@@ -93,6 +101,8 @@ export const byageSchema: AjvSchema = {
 		type,
 		start: { type: "string" },
 		end: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["start", "end"],
 	additionalProperties: false,
@@ -103,6 +113,8 @@ export const lastwateredSchema: AjvSchema = {
 	properties: {
 		type,
 		id: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["id"],
 	additionalProperties: false,
@@ -113,6 +125,8 @@ export const adoptedSchema: AjvSchema = {
 	properties: {
 		type,
 		uuid: { type: "string" },
+		limit: { type: "string" },
+		offset: { type: "string" },
 	},
 	required: ["uuid"],
 	additionalProperties: false,

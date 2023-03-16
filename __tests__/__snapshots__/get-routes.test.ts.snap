@@ -15,15 +15,17 @@ exports[`GET routes snapshot tests default responses Should return 200 on tree a
       52.64586,
       205,
     ],
-    [
-      "_2100186c08",
-      13.50331,
-      52.64586,
-      205,
-    ],
   ],
   "error": null,
+  "links": {
+    "next": "/get/all?limit=2&offset=2&type=all",
+  },
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": 13,
+    "start": 0,
+    "total": 14,
+  },
   "url": "/?type=all&limit=2&offset=0",
   "version": "2.0.0",
 }
@@ -1558,7 +1560,13 @@ exports[`GET routes snapshot tests default responses Should return 200 on treesb
     },
   ],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": 13,
+    "start": 0,
+    "total": 14,
+  },
   "url": "/?type=treesbyids&tree_ids=_2100294b1f%2C_210028b9c8",
   "version": "2.0.0",
 }
@@ -1568,7 +1576,13 @@ exports[`GET routes snapshot tests default responses should return 200 on adopte
 {
   "data": [],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": -1,
+    "start": -1,
+    "total": 0,
+  },
   "url": "/?type=adopted&uuid=auth0%7Cabc",
   "version": "2.0.0",
 }
@@ -1621,7 +1635,13 @@ exports[`GET routes snapshot tests default responses should return 200 on byage 
     },
   ],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": 13,
+    "start": 0,
+    "total": 14,
+  },
   "url": "/?type=byage&start=1800&end=3000",
   "version": "2.0.0",
 }
@@ -1653,7 +1673,13 @@ exports[`GET routes snapshot tests default responses should return 200 on lastwa
 {
   "data": [],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": -1,
+    "start": -1,
+    "total": 0,
+  },
   "url": "/?type=lastwatered&id=_210028b9c8",
   "version": "2.0.0",
 }
@@ -2449,7 +2475,13 @@ exports[`GET routes snapshot tests default responses should return 200 on trees_
     },
   ],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": 3,
+    "start": 0,
+    "total": 4,
+  },
   "url": "/?type=watered",
   "version": "2.0.0",
 }
@@ -2459,7 +2491,13 @@ exports[`GET routes snapshot tests default responses should return 200 on watere
 {
   "data": [],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": -1,
+    "start": -1,
+    "total": 0,
+  },
   "url": "/?type=wateredandadopted",
   "version": "2.0.0",
 }
@@ -2469,7 +2507,13 @@ exports[`GET routes snapshot tests default responses should return 200 on watere
 {
   "data": [],
   "error": null,
+  "links": {},
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
+  "range": {
+    "end": -1,
+    "start": -1,
+    "total": 0,
+  },
   "url": "/?type=wateredbyuser&uuid=auth0%7Cabc",
   "version": "2.0.0",
 }

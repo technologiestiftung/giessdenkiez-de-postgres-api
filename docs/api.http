@@ -1,6 +1,10 @@
+@SUPABASE_URL = http://localhost:54321
+@SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+@SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+# --------------------------------------------------
 @protocol = http
 @host = localhost
-@port = 3001
+@port = 3000
 
 
 @API_HOST = {{protocol}}://{{host}}:{{port}}
@@ -46,7 +50,7 @@ GET {{API_HOST}}/get/watered
 
 ### GET list of trees from an list of ids ✓
 
-GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_00096p5ra
+GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_21002949fc
 
 ### GET a list of trees with the properities ✓
 # adopted (how many users)
@@ -54,10 +58,21 @@ GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_00096p5ra
 
 GET {{API_HOST}}/get/wateredandadopted
 
+### GET a list of trees with the properities ✓
+# adopted (how many users)
+# waterd how often in the last 30days
+
+GET {{API_HOST}}/get/wateredandadopted?limit=4&offset=5
+
 ### get all trees with id, lat, lon, radolan_sum ✓
 #  with pagination
 
-GET {{API_HOST}}/get/all&limit=2&offset=1
+GET {{API_HOST}}/get/all&limit=4&offset=5
+
+
+### get all trees
+
+GET {{API_HOST}}/get/all
 
 
 
@@ -65,9 +80,13 @@ GET {{API_HOST}}/get/all&limit=2&offset=1
 
 GET {{API_HOST}}/get/byage&start=1800&end=2023
 
+### GET trees by age
+
+GET {{API_HOST}}/get/byage&start=1800&end=2023&limit=10000&offset=0
 ### GET count of trees by age ✓
 
 GET {{API_HOST}}/get/countbyage&start=1800&end=2023
+
 
 
   #####  ####### #######
@@ -226,3 +245,56 @@ Content-Type: application/json
     "uuid": "{{USER_ID}}"
     "watering_id": 1
 }
+
+
+
+# ██████  ██    ██ ██████  ███████
+# ██   ██ ██    ██ ██   ██ ██
+# ██████  ██    ██ ██████  █████
+# ██      ██    ██ ██   ██ ██
+# ██       ██████  ██   ██ ███████
+
+# ███████ ██    ██ ██████   █████  ██████   █████  ███████ ███████
+# ██      ██    ██ ██   ██ ██   ██ ██   ██ ██   ██ ██      ██
+# ███████ ██    ██ ██████  ███████ ██████  ███████ ███████ █████
+#      ██ ██    ██ ██      ██   ██ ██   ██ ██   ██      ██ ██
+# ███████  ██████  ██      ██   ██ ██████  ██   ██ ███████ ███████
+
+
+#  █████  ██████  ██
+# ██   ██ ██   ██ ██
+# ███████ ██████  ██
+# ██   ██ ██      ██
+# ██   ██ ██      ██
+
+
+### SUPABASE REST API (anon) (swagger)
+
+GET {{SUPABASE_URL}}/rest/v1/
+apikey: {{SUPABASE_ANON_KEY}}
+
+
+### HEAD to trees_watered (anon)
+# Use this to get the right amount of items returned
+
+HEAD {{SUPABASE_URL}}/rest/v1/trees_watered
+apikey: {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_SERVICE_ROLE_KEY}}
+Range-Unit: items
+Range: 33-300
+Prefer: count=exact
+
+
+### GET trees_watered (sudo mode since RLS is in effect)
+
+GET {{SUPABASE_URL}}/rest/v1/trees_watered
+apikey: {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_SERVICE_ROLE_KEY}}
+
+
+### RPC get_watered_and_adopted
+GET {{SUPABASE_URL}}/rest/v1/rpc/get_watered_and_adopted
+apikey: {{SUPABASE_ANON_KEY}}
+Range-Unit: items
+Prefer: count=exact
+

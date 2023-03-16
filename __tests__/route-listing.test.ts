@@ -148,6 +148,12 @@ describe("route listing", () => {
 		      "schema": {
 		        "additionalProperties": false,
 		        "properties": {
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
+		            "type": "string",
+		          },
 		          "type": {
 		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
 		            "type": "string",
@@ -178,7 +184,10 @@ describe("route listing", () => {
 		            "type": "string",
 		          },
 		        },
-		        "required": [],
+		        "required": [
+		          "limit",
+		          "offset",
+		        ],
 		        "type": "object",
 		      },
 		      "url": "get/all",
@@ -188,6 +197,12 @@ describe("route listing", () => {
 		        "additionalProperties": false,
 		        "properties": {
 		          "end": {
+		            "type": "string",
+		          },
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
 		            "type": "string",
 		          },
 		          "start": {
@@ -278,6 +293,12 @@ describe("route listing", () => {
 		          "id": {
 		            "type": "string",
 		          },
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
+		            "type": "string",
+		          },
 		          "type": {
 		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
 		            "type": "string",
@@ -294,6 +315,12 @@ describe("route listing", () => {
 		      "schema": {
 		        "additionalProperties": false,
 		        "properties": {
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
+		            "type": "string",
+		          },
 		          "tree_ids": {
 		            "type": "string",
 		          },
@@ -313,6 +340,12 @@ describe("route listing", () => {
 		      "schema": {
 		        "additionalProperties": false,
 		        "properties": {
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
+		            "type": "string",
+		          },
 		          "type": {
 		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
 		            "type": "string",
@@ -327,6 +360,12 @@ describe("route listing", () => {
 		      "schema": {
 		        "additionalProperties": false,
 		        "properties": {
+		          "limit": {
+		            "type": "string",
+		          },
+		          "offset": {
+		            "type": "string",
+		          },
 		          "type": {
 		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
 		            "type": "string",
