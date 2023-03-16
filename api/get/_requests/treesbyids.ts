@@ -44,6 +44,7 @@ export default async function handler(
 		range,
 		type: "treesbyids",
 		method: "get",
+		requestUrl: request.url ?? "",
 	});
 
 	const result = setupResponseData({

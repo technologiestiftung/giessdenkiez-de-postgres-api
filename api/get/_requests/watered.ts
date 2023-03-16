@@ -43,6 +43,7 @@ export default async function handler(
 		range,
 		type: "watered",
 		method: "get",
+		requestUrl: request.url ?? "",
 	});
 	const result = setupResponseData({
 		url: request.url,

@@ -80,6 +80,9 @@ GET {{API_HOST}}/get/all
 
 GET {{API_HOST}}/get/byage&start=1800&end=2023
 
+### GET trees by age
+
+GET {{API_HOST}}/get/byage&start=1800&end=2023&limit=10000&offset=0
 ### GET count of trees by age ✓
 
 GET {{API_HOST}}/get/countbyage&start=1800&end=2023

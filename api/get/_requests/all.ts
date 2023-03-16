@@ -60,6 +60,7 @@ export default async function handler(
 		range,
 		type: "all",
 		method: "get",
+		requestUrl: request.url ?? "",
 	});
 
 	const result = setupResponseData({
