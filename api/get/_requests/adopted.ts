@@ -27,7 +27,6 @@ export default async function handler(
 		`${SUPABASE_URL}/rest/v1/trees_adopted`
 	);
 	checkRangeError(response, rangeError, range);
-
 	const { uuid } = <{ uuid: string }>request.query;
 	const { data, error } = await supabase
 		.from("trees_adopted")
