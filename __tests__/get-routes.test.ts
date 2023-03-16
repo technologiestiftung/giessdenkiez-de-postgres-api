@@ -80,6 +80,7 @@ describe("GET routes snapshot tests default responses", () => {
 	});
 	test("should return 200 on lastwatered route", async () => {
 		await truncateTreesWaterd();
+
 		const { server, url } = await createTestServer(
 			{ type: "lastwatered", id: "_210028b9c8" },
 			handler

@@ -12,6 +12,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -55,6 +61,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
             "additionalProperties": false,
             "properties": {
               "end": {
+                "type": "string",
+              },
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
                 "type": "string",
               },
               "start": {
@@ -145,6 +157,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
               "id": {
                 "type": "string",
               },
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -161,6 +179,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "tree_ids": {
                 "type": "string",
               },
@@ -200,6 +224,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -362,6 +392,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -405,6 +441,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
             "additionalProperties": false,
             "properties": {
               "end": {
+                "type": "string",
+              },
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
                 "type": "string",
               },
               "start": {
@@ -495,6 +537,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
               "id": {
                 "type": "string",
               },
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -511,6 +559,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "tree_ids": {
                 "type": "string",
               },
@@ -550,6 +604,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -712,6 +772,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -755,6 +821,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
             "additionalProperties": false,
             "properties": {
               "end": {
+                "type": "string",
+              },
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
                 "type": "string",
               },
               "start": {
@@ -845,6 +917,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
               "id": {
                 "type": "string",
               },
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",
@@ -861,6 +939,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "tree_ids": {
                 "type": "string",
               },
@@ -900,6 +984,12 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
           "schema": {
             "additionalProperties": false,
             "properties": {
+              "limit": {
+                "type": "string",
+              },
+              "offset": {
+                "type": "string",
+              },
               "type": {
                 "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
                 "type": "string",

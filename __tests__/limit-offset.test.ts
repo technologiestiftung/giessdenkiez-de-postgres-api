@@ -37,7 +37,7 @@ describe("getLimitAndOffeset", () => {
 	});
 
 	test("returns default limit when parsed limit is greater than maximum limit", () => {
-		const query = { limit: "2000", offset: "50" };
+		const query = { limit: `${SUPABASE_MAX_ROWS}`, offset: "50" };
 		expect(getLimitAndOffeset(query)).toEqual({
 			limit: SUPABASE_MAX_ROWS,
 			offset: 50,
