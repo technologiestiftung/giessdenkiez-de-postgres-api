@@ -1,13 +1,15 @@
+import { User } from "@supabase/supabase-js";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { setupResponseData } from "../../../_utils/setup-response";
-import { supabase } from "../../../_utils/supabase";
-import { verifyRequest } from "../../../_utils/verify";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
+import { verifyAuth0Request } from "../../_utils/verify-auth0";
 
 export default async function handler(
 	request: VercelRequest,
-	response: VercelResponse
+	response: VercelResponse,
+	_user?: User
 ) {
-	const authorized = await verifyRequest(request);
+	const authorized = await verifyAuth0Request(request);
 	if (!authorized) {
 		return response.status(401).json({ error: "unauthorized" });
 	}

@@ -4,7 +4,7 @@
 # --------------------------------------------------
 @protocol = http
 @host = localhost
-@port = 3000
+@port = 8080
 
 
 @API_HOST = {{protocol}}://{{host}}:{{port}}
@@ -12,6 +12,15 @@
 @TREE_ID = _2100186a5c
 @USER_ID = auth0|abc
 @USER_NAME = foo
+
+
+#SUPABASE VARS
+
+@SUPABASE_USER_EMAIL = someone@email.com
+@SUPABASE_USER_PASSWORD = 1234567890
+@SUPABASE_USER_UUID = db640d6c-1ac9-4a4d-accc-0adacbf6d9ad
+@SUPABASE_USER_NAME = someone
+@SUPABASE_USER_ACCESS_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjc4OTkzMDUzLCJzdWIiOiJkYjY0MGQ2Yy0xYWM5LTRhNGQtYWNjYy0wYWRhY2JmNmQ5YWQiLCJlbWFpbCI6InNvbWVvbmVAZW1haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6e30sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE2Nzg5ODk0NTN9XSwic2Vzc2lvbl9pZCI6ImRhZGZmNDNmLWJkMTItNGNmYi1iZWEzLWNlNjVlMDU0MzAyYiJ9.acj7bwhju_bJ6zFz842oeG7iPNvgzcWtoP7Bji80wZk
 
 # @API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
 
@@ -40,6 +49,9 @@
 ### Healthcheck
 GET {{API_HOST}}
 
+
+### v3
+GET {{API_HOST}}/v3
 ### GET tree by its id byid ✓
 
 GET {{API_HOST}}/get/byid&id={{TREE_ID}}
@@ -87,6 +99,108 @@ GET {{API_HOST}}/get/byage&start=1800&end=2023&limit=10000&offset=0
 
 GET {{API_HOST}}/get/countbyage&start=1800&end=2023
 
+########################
+#
+# SUPABASE AUTH
+#
+#########################
+
+
+
+
+
+
+### Signup
+
+POST {{SUPABASE_URL}}/auth/v1/signup
+apikey: {{SUPABASE_ANON_KEY}}
+Content-Type: application/json
+
+{
+    "email": "{{SUPABASE_USER_EMAIL}}",
+    "password": "{{SUPABASE_USER_PASSWORD}}"
+}
+
+### Login
+
+
+POST {{SUPABASE_URL}}/auth/v1/token?grant_type=password
+apikey: {{SUPABASE_ANON_KEY}}
+Content-Type: application/json
+
+{
+    "email": "{{SUPABASE_USER_EMAIL}}",
+    "password": "{{SUPABASE_USER_PASSWORD}}"
+}
+
+
+### Login with magic link
+# look ont oinbucket of the email
+# http://localhost:54324
+POST {{SUPABASE_URL}}/auth/v1/magiclink
+apikey: {{SUPABASE_ANON_KEY}}
+Content-Type: application/json
+
+{
+    "email": "{{SUPABASE_USER_EMAIL}}"
+}
+
+### Get user JSON
+
+GET {{SUPABASE_URL}}/auth/v1/user
+apikey: {{SUPABASE_ANON_KEY}}
+Content-Type: application/json
+Authorization: Bearer {{SUPABASE_USER_ACCESS_TOKEN}}
+
+
+### Password recovery
+# in local developement look into the inbuckt of the email
+# http://localhost:54324
+# This will send you to http://localhost:3000 ???
+# with a token und the recovery url Param
+
+POST {{SUPABASE_URL}}/auth/v1/recover
+apikey: {{SUPABASE_ANON_KEY}}
+Content-Type: application/json
+
+{
+    "email": "{{SUPABASE_USER_EMAIL}}"
+}
+
+
+### Update the user data password and/or email
+# data is optional
+
+PUT {{SUPABASE_URL}}/auth/v1/user
+apikey: {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_USER_ACCESS_TOKEN}}
+Content-Type: application/json
+
+{
+    "email": "{{SUPABASE_USER_EMAIL}}",
+    "password": "{{SUPABASE_USER_PASSWORD}}",
+      "data": {
+         "key": "value"
+  }
+}
+
+
+### Logout
+
+POST {{SUPABASE_URL}}/auth/v1/logout
+apikey {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_USER_ACCESS_TOKEN}}
+
+
+
+
+
+########################
+#
+# SUPABASE AUTH END
+#
+#########################
+
 
 
   #####  ####### #######
@@ -125,6 +239,9 @@ Content-Type: application/json
     "audience": "{{audience}}",
     "grant_type": "client_credentials"
 }
+
+
+
 
 
 
@@ -185,7 +302,7 @@ Authorization: Bearer {{token}}
 ### POST water a tree
 
 POST {{API_HOST}}/post/water
-Authorization: Bearer {{token}}
+Authorization: Bearer {{SUPABASE_USER_ACCESS_TOKEN}}
 Content-Type: application/json
 
 {

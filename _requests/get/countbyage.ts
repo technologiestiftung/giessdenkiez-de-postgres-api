@@ -1,7 +1,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { checkDataError } from "../../../_utils/data-error-response";
-import { setupResponseData } from "../../../_utils/setup-response";
-import { supabase } from "../../../_utils/supabase";
+import { checkDataError } from "../../_utils/data-error-response";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
 
 export default async function handler(
 	request: VercelRequest,

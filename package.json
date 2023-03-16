@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "vercel:dev": "vercel dev",
+    "vercel:dev": "vercel dev --listen 8080",
     "lint": "eslint ./**/*.ts ",
     "format": "prettier ./**/*.ts --write",
     "generate:types": "npx just generate-types"

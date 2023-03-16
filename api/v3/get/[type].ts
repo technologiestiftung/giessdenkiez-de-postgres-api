@@ -1,20 +1,24 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import setHeaders from "../../_utils/set-headers";
-import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
-import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
+import setHeaders from "../../../_utils/set-headers";
+import { queryTypes as queryTypesList } from "../../../_utils/routes-listing";
+import {
+	getSchemas,
+	paramsToObject,
+	validate,
+} from "../../../_utils/validation";
 
-import allHandler from "../../_requests/get/all";
-import byidHandler from "../../_requests/get/byid";
-import wateredHandler from "../../_requests/get/watered";
-import treesbyidsHandler from "../../_requests/get/treesbyids";
-import wateredandadoptedHandler from "../../_requests/get/wateredandadopted";
-import countbyageHandler from "../../_requests/get/countbyage";
-import byageHandler from "../../_requests/get/byage";
-import lastwateredHandler from "../../_requests/get/lastwatered";
-import adoptedHandler from "../../_requests/get/adopted";
-import istreeadoptedHandler from "../../_requests/get/istreeadopted";
-import wateredbyuserHandler from "../../_requests/get/wateredbyuser";
-import { verifyAuth0Request } from "../../_utils/verify-auth0";
+import allHandler from "../../../_requests/get/all";
+import byidHandler from "../../../_requests/get/byid";
+import wateredHandler from "../../../_requests/get/watered";
+import treesbyidsHandler from "../../../_requests/get/treesbyids";
+import wateredandadoptedHandler from "../../../_requests/get/wateredandadopted";
+import countbyageHandler from "../../../_requests/get/countbyage";
+import byageHandler from "../../../_requests/get/byage";
+import lastwateredHandler from "../../../_requests/get/lastwatered";
+import adoptedHandler from "../../../_requests/get/adopted";
+import istreeadoptedHandler from "../../../_requests/get/istreeadopted";
+import wateredbyuserHandler from "../../../_requests/get/wateredbyuser";
+import { verifySupabaseToken } from "../../../_utils/verify-supabase-token";
 
 export const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
@@ -80,27 +84,27 @@ export default async function handler(
 		}
 		// All requests below this line are only available for authenticated users
 		// --------------------------------------------------------------------
-		case "adopted": {
-			const authorized = await verifyAuth0Request(request);
-			if (!authorized) {
-				return response.status(401).json({ error: "unauthorized" });
-			}
-			return await adoptedHandler(request, response);
-		}
-		case "istreeadopted": {
-			const authorized = await verifyAuth0Request(request);
-			if (!authorized) {
-				return response.status(401).json({ error: "unauthorized" });
-			}
-			return await istreeadoptedHandler(request, response);
-		}
-
+		case "adopted":
+		case "istreeadopted":
 		case "wateredbyuser": {
-			const authorized = await verifyAuth0Request(request);
-			if (!authorized) {
+			const { data: userData, error } = await verifySupabaseToken(request);
+			if (error) {
+				console.error("error from supabase auth", error);
 				return response.status(401).json({ error: "unauthorized" });
 			}
-			return await wateredbyuserHandler(request, response);
+			if (!userData) {
+				console.error("no user data from supabase auth");
+				return response.status(401).json({ error: "unauthorized" });
+			}
+			if (type === "adopted") {
+				return await adoptedHandler(request, response, userData);
+			} else if (type === "istreeadopted") {
+				return await istreeadoptedHandler(request, response, userData);
+			} else if (type === "wateredbyuser") {
+				return await wateredbyuserHandler(request, response, userData);
+			} else {
+				return response.status(400).json({ error: "invalid query type" });
+			}
 		}
 	}
 }

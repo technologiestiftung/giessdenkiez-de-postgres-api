@@ -27,7 +27,6 @@ exports[`GET routes snapshot tests default responses Should return 200 on tree a
     "total": 14,
   },
   "url": "/?type=all&limit=2&offset=0",
-  "version": "2.0.0",
 }
 `;
 
@@ -1568,7 +1567,6 @@ exports[`GET routes snapshot tests default responses Should return 200 on treesb
     "total": 2,
   },
   "url": "/?type=treesbyids&tree_ids=_2100294b1f%2C_210028b9c8",
-  "version": "2.0.0",
 }
 `;
 
@@ -1584,7 +1582,6 @@ exports[`GET routes snapshot tests default responses should return 200 on adopte
     "total": 0,
   },
   "url": "/?type=adopted&uuid=auth0%7Cabc",
-  "version": "2.0.0",
 }
 `;
 
@@ -1643,7 +1640,6 @@ exports[`GET routes snapshot tests default responses should return 200 on byage 
     "total": 14,
   },
   "url": "/?type=byage&start=1800&end=3000",
-  "version": "2.0.0",
 }
 `;
 
@@ -1655,7 +1651,6 @@ exports[`GET routes snapshot tests default responses should return 200 on countb
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "url": "/?type=countbyage&start=1800&end=3000",
-  "version": "2.0.0",
 }
 `;
 
@@ -1665,7 +1660,6 @@ exports[`GET routes snapshot tests default responses should return 200 on istree
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "url": "/?type=istreeadopted&id=_210028b9c8&uuid=auth0%7Cabc",
-  "version": "2.0.0",
 }
 `;
 
@@ -1681,7 +1675,6 @@ exports[`GET routes snapshot tests default responses should return 200 on lastwa
     "total": 0,
   },
   "url": "/?type=lastwatered&id=_210028b9c8",
-  "version": "2.0.0",
 }
 `;
 
@@ -2454,7 +2447,6 @@ exports[`GET routes snapshot tests default responses should return 200 on tree b
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "url": "/?type=byid&id=_2100294b1f",
-  "version": "2.0.0",
 }
 `;
 
@@ -2483,7 +2475,6 @@ exports[`GET routes snapshot tests default responses should return 200 on trees_
     "total": 4,
   },
   "url": "/?type=watered",
-  "version": "2.0.0",
 }
 `;
 
@@ -2499,7 +2490,6 @@ exports[`GET routes snapshot tests default responses should return 200 on watere
     "total": 0,
   },
   "url": "/?type=wateredandadopted",
-  "version": "2.0.0",
 }
 `;
 
@@ -2515,7 +2505,6 @@ exports[`GET routes snapshot tests default responses should return 200 on watere
     "total": 0,
   },
   "url": "/?type=wateredbyuser&uuid=auth0%7Cabc",
-  "version": "2.0.0",
 }
 `;
 

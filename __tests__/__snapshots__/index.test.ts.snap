@@ -376,7 +376,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
       },
     },
   ],
-  "version": "2.0.0",
 }
 `;
 
@@ -756,7 +755,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
       },
     },
   ],
-  "version": "2.0.0",
 }
 `;
 
@@ -1136,6 +1134,5 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
       },
     },
   ],
-  "version": "2.0.0",
 }
 `;

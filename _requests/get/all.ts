@@ -7,14 +7,14 @@ import type { Point } from "geojson";
 import {
 	checkLimitAndOffset,
 	getLimitAndOffeset,
-} from "../../../_utils/limit-and-offset";
-import { createLinks } from "../../../_utils/create-links";
-import { getEnvs } from "../../../_utils/envs";
-import { getRange } from "../../../_utils/parse-content-range";
-import { setupResponseData } from "../../../_utils/setup-response";
-import { supabase } from "../../../_utils/supabase";
-import { checkRangeError } from "../../../_utils/range-error-response";
-import { checkDataError } from "../../../_utils/data-error-response";
+} from "../../_utils/limit-and-offset";
+import { createLinks } from "../../_utils/create-links";
+import { getEnvs } from "../../_utils/envs";
+import { getRange } from "../../_utils/parse-content-range";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
+import { checkRangeError } from "../../_utils/range-error-response";
+import { checkDataError } from "../../_utils/data-error-response";
 const { SUPABASE_URL } = getEnvs();
 export default async function handler(
 	request: VercelRequest,
