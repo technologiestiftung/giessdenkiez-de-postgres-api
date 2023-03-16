@@ -33,58 +33,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
           },
           "url": "get/adopted",
         },
-        "all": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "limit",
-              "offset",
-            ],
-            "type": "object",
-          },
-          "url": "get/all",
-        },
-        "byage": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "end": {
-                "type": "string",
-              },
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "start": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "start",
-              "end",
-            ],
-            "type": "object",
-          },
-          "url": "get/byage",
-        },
         "byid": {
           "schema": {
             "additionalProperties": false,
@@ -103,29 +51,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
             "type": "object",
           },
           "url": "get/byid",
-        },
-        "countbyage": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "end": {
-                "type": "string",
-              },
-              "start": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "start",
-              "end",
-            ],
-            "type": "object",
-          },
-          "url": "get/countbyage",
         },
         "istreeadopted": {
           "schema": {
@@ -413,58 +338,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
           },
           "url": "get/adopted",
         },
-        "all": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "limit",
-              "offset",
-            ],
-            "type": "object",
-          },
-          "url": "get/all",
-        },
-        "byage": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "end": {
-                "type": "string",
-              },
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "start": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "start",
-              "end",
-            ],
-            "type": "object",
-          },
-          "url": "get/byage",
-        },
         "byid": {
           "schema": {
             "additionalProperties": false,
@@ -483,29 +356,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
             "type": "object",
           },
           "url": "get/byid",
-        },
-        "countbyage": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "end": {
-                "type": "string",
-              },
-              "start": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "start",
-              "end",
-            ],
-            "type": "object",
-          },
-          "url": "get/countbyage",
         },
         "istreeadopted": {
           "schema": {
@@ -793,58 +643,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
           },
           "url": "get/adopted",
         },
-        "all": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "limit",
-              "offset",
-            ],
-            "type": "object",
-          },
-          "url": "get/all",
-        },
-        "byage": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "end": {
-                "type": "string",
-              },
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "start": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "start",
-              "end",
-            ],
-            "type": "object",
-          },
-          "url": "get/byage",
-        },
         "byid": {
           "schema": {
             "additionalProperties": false,
@@ -863,29 +661,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
             "type": "object",
           },
           "url": "get/byid",
-        },
-        "countbyage": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "end": {
-                "type": "string",
-              },
-              "start": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [
-              "start",
-              "end",
-            ],
-            "type": "object",
-          },
-          "url": "get/countbyage",
         },
         "istreeadopted": {
           "schema": {
