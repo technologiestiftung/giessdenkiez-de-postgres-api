@@ -17,7 +17,6 @@ export default async function handler(
 ) {
 	checkLimitAndOffset(request, response);
 	const { limit, offset } = getLimitAndOffeset(request.query);
-	console.log(limit, offset);
 	const { range, error: rangeError } = await getRange(
 		`${SUPABASE_URL}/rest/v1/trees`
 	);
