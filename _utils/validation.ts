@@ -39,17 +39,6 @@ export const byidSchema: AjvSchema = {
 	additionalProperties: false,
 };
 
-export const wateredSchema: AjvSchema = {
-	type: "object",
-	properties: {
-		type,
-		limit: { type: "string" },
-		offset: { type: "string" },
-	},
-	required: [],
-	additionalProperties: false,
-};
-
 export const treesbyidsSchema: AjvSchema = {
 	type: "object",
 	properties: {
@@ -70,41 +59,6 @@ export const wateredandadoptedSchemata: AjvSchema = {
 		offset: { type: "string" },
 	},
 	required: [],
-	additionalProperties: false,
-};
-
-export const allSchema: AjvSchema = {
-	type: "object",
-	properties: {
-		type,
-		limit: { type: "string" },
-		offset: { type: "string" },
-	},
-	required: ["limit", "offset"],
-	additionalProperties: false,
-};
-
-export const countbyageSchema: AjvSchema = {
-	type: "object",
-	properties: {
-		type,
-		start: { type: "string" },
-		end: { type: "string" },
-	},
-	required: ["start", "end"],
-	additionalProperties: false,
-};
-
-export const byageSchema: AjvSchema = {
-	type: "object",
-	properties: {
-		type,
-		start: { type: "string" },
-		end: { type: "string" },
-		limit: { type: "string" },
-		offset: { type: "string" },
-	},
-	required: ["start", "end"],
 	additionalProperties: false,
 };
 
@@ -155,12 +109,8 @@ export const wateredbyuserSchema: AjvSchema = {
 
 export const getSchemas: Record<string, AjvSchema> = {
 	byid: byidSchema,
-	watered: wateredSchema,
 	treesbyids: treesbyidsSchema,
 	wateredandadopted: wateredandadoptedSchemata,
-	all: allSchema,
-	countbyage: countbyageSchema,
-	byage: byageSchema,
 	lastwatered: lastwateredSchema,
 	adopted: adoptedSchema,
 	istreeadopted: istreeadoptedSchema,

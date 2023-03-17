@@ -8,7 +8,7 @@ describe("route listing", () => {
 		const params = paramsToObject("uuid=1234&limit=10&offset=0");
 		const [valid, _validationErrors] = validate(
 			params,
-			getRoutesList.routes.all.schema
+			getRoutesList.routes.lastwatered.schema
 		);
 		// const validate = ajv.compile(getRoutesList.routes.adopted.schema);
 		// const valid = validate(params);
@@ -169,58 +169,6 @@ describe("route listing", () => {
 		      },
 		      "url": "get/adopted",
 		    },
-		    "all": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "limit": {
-		            "type": "string",
-		          },
-		          "offset": {
-		            "type": "string",
-		          },
-		          "type": {
-		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-		            "type": "string",
-		          },
-		        },
-		        "required": [
-		          "limit",
-		          "offset",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "get/all",
-		    },
-		    "byage": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "end": {
-		            "type": "string",
-		          },
-		          "limit": {
-		            "type": "string",
-		          },
-		          "offset": {
-		            "type": "string",
-		          },
-		          "start": {
-		            "type": "string",
-		          },
-		          "type": {
-		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-		            "type": "string",
-		          },
-		        },
-		        "required": [
-		          "start",
-		          "end",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "get/byage",
-		    },
 		    "byid": {
 		      "schema": {
 		        "additionalProperties": false,
@@ -239,29 +187,6 @@ describe("route listing", () => {
 		        "type": "object",
 		      },
 		      "url": "get/byid",
-		    },
-		    "countbyage": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "end": {
-		            "type": "string",
-		          },
-		          "start": {
-		            "type": "string",
-		          },
-		          "type": {
-		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-		            "type": "string",
-		          },
-		        },
-		        "required": [
-		          "start",
-		          "end",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "get/countbyage",
 		    },
 		    "istreeadopted": {
 		      "schema": {
@@ -335,26 +260,6 @@ describe("route listing", () => {
 		        "type": "object",
 		      },
 		      "url": "get/treesbyids",
-		    },
-		    "watered": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "limit": {
-		            "type": "string",
-		          },
-		          "offset": {
-		            "type": "string",
-		          },
-		          "type": {
-		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-		            "type": "string",
-		          },
-		        },
-		        "required": [],
-		        "type": "object",
-		      },
-		      "url": "get/watered",
 		    },
 		    "wateredandadopted": {
 		      "schema": {

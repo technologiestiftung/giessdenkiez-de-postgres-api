@@ -4,17 +4,12 @@ import { test, describe, expect } from "@jest/globals";
 import handler from "../api/get/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import {
-	createWateredTrees,
 	truncateTreesAdopted,
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
 import { requestTestToken } from "../__test-utils/req-test-token";
 // byid ✓
-// watered ✓
-// all ✓
 // treesbyids  ✓
-// countbyage ✓
-// byage ✓
 // wateredandadopted ✓
 // lastwatered ✓
 //
@@ -105,30 +100,6 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(json).toMatchSnapshot();
 	});
 
-	test("should return 200 on byage route", async () => {
-		const { server, url } = await createTestServer(
-			{ type: "byage", start: "1800", end: "3000" },
-			handler
-		);
-		const response = await fetch(`${url}`);
-		server.close();
-		const json = await response.json();
-		expect(response.status).toBe(200);
-		expect(json).toMatchSnapshot();
-	});
-
-	test("should return 200 on countbyage route", async () => {
-		const { server, url } = await createTestServer(
-			{ type: "countbyage", start: "1800", end: "3000" },
-			handler
-		);
-		const response = await fetch(`${url}`);
-		server.close();
-		const json = await response.json();
-		expect(response.status).toBe(200);
-		expect(json).toMatchSnapshot();
-	});
-
 	test("Should return 200 on treesbyid route", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "treesbyids", tree_ids: "_2100294b1f,_210028b9c8" },
@@ -140,36 +111,10 @@ describe("GET routes snapshot tests default responses", () => {
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
 	});
-	test("should return 200 on trees_watered watered route", async () => {
-		await truncateTreesWaterd();
-		await createWateredTrees();
-		const { server, url } = await createTestServer(
-			{ type: "watered" },
-			handler
-		);
-		const response = await fetch(`${url}`);
-		server.close();
-		const json = await response.json();
-		expect(response.status).toBe(200);
-
-		expect(json).toMatchSnapshot();
-		await truncateTreesWaterd();
-	});
 
 	test("should return 200 on tree by id route", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "byid", id: "_2100294b1f" },
-			handler
-		);
-		const response = await fetch(`${url}`);
-		server.close();
-		const json = await response.json();
-		expect(response.status).toBe(200);
-		expect(json).toMatchSnapshot();
-	});
-	test("Should return 200 on tree all route", async () => {
-		const { server, url } = await createTestServer(
-			{ type: "all", limit: "2", offset: "0" },
 			handler
 		);
 		const response = await fetch(`${url}`);
@@ -208,19 +153,9 @@ each([
 	[400, "adopted", {}, "due to not uuid missing"],
 	[401, "adopted", { uuid: "123" }, "due to not being authorized"],
 
-	[400, "all", { limit: "abc" }, "due to limit being NaN"],
-	[400, "all", { limit: 10000000 }, "due to limit being to large"],
-	[400, "all", { offset: "abc" }, "due to offset being NaN"],
 	[400, "byid", {}, "due to missing id serachParam"],
 	[400, "treesbyids", {}, "due to tree_ids missing"],
-	[400, "countbyage", {}, "due to start query is missing"],
-	[400, "countbyage", { start: "1800" }, "due to end query is missing"],
-	[400, "countbyage", { start: "1800", end: "abc" }, "due to end being NaN"],
-	[400, "countbyage", { start: "abc", end: "3000" }, "due to start being NaN"],
-	[400, "byage", {}, "due to start query is missing"],
-	[400, "byage", { start: "1800" }, "due to end query is missing"],
-	[400, "byage", { start: "1800", end: "abc" }, "due to end being NaN"],
-	[400, "byage", { start: "abc", end: "3000" }, "due to start being NaN"],
+
 	[400, "lastwatered", {}, "due to id missing"],
 	[
 		400,
