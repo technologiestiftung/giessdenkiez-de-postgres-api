@@ -53,7 +53,6 @@ export default async function handler(
 		case "byid": {
 			return await byidHandler(request, response);
 		}
-
 		case "treesbyids": {
 			return await treesbyidsHandler(request, response);
 		}
