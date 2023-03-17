@@ -2,10 +2,7 @@ import {
 	adoptedSchema,
 	adoptSchema,
 	AjvSchema,
-	// allSchema,
-	// byageSchema,
 	byidSchema,
-	// countbyageSchema,
 	istreeadoptedSchema,
 	lastwateredSchema,
 	treesbyidsSchema,
@@ -17,7 +14,6 @@ import {
 	waterSchema,
 } from "./validation";
 
-// import { queryTypes as getQueryTypes } from "../api/get/[type]";
 export const queryTypes: Record<string, Record<string, AjvSchema>> = {
 	GET: {
 		byid: byidSchema,
