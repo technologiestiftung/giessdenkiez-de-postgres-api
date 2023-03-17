@@ -1,6 +1,5 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
-import { faker } from "@faker-js/faker";
 import { test, describe, expect } from "@jest/globals";
 import v2handler from "../api/get/[type]";
 import v3handler from "../api/v3/get/[type]";
