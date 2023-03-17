@@ -1,13 +1,21 @@
+import { User } from "@supabase/supabase-js";
 import { VercelRequest, VercelResponse } from "@vercel/node";
+import { urlContainsV3 } from "../../_utils/check-if-v3";
 import { supabase } from "../../_utils/supabase";
 
 export default async function (
 	request: VercelRequest,
-	response: VercelResponse
+	response: VercelResponse,
+	user?: User
 ) {
-	// FIXME: [GDK-221] API (with supabase) Find out why delete/unwater route does not work
-
-	const { tree_id, uuid, watering_id } = request.body;
+	let { uuid } = request.body;
+	const { tree_id, watering_id } = request.body;
+	if (!request.url) {
+		return response.status(500).json({ error: "no url in request" });
+	}
+	if (urlContainsV3(request.url)) {
+		uuid = user?.id || uuid;
+	}
 	const { error } = await supabase
 		.from("trees_watered")
 		.delete()
