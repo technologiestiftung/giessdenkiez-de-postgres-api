@@ -108,8 +108,6 @@ GET {{API_HOST}}/get/countbyage&start=1800&end=2023
 
 
 
-
-
 ### Signup
 
 POST {{SUPABASE_URL}}/auth/v1/signup
