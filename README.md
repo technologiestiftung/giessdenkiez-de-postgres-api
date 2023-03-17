@@ -116,6 +116,74 @@ vercel --prod
 
 <!-- Congrats. Your API should be up and running. You might need to request tokens for the your endpoints that need authentication. See the auth0.com docs for more info. -->
 
+<<<<<<< HEAD
+=======
+## API Routes
+
+There are 3 main routes `/get`, `/post` and `/delete`.
+
+On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
+
+```bash
+curl --request GET \
+  --url 'http://localhost:3000/get/byid&id=_123456789' \
+
+```
+
+You can see all the available routes in the [docs/api.http](./docs/api.http) file with all their needed `URLSearchParams` and JSON bodies or by inspecting the JSON Schema that is returned when you do a request to the `/get`, `/post` or `/delete` route.
+
+Currently we have these routes
+
+| `/get`               | `/post`  | `/delete`  |
+| -------------------- | -------- | ---------- |
+| `/byid`              | `/adopt` | `/unadopt` |
+| `/treesbyids`        | `/water` | `/unwater` |
+| `/adopted`           |          |            |
+| `/istreeadopted`     |          |            |
+| `/wateredandadopted` |          |            |
+| `/lastwatered`       |          |            |
+| `/wateredbyuser`     |          |            |
+
+### API Authorization
+
+Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
+
+```bash
+curl --request POST \
+  --url https://your-tenant.eu.auth0.com/oauth/token \
+  --header 'content-type: application/json' \
+  --data '{"client_id": "<YOUR CLIENT ID>","client_secret": "<YOUR CLIENT SECRET>","audience": "<YOUR AUDIENCE>","grant_type": "client_credentials"}'
+# fill in the <VALUS> fields
+```
+
+This will respond with an `access_token`. Use it to make authenticated requests.
+
+```bash
+curl --request POST \
+  --url http://localhost:3000/post \
+  --header 'authorization: Bearer <ACCESS_TOKEN>' \
+  --header 'content-type: application/json' \
+  --data '{"queryType":"adopt","tree_id":"_01","uuid": "auth0|123"}'
+```
+
+Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+## Tests
+
+Locally you will need supabase running and a `.env` file with the right values in it.
+
+```bash
+cd giessdenkiez-de-postgres-api
+supabase start
+# Once the backaned is up and running, run the tests
+# Make sure to you habe your .env file setup right
+# with all the values from `supabase status` and your API from Auth0.com
+npm test
+```
+
+On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml) you still need an API on Auth0.com
+
+>>>>>>> 2bb17e65f3e01f12c281c859f2af27b448986479
 ## Supabase
 
 ### Migrations and Types

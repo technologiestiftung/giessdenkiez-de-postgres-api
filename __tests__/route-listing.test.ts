@@ -10,133 +10,15 @@ describe("route listing", () => {
 			params,
 			getRoutesList.routes.lastwatered.schema
 		);
-		// const validate = ajv.compile(getRoutesList.routes.adopted.schema);
-		// const valid = validate(params);
 
 		expect(valid).toBe(false);
 	});
 
 	test("should list all DELETE routes", () => {
-		expect(deleteRoutesList).toMatchInlineSnapshot(`
-		{
-		  "method": "DELETE",
-		  "routes": {
-		    "unadopt": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "queryType": {
-		            "type": "string",
-		          },
-		          "tree_id": {
-		            "type": "string",
-		          },
-		          "uuid": {
-		            "type": "string",
-		          },
-		        },
-		        "required": [
-		          "uuid",
-		          "tree_id",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "delete/unadopt",
-		    },
-		    "unwater": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "queryType": {
-		            "type": "string",
-		          },
-		          "tree_id": {
-		            "type": "string",
-		          },
-		          "uuid": {
-		            "type": "string",
-		          },
-		          "watering_id": {
-		            "type": "number",
-		          },
-		        },
-		        "required": [
-		          "uuid",
-		          "tree_id",
-		          "watering_id",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "delete/unwater",
-		    },
-		  },
-		}
-	`);
+		expect(deleteRoutesList).toMatchSnapshot();
 	});
 	test("should list all POST routes", () => {
-		expect(postRoutesList).toMatchInlineSnapshot(`
-		{
-		  "method": "POST",
-		  "routes": {
-		    "adopt": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "queryType": {
-		            "type": "string",
-		          },
-		          "tree_id": {
-		            "type": "string",
-		          },
-		          "uuid": {
-		            "type": "string",
-		          },
-		        },
-		        "required": [
-		          "uuid",
-		          "tree_id",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "post/adopt",
-		    },
-		    "water": {
-		      "schema": {
-		        "additionalProperties": false,
-		        "properties": {
-		          "amount": {
-		            "type": "number",
-		          },
-		          "queryType": {
-		            "type": "string",
-		          },
-		          "timestamp": {
-		            "type": "string",
-		          },
-		          "tree_id": {
-		            "type": "string",
-		          },
-		          "username": {
-		            "type": "string",
-		          },
-		          "uuid": {
-		            "type": "string",
-		          },
-		        },
-		        "required": [
-		          "uuid",
-		          "tree_id",
-		          "username",
-		          "timestamp",
-		          "amount",
-		        ],
-		        "type": "object",
-		      },
-		      "url": "post/water",
-		    },
-		  },
-		}
-	`);
+		expect(postRoutesList).toMatchSnapshot();
 	});
 
 	test("should list all the GET routes", async () => {
