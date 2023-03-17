@@ -10,7 +10,6 @@ import {
 	unwaterSchema,
 	wateredandadoptedSchemata,
 	wateredbyuserSchema,
-	wateredSchema,
 	waterSchema,
 } from "./validation";
 
@@ -19,7 +18,6 @@ export const queryTypes: Record<string, Record<string, AjvSchema>> = {
 		byid: byidSchema,
 		treesbyids: treesbyidsSchema,
 		adopted: adoptedSchema,
-		watered: wateredSchema,
 		istreeadopted: istreeadoptedSchema,
 		wateredandadopted: wateredandadoptedSchemata,
 		lastwatered: lastwateredSchema,

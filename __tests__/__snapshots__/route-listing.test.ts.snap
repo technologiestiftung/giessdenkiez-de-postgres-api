@@ -241,10 +241,6 @@ exports[`route listing should list all the GET routes 1`] = `
       },
       "url": "get/treesbyids",
     },
-    "watered": {
-      "schema": undefined,
-      "url": "get/watered",
-    },
     "wateredandadopted": {
       "schema": {
         "additionalProperties": false,

@@ -125,9 +125,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
           },
           "url": "get/treesbyids",
         },
-        "watered": {
-          "url": "get/watered",
-        },
         "wateredandadopted": {
           "schema": {
             "additionalProperties": false,
@@ -413,9 +410,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
           },
           "url": "get/treesbyids",
         },
-        "watered": {
-          "url": "get/watered",
-        },
         "wateredandadopted": {
           "schema": {
             "additionalProperties": false,
@@ -700,9 +694,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
             "type": "object",
           },
           "url": "get/treesbyids",
-        },
-        "watered": {
-          "url": "get/watered",
         },
         "wateredandadopted": {
           "schema": {

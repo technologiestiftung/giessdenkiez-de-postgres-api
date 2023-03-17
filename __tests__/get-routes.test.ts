@@ -9,11 +9,8 @@ import {
 } from "../__test-utils/postgres";
 import { requestTestToken } from "../__test-utils/req-test-token";
 // byid ✓
-// watered ✓ DEPECATED
-// all ✓ DEPRECATED
+
 // treesbyids  ✓
-// countbyage ✓ DEPRECATED
-// byage ✓ DEPRECATED
 // wateredandadopted ✓
 // lastwatered ✓
 //
