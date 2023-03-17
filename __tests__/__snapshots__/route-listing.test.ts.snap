@@ -242,23 +242,7 @@ exports[`route listing should list all the GET routes 1`] = `
       "url": "get/treesbyids",
     },
     "watered": {
-      "schema": {
-        "additionalProperties": false,
-        "properties": {
-          "limit": {
-            "type": "string",
-          },
-          "offset": {
-            "type": "string",
-          },
-          "type": {
-            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-            "type": "string",
-          },
-        },
-        "required": [],
-        "type": "object",
-      },
+      "schema": undefined,
       "url": "get/watered",
     },
     "wateredandadopted": {

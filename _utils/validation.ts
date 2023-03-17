@@ -39,17 +39,6 @@ export const byidSchema: AjvSchema = {
 	additionalProperties: false,
 };
 
-export const wateredSchema: AjvSchema = {
-	type: "object",
-	properties: {
-		type,
-		limit: { type: "string" },
-		offset: { type: "string" },
-	},
-	required: [],
-	additionalProperties: false,
-};
-
 export const treesbyidsSchema: AjvSchema = {
 	type: "object",
 	properties: {
@@ -155,7 +144,6 @@ export const wateredbyuserSchema: AjvSchema = {
 
 export const getSchemas: Record<string, AjvSchema> = {
 	byid: byidSchema,
-	watered: wateredSchema,
 	treesbyids: treesbyidsSchema,
 	wateredandadopted: wateredandadoptedSchemata,
 	all: allSchema,

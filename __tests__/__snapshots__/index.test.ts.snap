@@ -126,23 +126,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /delete 1`] = `
           "url": "get/treesbyids",
         },
         "watered": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [],
-            "type": "object",
-          },
           "url": "get/watered",
         },
         "wateredandadopted": {
@@ -431,23 +414,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /get 1`] = `
           "url": "get/treesbyids",
         },
         "watered": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [],
-            "type": "object",
-          },
           "url": "get/watered",
         },
         "wateredandadopted": {
@@ -736,23 +702,6 @@ exports[`GET/POST/DELETE routes index should list all routes on /post 1`] = `
           "url": "get/treesbyids",
         },
         "watered": {
-          "schema": {
-            "additionalProperties": false,
-            "properties": {
-              "limit": {
-                "type": "string",
-              },
-              "offset": {
-                "type": "string",
-              },
-              "type": {
-                "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
-                "type": "string",
-              },
-            },
-            "required": [],
-            "type": "object",
-          },
           "url": "get/watered",
         },
         "wateredandadopted": {

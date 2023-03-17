@@ -2356,35 +2356,6 @@ exports[`GET routes snapshot tests default responses should return 200 on tree b
 }
 `;
 
-exports[`GET routes snapshot tests default responses should return 200 on trees_watered watered route 1`] = `
-{
-  "data": [
-    {
-      "tree_id": "_2100186c08",
-    },
-    {
-      "tree_id": "_2100186c08",
-    },
-    {
-      "tree_id": "_2100294b1f",
-    },
-    {
-      "tree_id": "_2100294b1f",
-    },
-  ],
-  "error": null,
-  "links": {},
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "range": {
-    "end": 3,
-    "start": 0,
-    "total": 4,
-  },
-  "url": "/?type=watered",
-  "version": "2.0.0",
-}
-`;
-
 exports[`GET routes snapshot tests default responses should return 200 on wateredandadopted route 1`] = `
 {
   "data": [],

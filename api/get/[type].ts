@@ -4,7 +4,6 @@ import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
 
 import byidHandler from "./_requests/byid";
-import wateredHandler from "./_requests/watered";
 import treesbyidsHandler from "./_requests/treesbyids";
 import wateredandadoptedHandler from "./_requests/wateredandadopted";
 import lastwateredHandler from "./_requests/lastwatered";
@@ -52,9 +51,6 @@ export default async function handler(
 			return response.status(400).json({ error: "invalid query type" });
 		case "byid": {
 			return await byidHandler(request, response);
-		}
-		case "watered": {
-			return await wateredHandler(request, response);
 		}
 		case "treesbyids": {
 			return await treesbyidsHandler(request, response);

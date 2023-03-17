@@ -4,13 +4,12 @@ import { test, describe, expect } from "@jest/globals";
 import handler from "../api/get/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import {
-	createWateredTrees,
 	truncateTreesAdopted,
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
 import { requestTestToken } from "../__test-utils/req-test-token";
 // byid ✓
-// watered ✓
+// watered ✓ DEPECATED
 // all ✓ DEPRECATED
 // treesbyids  ✓
 // countbyage ✓ DEPRECATED
@@ -115,21 +114,6 @@ describe("GET routes snapshot tests default responses", () => {
 		const json = await response.json();
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
-	});
-	test("should return 200 on trees_watered watered route", async () => {
-		await truncateTreesWaterd();
-		await createWateredTrees();
-		const { server, url } = await createTestServer(
-			{ type: "watered" },
-			handler
-		);
-		const response = await fetch(`${url}`);
-		server.close();
-		const json = await response.json();
-		expect(response.status).toBe(200);
-
-		expect(json).toMatchSnapshot();
-		await truncateTreesWaterd();
 	});
 
 	test("should return 200 on tree by id route", async () => {
