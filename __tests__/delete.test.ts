@@ -2,7 +2,7 @@
 import { test, describe, expect } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 
-import { requestTestToken } from "../__test-utils/req-test-token";
+import { requestAuth0TestToken } from "../__test-utils/req-test-token";
 import { supabase } from "../_utils/supabase";
 import { Database } from "../_types/database";
 import {
@@ -34,7 +34,7 @@ describe("api/delete/[type]", () => {
 			{ type: "unwater" },
 			deleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
@@ -51,7 +51,7 @@ describe("api/delete/[type]", () => {
 			{ type: "unwater" },
 			deleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
@@ -102,7 +102,7 @@ describe("api/delete/[type]", () => {
 			{ type: "unwater" },
 			deleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
@@ -151,7 +151,7 @@ describe("api/delete/[type]", () => {
 			{ type: "unadopt" },
 			deleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {

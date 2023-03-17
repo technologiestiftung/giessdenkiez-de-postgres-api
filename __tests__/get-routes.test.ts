@@ -7,7 +7,7 @@ import {
 	truncateTreesAdopted,
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
-import { requestTestToken } from "../__test-utils/req-test-token";
+import { requestAuth0TestToken } from "../__test-utils/req-test-token";
 // byid ✓
 // treesbyids  ✓
 // wateredandadopted ✓
@@ -21,7 +21,7 @@ import { requestTestToken } from "../__test-utils/req-test-token";
 describe("GET routes snapshot tests default responses", () => {
 	test("should return 200 on wateredbyuser route authenticated", async () => {
 		await truncateTreesWaterd();
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const { server, url } = await createTestServer(
 			{ type: "wateredbyuser", uuid: "auth0|abc" },
 			handler
@@ -40,7 +40,7 @@ describe("GET routes snapshot tests default responses", () => {
 	});
 	test("should return 200 on istreeadopted route authenticated", async () => {
 		await truncateTreesWaterd();
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const { server, url } = await createTestServer(
 			{ type: "istreeadopted", id: "_210028b9c8", uuid: "auth0|abc" },
 			handler
@@ -58,7 +58,7 @@ describe("GET routes snapshot tests default responses", () => {
 
 	test("should return 200 on adopted route authenticated", async () => {
 		await truncateTreesWaterd();
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const { server, url } = await createTestServer(
 			{ type: "adopted", uuid: "auth0|abc" },
 			handler
@@ -173,7 +173,7 @@ each([
 		needsAuth?: boolean
 	) => {
 		test(`should return ${statusCode} on route "${type}" ${description}`, async () => {
-			// const token = await requestTestToken();
+			// const token = await requestAuth0TestToken();
 
 			const { server, url } = await createTestServer(
 				{ type, ...overrides },
@@ -182,7 +182,7 @@ each([
 			const response = await fetch(`${url}`, {
 				headers: {
 					...(needsAuth === true && {
-						Authorization: `Bearer ${await requestTestToken()}`,
+						Authorization: `Bearer ${await requestAuth0TestToken()}`,
 					}),
 					"Content-Type": "application/json",
 				},

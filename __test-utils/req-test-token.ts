@@ -3,7 +3,7 @@ const client_id = process.env.client_id || "";
 const client_secret = process.env.client_secret || "";
 const audience = process.env.audience || "";
 
-export async function requestTestToken() {
+export async function requestAuth0TestToken() {
 	const response = await fetch(`${issuer}oauth/token`, {
 		method: "POST",
 		headers: {

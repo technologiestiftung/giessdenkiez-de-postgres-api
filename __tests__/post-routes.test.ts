@@ -3,7 +3,7 @@ import each from "jest-each";
 import fetch from "cross-fetch";
 import handler from "../api/post/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
-import { requestTestToken } from "../__test-utils/req-test-token";
+import { requestAuth0TestToken } from "../__test-utils/req-test-token";
 import {
 	truncateTreesWaterd,
 	truncateTreesAdopted,
@@ -26,7 +26,7 @@ describe("posting data", () => {
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
-				Authorization: `Bearer ${await requestTestToken()}`,
+				Authorization: `Bearer ${await requestAuth0TestToken()}`,
 
 				"Content-Type": "application/json",
 			},
@@ -219,7 +219,7 @@ each([
 				method: "POST",
 				headers: {
 					...(auth === true && {
-						Authorization: `Bearer ${await requestTestToken()}`,
+						Authorization: `Bearer ${await requestAuth0TestToken()}`,
 					}),
 					"Content-Type": "application/json",
 				},

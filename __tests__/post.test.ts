@@ -1,7 +1,7 @@
 import { test, describe, expect } from "@jest/globals";
 
 import postHandler from "../api/post/[type]";
-import { requestTestToken } from "../__test-utils/req-test-token";
+import { requestAuth0TestToken } from "../__test-utils/req-test-token";
 import { supabase } from "../_utils/supabase";
 import {
 	truncateTreesAdopted,
@@ -42,7 +42,7 @@ describe("api/post/[type]", () => {
 			{ type: "watered" },
 			postHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
@@ -60,7 +60,7 @@ describe("api/post/[type]", () => {
 			{ type: "water" },
 			postHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
@@ -77,7 +77,7 @@ describe("api/post/[type]", () => {
 			{ type: "adopt" },
 			postHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
@@ -96,7 +96,7 @@ describe("api/post/[type]", () => {
 			{ type: "water" },
 			postHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const { data: trees, error } = await supabase.from("trees").select("*");
 		if (error) {
 			throw error;
@@ -134,7 +134,7 @@ describe("api/post/[type]", () => {
 			{ type: "adopt" },
 			postHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const { data: trees, error: treeError } = await supabase
 			.from("trees")
 			.select("id")
