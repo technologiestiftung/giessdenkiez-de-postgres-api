@@ -7,13 +7,9 @@ import {
 	validate,
 } from "../../../_utils/validation";
 
-import allHandler from "../../../_requests/get/all";
 import byidHandler from "../../../_requests/get/byid";
-import wateredHandler from "../../../_requests/get/watered";
 import treesbyidsHandler from "../../../_requests/get/treesbyids";
 import wateredandadoptedHandler from "../../../_requests/get/wateredandadopted";
-import countbyageHandler from "../../../_requests/get/countbyage";
-import byageHandler from "../../../_requests/get/byage";
 import lastwateredHandler from "../../../_requests/get/lastwatered";
 import adoptedHandler from "../../../_requests/get/adopted";
 import istreeadoptedHandler from "../../../_requests/get/istreeadopted";
@@ -56,28 +52,17 @@ export default async function handler(
 	}
 
 	switch (type) {
-		default:
+		default: {
 			return response.status(400).json({ error: "invalid query type" });
+		}
 		case "byid": {
 			return await byidHandler(request, response);
-		}
-		case "watered": {
-			return await wateredHandler(request, response);
 		}
 		case "treesbyids": {
 			return await treesbyidsHandler(request, response);
 		}
 		case "wateredandadopted": {
 			return await wateredandadoptedHandler(request, response);
-		}
-		case "all": {
-			return await allHandler(request, response);
-		}
-		case "countbyage": {
-			return await countbyageHandler(request, response);
-		}
-		case "byage": {
-			return await byageHandler(request, response);
 		}
 		case "lastwatered": {
 			return await lastwateredHandler(request, response);
