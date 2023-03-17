@@ -22,11 +22,9 @@ export default async function postHandler(
 
 	const { data: userData, error } = await verifySupabaseToken(request);
 	if (error) {
-		console.error("error from supabase auth", error);
 		return response.status(401).json({ error: "unauthorized" });
 	}
 	if (!userData) {
-		console.error("no user data from supabase auth");
 		return response.status(401).json({ error: "unauthorized" });
 	}
 

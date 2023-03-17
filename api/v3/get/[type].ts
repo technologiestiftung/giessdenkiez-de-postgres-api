@@ -74,11 +74,9 @@ export default async function handler(
 		case "wateredbyuser": {
 			const { data: userData, error } = await verifySupabaseToken(request);
 			if (error) {
-				console.error("error from supabase auth", error);
 				return response.status(401).json({ error: "unauthorized" });
 			}
 			if (!userData) {
-				console.error("no user data from supabase auth");
 				return response.status(401).json({ error: "unauthorized" });
 			}
 			if (type === "adopted") {
