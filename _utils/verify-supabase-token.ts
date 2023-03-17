@@ -1,3 +1,5 @@
+// based on this thread "Verify access token on node.js"
+// https://github.com/supabase/supabase/issues/491
 import { VercelRequest } from "@vercel/node";
 import { GDKAuthError } from "./errors";
 import { supabase } from "./supabase";
