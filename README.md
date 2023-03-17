@@ -132,12 +132,8 @@ Currently we have these routes
 | `/byid`              | `/adopt` | `/unadopt` |
 | `/treesbyids`        | `/water` | `/unwater` |
 | `/adopted`           |          |            |
-| `/countbyage`        |          |            |
-| `/watered`           |          |            |
-| `/all`               |          |            |
 | `/istreeadopted`     |          |            |
 | `/wateredandadopted` |          |            |
-| `/byage`             |          |            |
 | `/lastwatered`       |          |            |
 | `/wateredbyuser`     |          |            |
 

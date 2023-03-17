@@ -3,13 +3,9 @@ import setHeaders from "../../_utils/set-headers";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
 
-import allHandler from "./_requests/all";
 import byidHandler from "./_requests/byid";
-import wateredHandler from "./_requests/watered";
 import treesbyidsHandler from "./_requests/treesbyids";
 import wateredandadoptedHandler from "./_requests/wateredandadopted";
-import countbyageHandler from "./_requests/countbyage";
-import byageHandler from "./_requests/byage";
 import lastwateredHandler from "./_requests/lastwatered";
 import adoptedHandler from "./_requests/adopted";
 import istreeadoptedHandler from "./_requests/istreeadopted";
@@ -56,23 +52,11 @@ export default async function handler(
 		case "byid": {
 			return await byidHandler(request, response);
 		}
-		case "watered": {
-			return await wateredHandler(request, response);
-		}
 		case "treesbyids": {
 			return await treesbyidsHandler(request, response);
 		}
 		case "wateredandadopted": {
 			return await wateredandadoptedHandler(request, response);
-		}
-		case "all": {
-			return await allHandler(request, response);
-		}
-		case "countbyage": {
-			return await countbyageHandler(request, response);
-		}
-		case "byage": {
-			return await byageHandler(request, response);
 		}
 		case "lastwatered": {
 			return await lastwateredHandler(request, response);

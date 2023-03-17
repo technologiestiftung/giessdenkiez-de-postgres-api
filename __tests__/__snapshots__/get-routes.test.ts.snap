@@ -1,36 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GET routes snapshot tests default responses Should return 200 on tree all route 1`] = `
-{
-  "data": [
-    [
-      "_0mfm21mdc",
-      13.3883,
-      52.48415,
-      524,
-    ],
-    [
-      "_2100186a5c",
-      13.49968,
-      52.64586,
-      205,
-    ],
-  ],
-  "error": null,
-  "links": {
-    "next": "/get/all?limit=2&offset=2&type=all",
-  },
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "range": {
-    "end": 13,
-    "start": 0,
-    "total": 14,
-  },
-  "url": "/?type=all&limit=2&offset=0",
-  "version": "2.0.0",
-}
-`;
-
 exports[`GET routes snapshot tests default responses Should return 200 on treesbyid route 1`] = `
 {
   "data": [
@@ -1588,77 +1557,6 @@ exports[`GET routes snapshot tests default responses should return 200 on adopte
 }
 `;
 
-exports[`GET routes snapshot tests default responses should return 200 on byage route 1`] = `
-{
-  "data": [
-    {
-      "id": "_0mfm21mdc",
-    },
-    {
-      "id": "_2100186a5c",
-    },
-    {
-      "id": "_2100186c08",
-    },
-    {
-      "id": "_2100186c09",
-    },
-    {
-      "id": "_2100186d6f",
-    },
-    {
-      "id": "_2100186dca",
-    },
-    {
-      "id": "_2100186feb",
-    },
-    {
-      "id": "_2100194ce4",
-    },
-    {
-      "id": "_210028b9c8",
-    },
-    {
-      "id": "_21002949fc",
-    },
-    {
-      "id": "_2100294b1f",
-    },
-    {
-      "id": "_agi2nuc3l",
-    },
-    {
-      "id": "_gu1p1fon1",
-    },
-    {
-      "id": "_uip8uzpq0",
-    },
-  ],
-  "error": null,
-  "links": {},
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "range": {
-    "end": 13,
-    "start": 0,
-    "total": 14,
-  },
-  "url": "/?type=byage&start=1800&end=3000",
-  "version": "2.0.0",
-}
-`;
-
-exports[`GET routes snapshot tests default responses should return 200 on countbyage route 1`] = `
-{
-  "data": {
-    "count": 14,
-  },
-  "error": null,
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "url": "/?type=countbyage&start=1800&end=3000",
-  "version": "2.0.0",
-}
-`;
-
 exports[`GET routes snapshot tests default responses should return 200 on istreeadopted route authenticated 1`] = `
 {
   "data": false,
@@ -2454,35 +2352,6 @@ exports[`GET routes snapshot tests default responses should return 200 on tree b
   "error": null,
   "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
   "url": "/?type=byid&id=_2100294b1f",
-  "version": "2.0.0",
-}
-`;
-
-exports[`GET routes snapshot tests default responses should return 200 on trees_watered watered route 1`] = `
-{
-  "data": [
-    {
-      "tree_id": "_2100186c08",
-    },
-    {
-      "tree_id": "_2100186c08",
-    },
-    {
-      "tree_id": "_2100294b1f",
-    },
-    {
-      "tree_id": "_2100294b1f",
-    },
-  ],
-  "error": null,
-  "links": {},
-  "name": "@technologiestiftung/giessdenkiez-de-postgres-api",
-  "range": {
-    "end": 3,
-    "start": 0,
-    "total": 4,
-  },
-  "url": "/?type=watered",
   "version": "2.0.0",
 }
 `;
