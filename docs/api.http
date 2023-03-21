@@ -20,7 +20,7 @@
 @SUPABASE_USER_PASSWORD = 1234567890
 @SUPABASE_USER_UUID = db640d6c-1ac9-4a4d-accc-0adacbf6d9ad
 @SUPABASE_USER_NAME = someone
-@SUPABASE_USER_ACCESS_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjc5MDU2OTUyLCJzdWIiOiJkYjY0MGQ2Yy0xYWM5LTRhNGQtYWNjYy0wYWRhY2JmNmQ5YWQiLCJlbWFpbCI6InNvbWVvbmVAZW1haWwuY29tIiwicGhvbmUiOiIiLCJhcHBfbWV0YWRhdGEiOnsicHJvdmlkZXIiOiJlbWFpbCIsInByb3ZpZGVycyI6WyJlbWFpbCJdfSwidXNlcl9tZXRhZGF0YSI6e30sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE2NzkwNTMzNTJ9XSwic2Vzc2lvbl9pZCI6IjA2ZDMwYjk5LTRhYTAtNGE0Yi05MmMxLTYxZTkyMzNmMTNiMSJ9.g_gWFl2ewOdzG6VNn5WE5Fn0_tBW_NZ1C3UyqLdSa6c
+@SUPABASE_USER_ACCESS_TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNjc5NDE4Mzc1LCJzdWIiOiI2NmE2ZWNjZS1hZDNhLTRkODctOTIzZS02OTFhMzFhYTMyNjMiLCJlbWFpbCI6ImZhYmlhbm1vcm9uemlyZmFzQHByb3Rvbm1haWwuY2giLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7fSwicm9sZSI6ImF1dGhlbnRpY2F0ZWQiLCJhYWwiOiJhYWwxIiwiYW1yIjpbeyJtZXRob2QiOiJwYXNzd29yZCIsInRpbWVzdGFtcCI6MTY3OTQxNDc3NX1dLCJzZXNzaW9uX2lkIjoiOWYxYWM4OWItYTU4NC00Mjg5LWIxYWItY2IxNTBmYWZlMmVkIn0.QKf89g4ASbyC4txyHBWh7A_-nQyL93uY694S1Wm8TIY
 
 # @API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
 
@@ -362,7 +362,6 @@ Content-Type: application/json
 }
 
 
-
 # ██████  ██    ██ ██████  ███████
 # ██   ██ ██    ██ ██   ██ ██
 # ██████  ██    ██ ██████  █████
@@ -412,4 +411,12 @@ GET {{SUPABASE_URL}}/rest/v1/rpc/get_watered_and_adopted
 apikey: {{SUPABASE_ANON_KEY}}
 Range-Unit: items
 Prefer: count=exact
+
+
+### DELETE an account
+
+POST {{SUPABASE_URL}}/rest/v1/rpc/remove_account
+apikey: {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_USER_ACCESS_TOKEN}}
+Content-Type: application/json
 
