@@ -1,24 +1,20 @@
-import { send } from "micro";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { setupResponseData } from "./_utils/setup-response";
-import { errorHandler } from "./_utils/error-handler";
+import { routes } from "../_utils/routes-listing";
+import setHeaders from "../_utils/set-headers";
+import { setupResponseData } from "../_utils/setup-response";
 
-export default async function (
-  _request: VercelRequest,
-  response: VercelResponse,
-): Promise<void> {
-  try {
-    // const data = await json(request);
-    send(
-      response,
-      200,
-      setupResponseData({ message: "Yeah baby. It's working" }),
-    );
-    return;
-  } catch (error) {
-    await errorHandler({ response, error, statusCode: 500 }).catch(
-      (err) => err,
-    );
-    return;
-  }
+export default async function handler(
+	_request: VercelRequest,
+	response: VercelResponse
+) {
+	setHeaders(response, "GET");
+	try {
+		return response
+			.status(200)
+			.json(setupResponseData({ message: "its working", routes }));
+	} catch (error) {
+		return response
+			.status(500)
+			.json(setupResponseData({ error: "its not working", routes }));
+	}
 }

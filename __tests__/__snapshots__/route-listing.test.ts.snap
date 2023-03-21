@@ -1,0 +1,285 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`route listing should list all DELETE routes 1`] = `
+{
+  "method": "DELETE",
+  "routes": {
+    "unadopt": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "queryType": {
+            "type": "string",
+          },
+          "tree_id": {
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "uuid",
+          "tree_id",
+        ],
+        "type": "object",
+      },
+      "url": "delete/unadopt",
+    },
+    "unwater": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "queryType": {
+            "type": "string",
+          },
+          "tree_id": {
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+          "watering_id": {
+            "type": "number",
+          },
+        },
+        "required": [
+          "uuid",
+          "tree_id",
+          "watering_id",
+        ],
+        "type": "object",
+      },
+      "url": "delete/unwater",
+    },
+  },
+}
+`;
+
+exports[`route listing should list all POST routes 1`] = `
+{
+  "method": "POST",
+  "routes": {
+    "adopt": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "queryType": {
+            "type": "string",
+          },
+          "tree_id": {
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "uuid",
+          "tree_id",
+        ],
+        "type": "object",
+      },
+      "url": "post/adopt",
+    },
+    "water": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "amount": {
+            "type": "number",
+          },
+          "queryType": {
+            "type": "string",
+          },
+          "timestamp": {
+            "type": "string",
+          },
+          "tree_id": {
+            "type": "string",
+          },
+          "username": {
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "uuid",
+          "tree_id",
+          "username",
+          "timestamp",
+          "amount",
+        ],
+        "type": "object",
+      },
+      "url": "post/water",
+    },
+  },
+}
+`;
+
+exports[`route listing should list all the GET routes 1`] = `
+{
+  "method": "GET",
+  "routes": {
+    "adopted": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "string",
+          },
+          "offset": {
+            "type": "string",
+          },
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "uuid",
+        ],
+        "type": "object",
+      },
+      "url": "get/adopted",
+    },
+    "byid": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+          },
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+        ],
+        "type": "object",
+      },
+      "url": "get/byid",
+    },
+    "istreeadopted": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+          },
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "uuid",
+          "id",
+        ],
+        "type": "object",
+      },
+      "url": "get/istreeadopted",
+    },
+    "lastwatered": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+          },
+          "limit": {
+            "type": "string",
+          },
+          "offset": {
+            "type": "string",
+          },
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+        },
+        "required": [
+          "id",
+        ],
+        "type": "object",
+      },
+      "url": "get/lastwatered",
+    },
+    "treesbyids": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "string",
+          },
+          "offset": {
+            "type": "string",
+          },
+          "tree_ids": {
+            "type": "string",
+          },
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+        },
+        "required": [
+          "tree_ids",
+        ],
+        "type": "object",
+      },
+      "url": "get/treesbyids",
+    },
+    "wateredandadopted": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "limit": {
+            "type": "string",
+          },
+          "offset": {
+            "type": "string",
+          },
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+        },
+        "required": [],
+        "type": "object",
+      },
+      "url": "get/wateredandadopted",
+    },
+    "wateredbyuser": {
+      "schema": {
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+            "type": "string",
+          },
+          "uuid": {
+            "type": "string",
+          },
+        },
+        "required": [
+          "uuid",
+        ],
+        "type": "object",
+      },
+      "url": "get/wateredbyuser",
+    },
+  },
+}
+`;

@@ -1,16 +1,19 @@
+@SUPABASE_URL = http://localhost:54321
+@SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
+@SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
+# --------------------------------------------------
 @protocol = http
 @host = localhost
-@port = 3001
+@port = 3000
 
 
 @API_HOST = {{protocol}}://{{host}}:{{port}}
 
-@TREE_ID = _21000bf17b
+@TREE_ID = _2100186a5c
 @USER_ID = auth0|abc
 @USER_NAME = foo
 
-# @API_HOST = https://db-migration-api.giessdenkiez.de
-
+# @API_HOST = https://giessdenkiez-de-postgres-api-git-dev-technologiestiftung1.vercel.app
 
 # These needs a .env in the root of the project
 # you get these variables from auth0
@@ -37,35 +40,53 @@
 ### Healthcheck
 GET {{API_HOST}}
 
-### GET tree by its id byid
+### GET tree by its id byid ✓
 
-GET {{API_HOST}}/get?queryType=byid&id={{TREE_ID}}
+GET {{API_HOST}}/get/byid&id={{TREE_ID}}
 
-### GET a list of all waterd trees
+### GET a list of all waterd trees ✓
 
-GET {{API_HOST}}/get?queryType=watered
+GET {{API_HOST}}/get/watered
 
-### get all trees with id, lat, lon, radolan_sum
-#  with pagination
+### GET list of trees from an list of ids ✓
 
-GET {{API_HOST}}/get?queryType=all&limit=10&offset=10
+GET {{API_HOST}}/get/treesbyids&tree_ids={{TREE_ID}},_21002949fc
 
-
-### GET list of trees from an list of ids
-
-GET {{API_HOST}}/get?queryType=treesbyids&tree_ids={{TREE_ID}},_00096p5ra
-
-
-### GET a list of trees with the properities
+### GET a list of trees with the properities ✓
 # adopted (how many users)
 # waterd how often in the last 30days
 
-GET {{API_HOST}}/get?queryType=wateredandadopted
+GET {{API_HOST}}/get/wateredandadopted
+
+### GET a list of trees with the properities ✓
+# adopted (how many users)
+# waterd how often in the last 30days
+
+GET {{API_HOST}}/get/wateredandadopted?limit=4&offset=5
+
+### get all trees with id, lat, lon, radolan_sum ✓
+#  with pagination
+
+GET {{API_HOST}}/get/all&limit=4&offset=5
 
 
-### GET count of trees by age
+### get all trees
 
-GET {{API_HOST}}/get?queryType=countbyage&start=1800&end=2020
+GET {{API_HOST}}/get/all
+
+
+
+### GET trees by age
+
+GET {{API_HOST}}/get/byage&start=1800&end=2023
+
+### GET trees by age
+
+GET {{API_HOST}}/get/byage&start=1800&end=2023&limit=10000&offset=0
+### GET count of trees by age ✓
+
+GET {{API_HOST}}/get/countbyage&start=1800&end=2023
+
 
 
   #####  ####### #######
@@ -123,26 +144,26 @@ Content-Type: application/json
 #     # #     #    #    #     #
 #     #  #####     #    #     #
 
-### GET trees that where watered by aq specific user
+### GET trees that where watered by aq specific user ✓
 
-GET {{API_HOST}}/get?queryType=wateredbyuser&uuid={{USER_ID}}
+GET {{API_HOST}}/get/wateredbyuser&uuid={{USER_ID}}
 Authorization: Bearer {{token}}
 
-### GET check if a tree is adopted by a specific user
+### GET check if a tree is adopted by a specific user ✓
 
-{{API_HOST}}/get?queryType=istreeadopted&uuid={{USER_ID}}&id={{TREE_ID}}
-Authorization: Bearer {{token}}
-
-
-### GET trees that are adopted by a specific user
-
-{{API_HOST}}/get?queryType=adopted&uuid={{USER_ID}}
+{{API_HOST}}/get/istreeadopted&uuid={{USER_ID}}&id={{TREE_ID}}
 Authorization: Bearer {{token}}
 
 
-### GET the last watering of a specific tree with all the users
+### GET trees that are adopted by a specific user ✓
 
-{{API_HOST}}/get?queryType=lastwatered&id={{TREE_ID}}
+{{API_HOST}}/get/adopted&uuid={{USER_ID}}
+Authorization: Bearer {{token}}
+
+
+### GET the last watering of a specific tree with all the users ✓
+
+{{API_HOST}}/get/lastwatered&id={{TREE_ID}}
 
  ######  #######  #####  #######
  #     # #     # #     #    #
@@ -162,15 +183,13 @@ Authorization: Bearer {{token}}
 
 
 ### POST water a tree
-# "timestamp":"{{$datetime "YYYY-MM-DD HH:mm:ss.ms"}}",
-POST {{API_HOST}}/post
+
+POST {{API_HOST}}/post/water
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "queryType":"water",
-    "time":"2022-11-17T14:11:59.857Z",
-    "timestamp":"2022-11-17T14:11:59.857Z",
+    "timestamp":"{{$datetime "YYYY-MM-DD HH:mm:ss"}}",
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}",
     "username":"{{USER_NAME}}",
@@ -179,12 +198,11 @@ Content-Type: application/json
 
 ### Adopt a tree
 
-POST {{API_HOST}}/post
+POST {{API_HOST}}/post/adopt
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "queryType":"adopt",
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}"
 }
@@ -207,12 +225,76 @@ Content-Type: application/json
 
 ### DELETE a tree adoption
 
-DELETE {{API_HOST}}/delete
+DELETE {{API_HOST}}/delete/unadopt
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-    "queryType":"unadopt",
     "tree_id":"{{TREE_ID}}",
     "uuid": "{{USER_ID}}"
 }
+
+### DELETE a tree watering
+
+DELETE {{API_HOST}}/delete/unwater
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "tree_id":"{{TREE_ID}}",
+    "uuid": "{{USER_ID}}"
+    "watering_id": 1
+}
+
+
+
+# ██████  ██    ██ ██████  ███████
+# ██   ██ ██    ██ ██   ██ ██
+# ██████  ██    ██ ██████  █████
+# ██      ██    ██ ██   ██ ██
+# ██       ██████  ██   ██ ███████
+
+# ███████ ██    ██ ██████   █████  ██████   █████  ███████ ███████
+# ██      ██    ██ ██   ██ ██   ██ ██   ██ ██   ██ ██      ██
+# ███████ ██    ██ ██████  ███████ ██████  ███████ ███████ █████
+#      ██ ██    ██ ██      ██   ██ ██   ██ ██   ██      ██ ██
+# ███████  ██████  ██      ██   ██ ██████  ██   ██ ███████ ███████
+
+
+#  █████  ██████  ██
+# ██   ██ ██   ██ ██
+# ███████ ██████  ██
+# ██   ██ ██      ██
+# ██   ██ ██      ██
+
+
+### SUPABASE REST API (anon) (swagger)
+
+GET {{SUPABASE_URL}}/rest/v1/
+apikey: {{SUPABASE_ANON_KEY}}
+
+
+### HEAD to trees_watered (anon)
+# Use this to get the right amount of items returned
+
+HEAD {{SUPABASE_URL}}/rest/v1/trees_watered
+apikey: {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_SERVICE_ROLE_KEY}}
+Range-Unit: items
+Range: 33-300
+Prefer: count=exact
+
+
+### GET trees_watered (sudo mode since RLS is in effect)
+
+GET {{SUPABASE_URL}}/rest/v1/trees_watered
+apikey: {{SUPABASE_ANON_KEY}}
+Authorization: Bearer {{SUPABASE_SERVICE_ROLE_KEY}}
+
+
+### RPC get_watered_and_adopted
+GET {{SUPABASE_URL}}/rest/v1/rpc/get_watered_and_adopted
+apikey: {{SUPABASE_ANON_KEY}}
+Range-Unit: items
+Prefer: count=exact
+
