@@ -41,8 +41,8 @@ export default async function handler(
 	}
 	const params = paramsToObject(
 		request.url
-			.replace(`/${method.toLowerCase()}/${type}`, "")
-			.replace(`/?type=${type}`, "")
+			.replace(`/v3/${method.toLowerCase()}/${type}`, "")
+			.replace(`/v3/?type=${type}`, "")
 	);
 	const [paramsAreValid, validationError] = validate(params, getSchemas[type]);
 	if (!paramsAreValid) {
