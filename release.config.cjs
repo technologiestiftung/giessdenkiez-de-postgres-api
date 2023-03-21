@@ -1,7 +1,7 @@
 module.exports = {
   extends: "@technologiestiftung/semantic-release-config",
   branches: [
-    { name: "main" },
+    { name: "master" },
     { name: "staging", channel: "pre/rc", prerelease: "rc" },
   ],
   plugins: [
