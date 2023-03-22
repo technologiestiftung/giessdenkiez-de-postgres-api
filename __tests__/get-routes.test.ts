@@ -229,7 +229,6 @@ describe("GET v3 routes snapshot tests default responses", () => {
 		});
 		server.close();
 		const json = await response.json();
-		// console.log(json);
 		expect(response.status).toBe(200);
 		expect(json).toMatchSnapshot();
 	});

@@ -42,7 +42,9 @@ export default async function handler(
 	const params = paramsToObject(
 		request.url
 			.replace(`/v3/${method.toLowerCase()}/${type}`, "")
+			/* FIXME: this is to fix tests not production since the handler does not know the full route in tests */
 			.replace(`/v3/?type=${type}`, "")
+			.replace(`/?type=${type}`, "")
 	);
 	const [paramsAreValid, validationError] = validate(params, getSchemas[type]);
 	if (!paramsAreValid) {
