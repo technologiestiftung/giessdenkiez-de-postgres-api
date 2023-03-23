@@ -1,17 +1,29 @@
 import { test, describe, expect } from "@jest/globals";
 import each from "jest-each";
 import fetch from "cross-fetch";
-import handler from "../api/post/[type]";
+import handler from "../api/v3/post/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
-import { requestAuth0TestToken } from "../__test-utils/req-test-token";
+import {
+	createSupabaseUser,
+	requestSupabaseTestToken,
+} from "../__test-utils/req-test-token";
 import {
 	truncateTreesWaterd,
 	truncateTreesAdopted,
+	deleteSupabaseUser,
 } from "../__test-utils/postgres";
 
 // adopt
 // water
 describe("posting data", () => {
+	const email = "poster@example.com";
+	const password = "1234567890@";
+	beforeAll(async () => {
+		await createSupabaseUser(email, password);
+	});
+	afterAll(async () => {
+		await deleteSupabaseUser(email);
+	});
 	test("should return 200 on options route", async () => {
 		const { server, url } = await createTestServer({ type: "water" }, handler);
 		const response = await fetch(url, {
@@ -26,7 +38,10 @@ describe("posting data", () => {
 		const response = await fetch(url, {
 			method: "POST",
 			headers: {
-				Authorization: `Bearer ${await requestAuth0TestToken()}`,
+				Authorization: `Bearer ${await requestSupabaseTestToken(
+					email,
+					password
+				)}`,
 
 				"Content-Type": "application/json",
 			},
@@ -210,6 +225,14 @@ each([
 		auth?: boolean;
 		body?: Record<string, unknown>;
 	}) => {
+		const email = "poster2@example.com";
+		const password = "1234567890@";
+		beforeAll(async () => {
+			await createSupabaseUser(email, password);
+		});
+		afterAll(async () => {
+			await deleteSupabaseUser(email);
+		});
 		test(`should return ${statusCode} on route "${type} ${description}"`, async () => {
 			const { server, url } = await createTestServer(
 				{ type, ...overrides },
@@ -219,7 +242,10 @@ each([
 				method: "POST",
 				headers: {
 					...(auth === true && {
-						Authorization: `Bearer ${await requestAuth0TestToken()}`,
+						Authorization: `Bearer ${await requestSupabaseTestToken(
+							email,
+							password
+						)}`,
 					}),
 					"Content-Type": "application/json",
 				},

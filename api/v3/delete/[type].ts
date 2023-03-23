@@ -1,10 +1,10 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { verifyAuth0Request } from "../../_utils/verify-auth0";
-import setHeaders from "../../_utils/set-headers";
-import { deleteSchemas, validate } from "../../_utils/validation";
+import setHeaders from "../../../_utils/set-headers";
+import { deleteSchemas, validate } from "../../../_utils/validation";
 
-import unadoptHandler from "../../_requests/delete/unadopt";
-import unwaterHandler from "../../_requests/delete/unwater";
+import unadoptHandler from "../../../_requests/delete/unadopt";
+import unwaterHandler from "../../../_requests/delete/unwater";
+import { verifySupabaseToken } from "../../../_utils/verify-supabase-token";
 export const queryTypes = ["unadopt", "unwater"];
 // const schemas: Record<string, AjvSchema> = {
 // 	unadopt: unadoptSchema,
@@ -20,10 +20,14 @@ export default async function deleteHandler(
 	if (request.method === "OPTIONS") {
 		return response.status(200).end();
 	}
-	const authorized = await verifyAuth0Request(request);
-	if (!authorized) {
+	const { data: userData, error } = await verifySupabaseToken(request);
+	if (error) {
 		return response.status(401).json({ error: "unauthorized" });
 	}
+	if (!userData) {
+		return response.status(401).json({ error: "unauthorized" });
+	}
+
 	const { type } = request.query;
 	if (Array.isArray(type)) {
 		return response.status(400).json({ error: "type needs to be a string" });
@@ -49,10 +53,10 @@ export default async function deleteHandler(
 			return response.status(400).json({ error: "invalid query type" });
 		}
 		case "unadopt": {
-			return await unadoptHandler(request, response);
+			return await unadoptHandler(request, response, userData);
 		}
 		case "unwater": {
-			return await unwaterHandler(request, response);
+			return await unwaterHandler(request, response, userData);
 		}
 	}
 }
