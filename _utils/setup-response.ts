@@ -8,7 +8,7 @@ const pkg = getPackage();
 // }
 export function setupResponseData<T>(overrides?: T) {
 	return {
-		version: pkg.version,
+		// version: pkg.version,
 		name: pkg.name,
 		// bugs: pkg.bugs?.url,
 		// home: pkg.homepage,

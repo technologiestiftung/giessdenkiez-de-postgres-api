@@ -1,33 +1,37 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { checkDataError } from "../../../_utils/data-error-response";
+import { checkDataError } from "../../_utils/data-error-response";
 import {
 	checkLimitAndOffset,
 	getLimitAndOffeset,
-} from "../../../_utils/limit-and-offset";
-import { getRange } from "../../../_utils/parse-content-range";
-import { setupResponseData } from "../../../_utils/setup-response";
-import { supabase } from "../../../_utils/supabase";
-import { verifyRequest } from "../../../_utils/verify";
-import { getEnvs } from "../../../_utils/envs";
-import { checkRangeError } from "../../../_utils/range-error-response";
-import { createLinks } from "../../../_utils/create-links";
+} from "../../_utils/limit-and-offset";
+import { getRange } from "../../_utils/parse-content-range";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
+import { getEnvs } from "../../_utils/envs";
+import { checkRangeError } from "../../_utils/range-error-response";
+import { createLinks } from "../../_utils/create-links";
+import { User } from "@supabase/supabase-js";
+import { urlContainsV3 } from "../../_utils/check-if-v3";
 const { SUPABASE_URL } = getEnvs();
 export default async function handler(
 	request: VercelRequest,
-	response: VercelResponse
+	response: VercelResponse,
+	user?: User
 ) {
-	const authorized = await verifyRequest(request);
-	if (!authorized) {
-		return response.status(401).json({ error: "unauthorized" });
-	}
-
 	checkLimitAndOffset(request, response);
 	const { limit, offset } = getLimitAndOffeset(request.query);
-	const { uuid } = <{ uuid: string }>request.query;
+	let { uuid } = <{ uuid: string }>request.query;
 	const { range, error: rangeError } = await getRange(
 		`${SUPABASE_URL}/rest/v1/trees_adopted?uuid=eq.${uuid}`
 	);
 	checkRangeError(response, rangeError, range);
+	if (!request.url) {
+		return response.status(500).json({ error: "no url in request" });
+	}
+	if (urlContainsV3(request.url)) {
+		uuid = user?.id || uuid;
+	}
+
 	const { data, error } = await supabase
 		.from("trees_adopted")
 		.select("tree_id,uuid")

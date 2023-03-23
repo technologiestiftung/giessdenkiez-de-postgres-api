@@ -3,7 +3,7 @@ import each from "jest-each";
 import fetch from "cross-fetch";
 import handler from "../api/delete/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
-import { requestTestToken } from "../__test-utils/req-test-token";
+import { requestAuth0TestToken } from "../__test-utils/req-test-token";
 
 describe("deleting data", () => {
 	test("should return 200 on options route", async () => {
@@ -31,7 +31,7 @@ describe("deleting data", () => {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${await requestTestToken()}`,
+				Authorization: `Bearer ${await requestAuth0TestToken()}`,
 			},
 			body: JSON.stringify({ uuid: "test", tree_id: "test", watering_id: 123 }),
 		});
@@ -167,7 +167,7 @@ each([
 				method: "DELETE",
 				headers: {
 					...(auth === true && {
-						Authorization: `Bearer ${await requestTestToken()}`,
+						Authorization: `Bearer ${await requestAuth0TestToken()}`,
 						"Content-Type": "application/json",
 					}),
 				},

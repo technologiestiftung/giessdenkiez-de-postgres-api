@@ -1,16 +1,16 @@
 // // FIXME: Request could be done from the frontend
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { createLinks } from "../../../_utils/create-links";
-import { checkDataError } from "../../../_utils/data-error-response";
-import { getEnvs } from "../../../_utils/envs";
+import { createLinks } from "../../_utils/create-links";
+import { checkDataError } from "../../_utils/data-error-response";
+import { getEnvs } from "../../_utils/envs";
 import {
 	checkLimitAndOffset,
 	getLimitAndOffeset,
-} from "../../../_utils/limit-and-offset";
-import { getRange } from "../../../_utils/parse-content-range";
-import { checkRangeError } from "../../../_utils/range-error-response";
-import { setupResponseData } from "../../../_utils/setup-response";
-import { supabase } from "../../../_utils/supabase";
+} from "../../_utils/limit-and-offset";
+import { getRange } from "../../_utils/parse-content-range";
+import { checkRangeError } from "../../_utils/range-error-response";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
 const { SUPABASE_URL } = getEnvs();
 
 export default async function handler(

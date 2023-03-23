@@ -1,7 +1,7 @@
 import { VercelRequest } from "@vercel/node";
 import { options, verifyAuth0Token } from "./verify-token";
 
-export async function verifyRequest(request: VercelRequest) {
+export async function verifyAuth0Request(request: VercelRequest) {
 	const { authorization } = request.headers;
 	if (!authorization) {
 		return false;
