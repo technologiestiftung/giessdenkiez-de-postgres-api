@@ -8,16 +8,19 @@
     - [Environments and Variables](#environments-and-variables)
     - [Auth0 (deprecated)](#auth0-deprecated)
     - [Vercel](#vercel)
-      - [Vercel Environment Variables](#vercel-environment-variables)
+        - [Vercel Environment Variables](#vercel-environment-variables)
+  - [API Routes](#api-routes)
+    - [API Authorization](#api-authorization)
+  - [Tests](#tests)
   - [Supabase](#supabase)
     - [Migrations and Types](#migrations-and-types)
     - [Deployment](#deployment)
     - [Radolan Harvester](#radolan-harvester)
-  - [API Routes](#api-routes)
-    - [API Authorization](#api-authorization)
+  - [API Routes](#api-routes-1)
+    - [API Authorization](#api-authorization-1)
       - [Supabase](#supabase-1)
       - [Auth0 (deprecated)](#auth0-deprecated-1)
-  - [Tests](#tests)
+  - [Tests](#tests-1)
   - [Contributors ✨](#contributors-)
   - [Credits](#credits)
 
@@ -81,7 +84,7 @@ Again. Be a smart developer, read https://12factor.net/config, https://github.co
 
 ### Auth0 (deprecated)
 
-**!Hint: We still support using Auth0 in this API but will eventually remove it. Using Supabase is preferered.**
+**!Hint: We still support using Auth0 in this API but will eventually remove it. Using Supabase is preferred.**
 
 Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values and add them to the `.env` file as well. The values for `client_id` and `client_secret` are only needed if you want to run local integration tests and use tools like rest-client, Postman, Insomnia or Paw to obtain a token. This is explained later in this document.
 
@@ -114,10 +117,6 @@ To let these variables take effect you need to deploy your application once more
 vercel --prod
 ```
 
-<!-- Congrats. Your API should be up and running. You might need to request tokens for the your endpoints that need authentication. See the auth0.com docs for more info. -->
-
-<<<<<<< HEAD
-=======
 ## API Routes
 
 There are 3 main routes `/get`, `/post` and `/delete`.
@@ -183,7 +182,6 @@ npm test
 
 On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml) you still need an API on Auth0.com
 
->>>>>>> 2bb17e65f3e01f12c281c859f2af27b448986479
 ## Supabase
 
 ### Migrations and Types
@@ -378,5 +376,3 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [gdk-supabase]: https://github.com/technologiestiftung/giessdenkiez-de-supabase/
 [supabase]: https://supabase.com/
-
-<!-- bump -->
