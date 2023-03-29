@@ -8,18 +8,21 @@
     - [Environments and Variables](#environments-and-variables)
     - [Auth0 (deprecated)](#auth0-deprecated)
     - [Vercel](#vercel)
-        - [Vercel Environment Variables](#vercel-environment-variables)
-  - [API Routes](#api-routes)
+      - [Vercel Environment Variables](#vercel-environment-variables)
+  - [API Routes /v3](#api-routes-v3)
+    - [](#)
     - [API Authorization](#api-authorization)
+    - [Supabase](#supabase)
+      - [Auth0 (deprecated)](#auth0-deprecated-1)
   - [Tests](#tests)
-  - [Supabase](#supabase)
+  - [Supabase](#supabase-1)
     - [Migrations and Types](#migrations-and-types)
     - [Deployment](#deployment)
     - [Radolan Harvester](#radolan-harvester)
-  - [API Routes](#api-routes-1)
+  - [API Routes](#api-routes)
     - [API Authorization](#api-authorization-1)
-      - [Supabase](#supabase-1)
-      - [Auth0 (deprecated)](#auth0-deprecated-1)
+      - [Supabase](#supabase-2)
+      - [Auth0 (deprecated)](#auth0-deprecated-2)
   - [Tests](#tests-1)
   - [Contributors ✨](#contributors-)
   - [Credits](#credits)
@@ -106,9 +109,10 @@ vercel env add SUPABASE_ANON_KEY
 # the max rows allowed to fetch from supabase (default 1000)
 vercel env add SUPABASE_MAX_ROWS
 # below are all taken from auth0.com
-vercel env add jwksuri
-vercel env add audience
-vercel env add issuer
+# the v3 api does not need them anymore
+# vercel env add jwksuri
+# vercel env add audience
+# vercel env add issuer
 ```
 
 To let these variables take effect you need to deploy your application once more.
@@ -117,9 +121,9 @@ To let these variables take effect you need to deploy your application once more
 vercel --prod
 ```
 
-## API Routes
+## API Routes /v3
 
-There are 3 main routes `/get`, `/post` and `/delete`.
+There are 3 main routes `/v3/get`, `/v3/post` and `/v3/delete`.
 
 On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
 
@@ -133,19 +137,47 @@ You can see all the available routes in the [docs/api.http](./docs/api.http) fil
 
 Currently we have these routes
 
-| `/get`               | `/post`  | `/delete`  |
-| -------------------- | -------- | ---------- |
-| `/byid`              | `/adopt` | `/unadopt` |
-| `/treesbyids`        | `/water` | `/unwater` |
-| `/adopted`           |          |            |
-| `/istreeadopted`     |          |            |
-| `/wateredandadopted` |          |            |
-| `/lastwatered`       |          |            |
-| `/wateredbyuser`     |          |            |
+| `/v3/get`            | `/v3/post` | `/v3/delete` |
+| :------------------- | :--------- | :----------- |
+| `/byid`              | `/adopt`   | `/unadopt`   |
+| `/treesbyids`        | `/water`   | `/unwater`   |
+| `/adopted`           |            |              |
+| `/istreeadopted`     |            |              |
+| `/wateredandadopted` |            |              |
+| `/lastwatered`       |            |              |
+| `/wateredbyuser`     |            |              |
+
+###
 
 ### API Authorization
 
 Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
+
+### Supabase
+
+You can sign up with the request below. You will get an access token to use in your requests.
+
+```bash
+curl --request POST \
+  --url http://localhost:54321/auth/v1/signup \
+  --header 'apikey: <SUPABASE ANON KEY>' \
+  --header 'content-type: application/json' \
+  --header 'user-agent: vscode-restclient' \
+  --data '{"email": "someone@email.com","password": "1234567890"}'
+```
+
+```bash
+curl --request POST \
+  --url http://localhost:8080/post/adopt \
+  --header 'authorization: Bearer <ACCESS_TOKEN>' \
+  --header 'content-type: application/json' \
+  --data '{"tree_id":"_01","uuid": "<YOUR USERS ID>"}'
+
+```
+
+The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
+
+#### Auth0 (deprecated)
 
 ```bash
 curl --request POST \
@@ -159,10 +191,10 @@ This will respond with an `access_token`. Use it to make authenticated requests.
 
 ```bash
 curl --request POST \
-  --url http://localhost:3000/post \
+  --url http://localhost:8080/post/adopt \
   --header 'authorization: Bearer <ACCESS_TOKEN>' \
   --header 'content-type: application/json' \
-  --data '{"queryType":"adopt","tree_id":"_01","uuid": "auth0|123"}'
+  --data '{"tree_id":"_01","uuid": "auth0|123"}'
 ```
 
 Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
@@ -237,7 +269,7 @@ On the `/get` route all actions are controlled by passing URL params. On the `/p
 
 ```bash
 curl --request GET \
-  --url 'http://localhost:3000/get/byid&id=_123456789' \
+  --url 'http://localhost:8080/get/byid&id=_123456789' \
 
 ```
 
@@ -299,7 +331,7 @@ This will respond with an `access_token`. Use it to make authenticated requests.
 
 ```bash
 curl --request POST \
-  --url http://localhost:3000/post \
+  --url http://localhost:8080/post \
   --header 'authorization: Bearer <ACCESS_TOKEN>' \
   --header 'content-type: application/json' \
   --data '{"queryType":"adopt","tree_id":"_01","uuid": "auth0|123"}'
