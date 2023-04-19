@@ -16,15 +16,16 @@ export async function truncateTreesAdopted() {
 	sql.end();
 }
 
-export async function createWateredTrees() {
+export async function createWateredTrees(userId?: string, userName?: string) {
 	const sql = postgres(url);
+	const randomText = sql`md5(random()::text)`;
 	await sql`
 	INSERT INTO trees_watered (uuid, amount, timestamp, username, tree_id)
 	SELECT
-		md5(random()::text),
+		${userId ? userId : sql`extensions.uuid_generate_v4()::text`},
 		random() * 10,
 		NOW() - (random() * INTERVAL '7 days'),
-		md5(random()::text),
+		${userName ? userName : randomText},
 		id
 	FROM
 		trees
