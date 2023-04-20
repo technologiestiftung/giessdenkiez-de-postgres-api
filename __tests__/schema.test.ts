@@ -46,6 +46,7 @@ describe("misc test testing the schema function of the database", () => {
 	});
 
 	test("a user should be able to remove its account and his associated data", async () => {
+		const numberOfTrees = 10;
 		const email = "user@email.com";
 		await deleteSupabaseUser(email); // clean up before running
 		const { data, error } = await supabaseAnonClient.auth.signUp({
@@ -57,9 +58,9 @@ describe("misc test testing the schema function of the database", () => {
 		const { data: trees, error: treesError } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
-			.limit(10);
+			.limit(numberOfTrees);
 		expect(treesError).toBeNull();
-		expect(trees).toHaveLength(10);
+		expect(trees).toHaveLength(numberOfTrees);
 
 		const { data: adoptedTrees, error: adoptedTreesError } =
 			await supabaseServiceRoleClient
@@ -73,7 +74,7 @@ describe("misc test testing the schema function of the database", () => {
 				)
 				.select("*");
 		expect(adoptedTreesError).toBeNull();
-		expect(adoptedTrees).toHaveLength(10);
+		expect(adoptedTrees).toHaveLength(numberOfTrees);
 		const { data: userTrees, error: userTreesError } =
 			await supabaseServiceRoleClient
 				.from("trees_watered")
@@ -89,7 +90,7 @@ describe("misc test testing the schema function of the database", () => {
 				)
 				.select("*");
 		expect(userTreesError).toBeNull();
-		expect(userTrees).toHaveLength(10);
+		expect(userTrees).toHaveLength(numberOfTrees);
 
 		// since wa can not pass the token to our supabase client, we need to use fetch directly
 		const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/remove_account`, {
@@ -122,6 +123,7 @@ describe("misc test testing the schema function of the database", () => {
 
 	test("if a user changes his username all the usernames on the trees_watered table should change too", async () => {
 		const email = "foo@bar.com";
+		const numberOfTrees = 10;
 		await deleteSupabaseUser(email);
 		await truncateTreesWaterd();
 		const { data, error } = await supabaseAnonClient.auth.signUp({
@@ -133,9 +135,9 @@ describe("misc test testing the schema function of the database", () => {
 		const { data: trees, error: treesError } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
-			.limit(10);
+			.limit(numberOfTrees);
 		expect(treesError).toBeNull();
-		expect(trees).toHaveLength(10);
+		expect(trees).toHaveLength(numberOfTrees);
 
 		const { data: adoptedTrees, error: adoptedTreesError } =
 			await supabaseServiceRoleClient
@@ -152,7 +154,7 @@ describe("misc test testing the schema function of the database", () => {
 				)
 				.select("*");
 		expect(adoptedTreesError).toBeNull();
-		expect(adoptedTrees).toHaveLength(10);
+		expect(adoptedTrees).toHaveLength(numberOfTrees);
 
 		// since we cant pass our access token to change our username to our anon client we use fetch directly
 		const changeResponse = await fetch(
@@ -180,7 +182,7 @@ describe("misc test testing the schema function of the database", () => {
 				.eq("username", "bar");
 
 		expect(treesAfterError).toBeNull();
-		expect(treesAfter).toHaveLength(10);
+		expect(treesAfter).toHaveLength(numberOfTrees);
 		await deleteSupabaseUser(email);
 		await truncateTreesWaterd();
 	});
