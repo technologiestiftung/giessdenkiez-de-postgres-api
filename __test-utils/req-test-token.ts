@@ -1,9 +1,10 @@
+import { SignupResponse } from "../_types/user";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./supabase";
 const issuer = process.env.issuer || "";
 const client_id = process.env.client_id || "";
 const client_secret = process.env.client_secret || "";
 const audience = process.env.audience || "";
-const SUPABASE_URL = process.env.SUPABASE_URL || "http://localhost:54321";
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "";
+
 export async function requestAuth0TestToken() {
 	const response = await fetch(`${issuer}oauth/token`, {
 		method: "POST",
@@ -47,14 +48,15 @@ export async function requestSupabaseTestToken(
 		const json = await response.text();
 		throw new Error(`Could not get test token, ${json}`);
 	}
-	const json = (await response.json()) as {
-		access_token: string;
-		user: { id: string };
-	};
+	const json = (await response.json()) as SignupResponse;
 	return json.access_token;
 }
 
-export async function createSupabaseUser(email: string, password: string) {
+export async function createSupabaseUser(
+	email: string,
+	password: string,
+	opts?: { returnFullUser: boolean }
+) {
 	const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
 		method: "POST",
 		headers: {
@@ -67,6 +69,7 @@ export async function createSupabaseUser(email: string, password: string) {
 		}),
 	});
 	if (!response.ok) {
+		console.log(response.status);
 		const json = await response.text();
 		throw new Error(`Could not create test user, ${json}`);
 	}
@@ -74,5 +77,8 @@ export async function createSupabaseUser(email: string, password: string) {
 		access_token: string;
 		user: { id: string };
 	};
+	if (opts?.returnFullUser) {
+		return json;
+	}
 	return json.access_token;
 }
