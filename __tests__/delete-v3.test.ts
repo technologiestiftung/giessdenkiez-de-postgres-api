@@ -101,7 +101,6 @@ describe("api/v3/delete/[type]", () => {
 				uuid,
 				amount,
 				timestamp,
-				time: timestamp,
 				username: uuid,
 			})
 			.select("id");

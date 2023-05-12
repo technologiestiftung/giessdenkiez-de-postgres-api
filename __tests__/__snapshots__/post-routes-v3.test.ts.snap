@@ -4,7 +4,6 @@ exports[`posting data should return 201 on water route invalid body missing uuid
 {
   "amount": Any<Number>,
   "id": Any<Number>,
-  "time": null,
   "timestamp": Any<String>,
   "tree_id": Any<String>,
   "username": Any<String>,
