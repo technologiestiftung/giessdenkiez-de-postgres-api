@@ -235,7 +235,6 @@ export interface Database {
         Row: {
           amount: number
           id: number
-          time: string | null
           timestamp: string
           tree_id: string
           username: string | null
@@ -244,7 +243,6 @@ export interface Database {
         Insert: {
           amount: number
           id?: number
-          time?: string | null
           timestamp: string
           tree_id: string
           username?: string | null
@@ -253,7 +251,6 @@ export interface Database {
         Update: {
           amount?: number
           id?: number
-          time?: string | null
           timestamp?: string
           tree_id?: string
           username?: string | null
