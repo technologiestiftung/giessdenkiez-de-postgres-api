@@ -1,17 +1,22 @@
+import { User } from "@supabase/supabase-js";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { setupResponseData } from "../../../_utils/setup-response";
-import { supabase } from "../../../_utils/supabase";
-import { verifyRequest } from "../../../_utils/verify";
+import { urlContainsV3 } from "../../_utils/check-if-v3";
+import { setupResponseData } from "../../_utils/setup-response";
+import { supabase } from "../../_utils/supabase";
 
 export default async function handler(
 	request: VercelRequest,
-	response: VercelResponse
+	response: VercelResponse,
+	user?: User
 ) {
-	const authorized = await verifyRequest(request);
-	if (!authorized) {
-		return response.status(401).json({ error: "unauthorized" });
+	const { id } = <{ uuid: string; id: string }>request.query;
+	let { uuid } = <{ uuid: string; id: string }>request.query;
+	if (!request.url) {
+		return response.status(500).json({ error: "no url in request" });
 	}
-	const { uuid, id } = <{ uuid: string; id: string }>request.query;
+	if (urlContainsV3(request.url)) {
+		uuid = user?.id || uuid;
+	}
 
 	const { data, error } = await supabase
 		.from("trees_adopted")

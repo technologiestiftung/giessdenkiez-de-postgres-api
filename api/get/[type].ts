@@ -3,13 +3,14 @@ import setHeaders from "../../_utils/set-headers";
 import { queryTypes as queryTypesList } from "../../_utils/routes-listing";
 import { getSchemas, paramsToObject, validate } from "../../_utils/validation";
 
-import byidHandler from "./_requests/byid";
-import treesbyidsHandler from "./_requests/treesbyids";
-import wateredandadoptedHandler from "./_requests/wateredandadopted";
-import lastwateredHandler from "./_requests/lastwatered";
-import adoptedHandler from "./_requests/adopted";
-import istreeadoptedHandler from "./_requests/istreeadopted";
-import wateredbyuserHandler from "./_requests/wateredbyuser";
+import byidHandler from "../../_requests/get/byid";
+import treesbyidsHandler from "../../_requests/get/treesbyids";
+import wateredandadoptedHandler from "../../_requests/get/wateredandadopted";
+import lastwateredHandler from "../../_requests/get/lastwatered";
+import adoptedHandler from "../../_requests/get/adopted";
+import istreeadoptedHandler from "../../_requests/get/istreeadopted";
+import wateredbyuserHandler from "../../_requests/get/wateredbyuser";
+import { verifyAuth0Request } from "../../_utils/verify-auth0";
 
 export const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
@@ -58,19 +59,32 @@ export default async function handler(
 		case "wateredandadopted": {
 			return await wateredandadoptedHandler(request, response);
 		}
+
 		case "lastwatered": {
 			return await lastwateredHandler(request, response);
 		}
 		// All requests below this line are only available for authenticated users
 		// --------------------------------------------------------------------
 		case "adopted": {
+			const authorized = await verifyAuth0Request(request);
+			if (!authorized) {
+				return response.status(401).json({ error: "unauthorized" });
+			}
 			return await adoptedHandler(request, response);
 		}
 		case "istreeadopted": {
+			const authorized = await verifyAuth0Request(request);
+			if (!authorized) {
+				return response.status(401).json({ error: "unauthorized" });
+			}
 			return await istreeadoptedHandler(request, response);
 		}
 
 		case "wateredbyuser": {
+			const authorized = await verifyAuth0Request(request);
+			if (!authorized) {
+				return response.status(401).json({ error: "unauthorized" });
+			}
 			return await wateredbyuserHandler(request, response);
 		}
 	}

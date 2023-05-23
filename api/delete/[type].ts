@@ -1,9 +1,10 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { verifyRequest } from "../../_utils/verify";
+import { verifyAuth0Request } from "../../_utils/verify-auth0";
 import setHeaders from "../../_utils/set-headers";
-import { supabase } from "../../_utils/supabase";
 import { deleteSchemas, validate } from "../../_utils/validation";
 
+import unadoptHandler from "../../_requests/delete/unadopt";
+import unwaterHandler from "../../_requests/delete/unwater";
 export const queryTypes = ["unadopt", "unwater"];
 // const schemas: Record<string, AjvSchema> = {
 // 	unadopt: unadoptSchema,
@@ -19,7 +20,7 @@ export default async function deleteHandler(
 	if (request.method === "OPTIONS") {
 		return response.status(200).end();
 	}
-	const authorized = await verifyRequest(request);
+	const authorized = await verifyAuth0Request(request);
 	if (!authorized) {
 		return response.status(401).json({ error: "unauthorized" });
 	}
@@ -48,35 +49,10 @@ export default async function deleteHandler(
 			return response.status(400).json({ error: "invalid query type" });
 		}
 		case "unadopt": {
-			const { tree_id, uuid } = request.body;
-			const { error } = await supabase
-				.from("trees_adopted")
-				.delete()
-				.eq("tree_id", tree_id)
-				.eq("uuid", uuid);
-			if (error) {
-				return response.status(500).json({ error });
-			}
-			return response
-				.status(204)
-				.json({ message: `unadopted tree ${tree_id}` });
+			return await unadoptHandler(request, response);
 		}
 		case "unwater": {
-			// FIXME: [GDK-221] API (with supabase) Find out why delete/unwater route does not work
-
-			const { tree_id, uuid, watering_id } = request.body;
-			const { error } = await supabase
-				.from("trees_watered")
-				.delete()
-				.eq("tree_id", tree_id)
-				.eq("uuid", uuid)
-				.eq("id", watering_id);
-			if (error) {
-				return response.status(500).json({ error });
-			}
-			return response
-				.status(204)
-				.json({ message: `unwatered tree ${tree_id} ` });
+			return await unwaterHandler(request, response);
 		}
 	}
 }

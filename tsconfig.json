@@ -6,6 +6,7 @@
 	"include": [
 		"api/**/*.ts",
 		"_utils/**/*.ts",
+		"_requests/**/*.ts",
 		"__tests__/**/*.ts",
 		"__test-utils__/**/*.ts",
 		"_types/**/*.ts"

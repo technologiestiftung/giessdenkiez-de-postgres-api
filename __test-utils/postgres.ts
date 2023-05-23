@@ -16,15 +16,28 @@ export async function truncateTreesAdopted() {
 	sql.end();
 }
 
-export async function createWateredTrees() {
+export async function createWateredTrees(userId?: string, userName?: string) {
 	const sql = postgres(url);
+	const randomText = sql`md5(random()::text)`;
 	await sql`
-		INSERT INTO trees_watered (uuid, tree_id, amount, timestamp)
-		VALUES
-			('test', '_2100294b1f', 1, '2023-01-01 00:00:00'),
-			('test', '_2100294b1f', 1, '2023-01-01 00:00:00'),
-			('test', '_2100186c08', 1, '2023-01-01 00:00:00'),
-			('test', '_2100186c08', 1, '2023-01-01 00:00:00');
+	INSERT INTO trees_watered (uuid, amount, timestamp, username, tree_id)
+	SELECT
+		${userId ? userId : sql`extensions.uuid_generate_v4()::text`},
+		random() * 10,
+		NOW() - (random() * INTERVAL '7 days'),
+		${userName ? userName : randomText},
+		id
+	FROM
+		trees
+	ORDER BY
+		random()
+	LIMIT 10;
 			`;
+	sql.end();
+}
+
+export async function deleteSupabaseUser(email: string): Promise<void> {
+	const sql = postgres(url);
+	await sql`DELETE FROM auth.users WHERE email = ${email}`;
 	sql.end();
 }

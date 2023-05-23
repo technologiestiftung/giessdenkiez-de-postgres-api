@@ -4,17 +4,26 @@
   - [W.I.P. API Migration](#wip-api-migration)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
+    - [Supabase (local)](#supabase-local)
     - [Environments and Variables](#environments-and-variables)
-    - [Auth0](#auth0)
+    - [Auth0 (deprecated)](#auth0-deprecated)
     - [Vercel](#vercel)
-        - [Vercel Environment Variables](#vercel-environment-variables)
-  - [API Routes](#api-routes)
+      - [Vercel Environment Variables](#vercel-environment-variables)
+  - [API Routes /v3](#api-routes-v3)
+    - [](#)
     - [API Authorization](#api-authorization)
+    - [Supabase](#supabase)
+      - [Auth0 (deprecated)](#auth0-deprecated-1)
   - [Tests](#tests)
-  - [Supabase](#supabase)
+  - [Supabase](#supabase-1)
     - [Migrations and Types](#migrations-and-types)
     - [Deployment](#deployment)
     - [Radolan Harvester](#radolan-harvester)
+  - [API Routes](#api-routes)
+    - [API Authorization](#api-authorization-1)
+      - [Supabase](#supabase-2)
+      - [Auth0 (deprecated)](#auth0-deprecated-2)
+  - [Tests](#tests-1)
   - [Contributors ✨](#contributors-)
   - [Credits](#credits)
 
@@ -28,7 +37,7 @@ Built with Typescript connects to Supabase and (still) Auth0.com, runs on vercel
 
 ![](./docs/wip.png)
 
-We are in the process of migrating the API fully to supabase. These docs are not up to date yet.
+We are in the process of migrating the API fully to supabase. These docs might have some missing information.
 
 ## Prerequisites
 
@@ -36,9 +45,11 @@ We are in the process of migrating the API fully to supabase. These docs are not
 - [Supabase](https://supabase.com) Account
 - Supabase CLI install with brew `brew install supabase/tap/supabase`
 - [Docker](https://www.docker.com/) Dependency for Supabase
-- [Auth0.com](https://auth0.com) Account
+- (deprecated) [Auth0.com](https://auth0.com) Account
 
 ## Setup
+
+### Supabase (local)
 
 ```bash
 git clone git@github.com:technologiestiftung/giessdenkiez-de-postgres-api.git
@@ -74,9 +85,9 @@ In the example code above the Postgres database Postgrest API are run locally. Y
 
 Again. Be a smart developer, read https://12factor.net/config, https://github.com/motdotla/dotenv#should-i-have-multiple-env-files and never ever touch production with your local code!
 
-### Auth0
+### Auth0 (deprecated)
 
-**!Hint: We are working on replacing Auth0 with Supabase. This is not yet implemented.**
+**!Hint: We still support using Auth0 in this API but will eventually remove it. Using Supabase is preferred.**
 
 Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values and add them to the `.env` file as well. The values for `client_id` and `client_secret` are only needed if you want to run local integration tests and use tools like rest-client, Postman, Insomnia or Paw to obtain a token. This is explained later in this document.
 
@@ -98,9 +109,10 @@ vercel env add SUPABASE_ANON_KEY
 # the max rows allowed to fetch from supabase (default 1000)
 vercel env add SUPABASE_MAX_ROWS
 # below are all taken from auth0.com
-vercel env add jwksuri
-vercel env add audience
-vercel env add issuer
+# the v3 api does not need them anymore
+# vercel env add jwksuri
+# vercel env add audience
+# vercel env add issuer
 ```
 
 To let these variables take effect you need to deploy your application once more.
@@ -109,11 +121,9 @@ To let these variables take effect you need to deploy your application once more
 vercel --prod
 ```
 
-<!-- Congrats. Your API should be up and running. You might need to request tokens for the your endpoints that need authentication. See the auth0.com docs for more info. -->
+## API Routes /v3
 
-## API Routes
-
-There are 3 main routes `/get`, `/post` and `/delete`.
+There are 3 main routes `/v3/get`, `/v3/post` and `/v3/delete`.
 
 On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
 
@@ -127,19 +137,47 @@ You can see all the available routes in the [docs/api.http](./docs/api.http) fil
 
 Currently we have these routes
 
-| `/get`               | `/post`  | `/delete`  |
-| -------------------- | -------- | ---------- |
-| `/byid`              | `/adopt` | `/unadopt` |
-| `/treesbyids`        | `/water` | `/unwater` |
-| `/adopted`           |          |            |
-| `/istreeadopted`     |          |            |
-| `/wateredandadopted` |          |            |
-| `/lastwatered`       |          |            |
-| `/wateredbyuser`     |          |            |
+| `/v3/get`            | `/v3/post` | `/v3/delete` |
+| :------------------- | :--------- | :----------- |
+| `/byid`              | `/adopt`   | `/unadopt`   |
+| `/treesbyids`        | `/water`   | `/unwater`   |
+| `/adopted`           |            |              |
+| `/istreeadopted`     |            |              |
+| `/wateredandadopted` |            |              |
+| `/lastwatered`       |            |              |
+| `/wateredbyuser`     |            |              |
+
+###
 
 ### API Authorization
 
 Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
+
+### Supabase
+
+You can sign up with the request below. You will get an access token to use in your requests.
+
+```bash
+curl --request POST \
+  --url http://localhost:54321/auth/v1/signup \
+  --header 'apikey: <SUPABASE ANON KEY>' \
+  --header 'content-type: application/json' \
+  --header 'user-agent: vscode-restclient' \
+  --data '{"email": "someone@email.com","password": "1234567890"}'
+```
+
+```bash
+curl --request POST \
+  --url http://localhost:8080/post/adopt \
+  --header 'authorization: Bearer <ACCESS_TOKEN>' \
+  --header 'content-type: application/json' \
+  --data '{"tree_id":"_01","uuid": "<YOUR USERS ID>"}'
+
+```
+
+The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
+
+#### Auth0 (deprecated)
 
 ```bash
 curl --request POST \
@@ -153,10 +191,10 @@ This will respond with an `access_token`. Use it to make authenticated requests.
 
 ```bash
 curl --request POST \
-  --url http://localhost:3000/post \
+  --url http://localhost:8080/post/adopt \
   --header 'authorization: Bearer <ACCESS_TOKEN>' \
   --header 'content-type: application/json' \
-  --data '{"queryType":"adopt","tree_id":"_01","uuid": "auth0|123"}'
+  --data '{"tree_id":"_01","uuid": "auth0|123"}'
 ```
 
 Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
@@ -223,6 +261,99 @@ INSERT INTO "public"."radolan_harvester" ("id", "collection_date", "start_date",
 
 This process is actually a little blackbox we need to solve.
 
+## API Routes
+
+There are 3 main routes `/get`, `/post` and `/delete`.
+
+On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
+
+```bash
+curl --request GET \
+  --url 'http://localhost:8080/get/byid&id=_123456789' \
+
+```
+
+You can see all the available routes in the [docs/api.http](./docs/api.http) file with all their needed `URLSearchParams` and JSON bodies or by inspecting the JSON Schema that is returned when you do a request to the `/get`, `/post` or `/delete` route.
+
+Currently we have these routes (for routes that still use auth0 remove the v3 prefix)
+
+| `/v3/get`            | `/v3/post` | `/v3/delete` |
+| -------------------- | ---------- | ------------ |
+| `/byid`              | `/adopt`   | `/unadopt`   |
+| `/treesbyids`        | `/water`   | `/unwater`   |
+| `/adopted`           |            |              |
+| `/istreeadopted`     |            |              |
+| `/wateredandadopted` |            |              |
+| `/lastwatered`       |            |              |
+| `/wateredbyuser`     |            |              |
+
+### API Authorization
+
+#### Supabase
+
+Some of the requests need a authorized user. You can create a new user using email password via the Supabase API.
+
+```bash
+curl --request POST \
+  --url http://localhost:54321/auth/v1/signup \
+  --header 'apikey: <SUPABASE_ANON_KEY>' \
+  --header 'content-type: application/json' \
+  --data '{"email": "someone@email.com","password": "1234567890"}'
+```
+
+This will give you in development already an aceess token. In production you will need to confirm your email address first.
+
+A login can be done like this:
+
+```bash
+curl --request POST \
+  --url 'http://localhost:54321/auth/v1/token?grant_type=password' \
+  --header 'apikey: <SUPABASE_ANON_KEY>' \
+  --header 'content-type: application/json' \
+  --data '{"email": "someone@email.com","password": "1234567890"}'
+```
+
+See the [docs/api.http](./docs/api.http) file for more examples or take a look into the API documentation in your local supabase instance under http://localhost:54323/project/default/api?page=users
+
+#### Auth0 (deprecated)
+
+Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
+
+```bash
+curl --request POST \
+  --url https://your-tenant.eu.auth0.com/oauth/token \
+  --header 'content-type: application/json' \
+  --data '{"client_id": "<YOUR CLIENT ID>","client_secret": "<YOUR CLIENT SECRET>","audience": "<YOUR AUDIENCE>","grant_type": "client_credentials"}'
+# fill in the <VALUS> fields
+```
+
+This will respond with an `access_token`. Use it to make authenticated requests.
+
+```bash
+curl --request POST \
+  --url http://localhost:8080/post \
+  --header 'authorization: Bearer <ACCESS_TOKEN>' \
+  --header 'content-type: application/json' \
+  --data '{"queryType":"adopt","tree_id":"_01","uuid": "auth0|123"}'
+```
+
+Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+
+## Tests
+
+Locally you will need supabase running and a `.env` file with the right values in it.
+
+```bash
+cd giessdenkiez-de-postgres-api
+supabase start
+# Once the backaned is up and running, run the tests
+# Make sure to you habe your .env file setup right
+# with all the values from `supabase status` and your API from Auth0.com
+npm test
+```
+
+On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml) you still need an API on Auth0.com
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
@@ -231,14 +362,18 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://fabianmoronzirfas.me/"><img src="https://avatars.githubusercontent.com/u/315106?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Fabian Morón Zirfas</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=ff6347" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=ff6347" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/fdnklg"><img src="https://avatars.githubusercontent.com/u/9034032?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Fabian</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=fdnklg" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=fdnklg" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/warenix"><img src="https://avatars.githubusercontent.com/u/1849536?v=4?s=64" width="64px;" alt=""/><br /><sub><b>warenix</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=warenix" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=warenix" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://it-freelancer.berlin/"><img src="https://avatars.githubusercontent.com/u/7558075?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Daniel Sippel</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=danielsippel" title="Documentation">📖</a></td>
-    <td align="center"><a href="http://www.sebastianmeier.eu/"><img src="https://avatars.githubusercontent.com/u/302789?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Sebastian Meier</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=sebastian-meier" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/vogelino"><img src="https://avatars.githubusercontent.com/u/2759340?v=4?s=64" width="64px;" alt=""/><br /><sub><b>Lucas Vogel</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=vogelino" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://fabianmoronzirfas.me/"><img src="https://avatars.githubusercontent.com/u/315106?v=4?s=64" width="64px;" alt="Fabian Morón Zirfas"/><br /><sub><b>Fabian Morón Zirfas</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=ff6347" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=ff6347" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/fdnklg"><img src="https://avatars.githubusercontent.com/u/9034032?v=4?s=64" width="64px;" alt="Fabian"/><br /><sub><b>Fabian</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=fdnklg" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=fdnklg" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/warenix"><img src="https://avatars.githubusercontent.com/u/1849536?v=4?s=64" width="64px;" alt="warenix"/><br /><sub><b>warenix</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=warenix" title="Code">💻</a> <a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=warenix" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://it-freelancer.berlin/"><img src="https://avatars.githubusercontent.com/u/7558075?v=4?s=64" width="64px;" alt="Daniel Sippel"/><br /><sub><b>Daniel Sippel</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=danielsippel" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.sebastianmeier.eu/"><img src="https://avatars.githubusercontent.com/u/302789?v=4?s=64" width="64px;" alt="Sebastian Meier"/><br /><sub><b>Sebastian Meier</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=sebastian-meier" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/vogelino"><img src="https://avatars.githubusercontent.com/u/2759340?v=4?s=64" width="64px;" alt="Lucas Vogel"/><br /><sub><b>Lucas Vogel</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/commits?author=vogelino" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/dnsos"><img src="https://avatars.githubusercontent.com/u/15640196?v=4?s=64" width="64px;" alt="Dennis Ostendorf"/><br /><sub><b>Dennis Ostendorf</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/pulls?q=is%3Apr+reviewed-by%3Adnsos" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/julizet"><img src="https://avatars.githubusercontent.com/u/52455010?v=4?s=64" width="64px;" alt="Julia Zet"/><br /><sub><b>Julia Zet</b></sub></a><br /><a href="https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/pulls?q=is%3Apr+reviewed-by%3Ajulizet" title="Reviewed Pull Requests">👀</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->
@@ -277,5 +412,3 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [gdk-supabase]: https://github.com/technologiestiftung/giessdenkiez-de-supabase/
 [supabase]: https://supabase.com/
-
-<!-- bump -->

@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "vercel:dev": "vercel dev",
+    "vercel:dev": "vercel dev --listen 8080",
     "lint": "eslint ./**/*.ts ",
     "format": "prettier ./**/*.ts --write",
     "generate:types": "npx just generate-types"
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "7.6.0",
-    "@saithodev/semantic-release-backmerge": "2.1.2",
+    "@saithodev/semantic-release-backmerge": "2.2.0",
     "@technologiestiftung/semantic-release-config": "1.1.0",
     "@types/geojson": "7946.0.10",
     "@types/jest": "29.4.0",

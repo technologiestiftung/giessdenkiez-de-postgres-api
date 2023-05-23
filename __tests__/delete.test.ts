@@ -2,7 +2,7 @@
 import { test, describe, expect } from "@jest/globals";
 import { faker } from "@faker-js/faker";
 
-import { requestTestToken } from "../__test-utils/req-test-token";
+import { requestAuth0TestToken } from "../__test-utils/req-test-token";
 import { supabase } from "../_utils/supabase";
 import { Database } from "../_types/database";
 import {
@@ -10,7 +10,7 @@ import {
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
 import { createTestServer } from "../__test-utils/create-test-server";
-import deleteHandler from "../api/delete/[type]";
+import v2DeleteHandler from "../api/delete/[type]";
 // const envs = config({ path: path.resolve(process.cwd(), ".env") });
 process.env.NODE_ENV = "test";
 
@@ -18,7 +18,7 @@ describe("api/delete/[type]", () => {
 	test("should make a request to delete/unwater and fail unauthorized", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "unwater" },
-			deleteHandler
+			v2DeleteHandler
 		);
 		const response = await fetch(url, {
 			method: "DELETE",
@@ -32,9 +32,9 @@ describe("api/delete/[type]", () => {
 	test("should make a request to api/delete/unwater and fail due to missing body", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "unwater" },
-			deleteHandler
+			v2DeleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
@@ -49,9 +49,9 @@ describe("api/delete/[type]", () => {
 	test("should make a request to api/delete/unwater and fail due to wrong body", async () => {
 		const { server, url } = await createTestServer(
 			{ type: "unwater" },
-			deleteHandler
+			v2DeleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
@@ -89,7 +89,6 @@ describe("api/delete/[type]", () => {
 				uuid,
 				amount,
 				timestamp,
-				time: timestamp,
 				username: uuid,
 			})
 			.select("id");
@@ -100,9 +99,9 @@ describe("api/delete/[type]", () => {
 		const watering_id = waterData[0].id;
 		const { server, url } = await createTestServer(
 			{ type: "unwater" },
-			deleteHandler
+			v2DeleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
@@ -149,9 +148,9 @@ describe("api/delete/[type]", () => {
 
 		const { server, url } = await createTestServer(
 			{ type: "unadopt" },
-			deleteHandler
+			v2DeleteHandler
 		);
-		const token = await requestTestToken();
+		const token = await requestAuth0TestToken();
 		const response = await fetch(url, {
 			method: "DELETE",
 			headers: {
