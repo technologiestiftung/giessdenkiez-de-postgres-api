@@ -261,6 +261,27 @@ INSERT INTO "public"."radolan_harvester" ("id", "collection_date", "start_date",
 
 This process is actually a little blackbox we need to solve.
 
+### OSM Pumpen Harvester
+
+The [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repository fetches Pumpen data from Supabase via a Github Action defined in [pumps.yml](https://github.com/technologiestiftung/giessdenkiez-de/blob/master/.github/workflows/pumps.yml). The data is pushed to a Supabase bucket `data_assets`. For local development, it is created via [seed.sql](supabase/seed.sql). For deployments, the bucket needs to be created:
+
+```
+-- Create the public data_assets bucket
+INSERT INTO storage.buckets(id, name)
+	VALUES ('data_assets', 'data_assets');
+
+CREATE POLICY "Public Access" ON storage.objects
+	FOR SELECT
+		USING (bucket_id = 'data_assets');
+
+UPDATE
+	"storage".buckets
+SET
+	"public" = TRUE
+WHERE
+	buckets.id = 'data_assets';
+```
+
 ## API Routes
 
 There are 3 main routes `/get`, `/post` and `/delete`.
