@@ -33,12 +33,6 @@ Built with Typescript connects to Supabase and (still) Auth0.com, runs on vercel
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
 
-## W.I.P. API Migration
-
-![](./docs/wip.png)
-
-We are in the process of migrating the API fully to supabase. These docs might have some missing information.
-
 ## Prerequisites
 
 - [Vercel.com](https://vercel.com) Account
