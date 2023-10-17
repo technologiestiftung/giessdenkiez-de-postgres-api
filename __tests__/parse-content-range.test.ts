@@ -15,8 +15,8 @@ describe("getRange", () => {
 		expect(result.error).toBeNull();
 		expect(result.range).toEqual({
 			start: 0,
-			end: 13,
-			total: 14,
+			end: 12779,
+			total: 12780,
 		} as ContentRange);
 	});
 
@@ -27,7 +27,7 @@ describe("getRange", () => {
 	});
 
 	test("should return full range", async () => {
-		const expected = { end: 13, start: 0, total: 14 };
+		const expected = { end: 12779, start: 0, total: 12780 };
 		const { error, range: result } = await getRange(
 			`${SUPABASE_URL}/rest/v1/trees`
 			//
