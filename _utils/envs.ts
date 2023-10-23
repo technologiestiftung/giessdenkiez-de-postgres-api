@@ -9,11 +9,7 @@ interface Envs {
 	AUDIENCE: string;
 	ISSUER: string;
 
-	// auth0ClientIdManagementApi: string;
-	// auth0ClientSecretManagementApi: string;
-	// auth0ManagementApiAudience: string;
-	// auth0TokenApiUrlManagementApi: string;
-	// auth0ManagementApiUrl: string;
+	ACCESS_CONTROL_ALLOW_ORIGIN: string;
 }
 export function getEnvs(): Envs {
 	const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -42,6 +38,10 @@ export function getEnvs(): Envs {
 		throw new Error("SUPABASE_MAX_ROWS is not parseable to a number");
 	const SUPABASE_MAX_ROWS = parseInt(SUPABASE_MAX_ROWS_RAW);
 
+	const ACCESS_CONTROL_ALLOW_ORIGIN = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
+	if(ACCESS_CONTROL_ALLOW_ORIGIN === undefined)
+		throw new Error("ACCESS_CONTROL_ALLOW_ORIGIN is undefined")
+
 	return {
 		SUPABASE_URL,
 		SUPABASE_ANON_KEY,
@@ -50,5 +50,6 @@ export function getEnvs(): Envs {
 		AUDIENCE,
 		ISSUER,
 		JWKS_URI,
+		ACCESS_CONTROL_ALLOW_ORIGIN,
 	};
 }
