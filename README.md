@@ -1,43 +1,29 @@
 ![](https://img.shields.io/badge/Built%20with%20%E2%9D%A4%EF%B8%8F-at%20Technologiestiftung%20Berlin-blue)
 
 - [Giess den Kiez API](#giess-den-kiez-api)
-  - [W.I.P. API Migration](#wip-api-migration)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
     - [Supabase (local)](#supabase-local)
     - [Environments and Variables](#environments-and-variables)
-    - [Auth0 (deprecated)](#auth0-deprecated)
     - [Vercel](#vercel)
-      - [Vercel Environment Variables](#vercel-environment-variables)
+        - [Vercel Environment Variables](#vercel-environment-variables)
   - [API Routes /v3](#api-routes-v3)
-    - [](#)
-    - [API Authorization](#api-authorization)
-    - [Supabase](#supabase)
-      - [Auth0 (deprecated)](#auth0-deprecated-1)
+    - [Supabase Authorization](#supabase-authorization)
   - [Tests](#tests)
-  - [Supabase](#supabase-1)
+  - [Supabase](#supabase)
     - [Migrations and Types](#migrations-and-types)
     - [Deployment](#deployment)
     - [Radolan Harvester](#radolan-harvester)
-  - [API Routes](#api-routes)
-    - [API Authorization](#api-authorization-1)
-      - [Supabase](#supabase-2)
-      - [Auth0 (deprecated)](#auth0-deprecated-2)
+    - [OSM Pumpen Harvester](#osm-pumpen-harvester)
   - [Tests](#tests-1)
   - [Contributors ✨](#contributors-)
   - [Credits](#credits)
 
 # Giess den Kiez API
 
-Built with Typescript connects to Supabase and (still) Auth0.com, runs on vercel.com.
+Built with Typescript connects to Supabase and runs on vercel.com.
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
-
-## W.I.P. API Migration
-
-![](./docs/wip.png)
-
-We are in the process of migrating the API fully to supabase. These docs might have some missing information.
 
 ## Prerequisites
 
@@ -45,7 +31,6 @@ We are in the process of migrating the API fully to supabase. These docs might h
 - [Supabase](https://supabase.com) Account
 - Supabase CLI install with brew `brew install supabase/tap/supabase`
 - [Docker](https://www.docker.com/) Dependency for Supabase
-- (deprecated) [Auth0.com](https://auth0.com) Account
 
 ## Setup
 
@@ -84,12 +69,6 @@ cp .env.example .env
 In the example code above the Postgres database Postgrest API are run locally. You **SHOULD NOT** use production variables in your local or CI environments. The tests will modify the database and also truncate tables through the API and also with direct calls.
 
 Again. Be a smart developer, read https://12factor.net/config, https://github.com/motdotla/dotenv#should-i-have-multiple-env-files and never ever touch production with your local code!
-
-### Auth0 (deprecated)
-
-**!Hint: We still support using Auth0 in this API but will eventually remove it. Using Supabase is preferred.**
-
-Setup your auth0.com account and create a new API. Get your `jwksUri`, `issuer`, `audience`, `client_id` and `client_secret` values and add them to the `.env` file as well. The values for `client_id` and `client_secret` are only needed if you want to run local integration tests and use tools like rest-client, Postman, Insomnia or Paw to obtain a token. This is explained later in this document.
 
 ### Vercel
 
@@ -147,15 +126,9 @@ Currently we have these routes
 | `/lastwatered`       |            |              |
 | `/wateredbyuser`     |            |              |
 
-###
+### Supabase Authorization
 
-### API Authorization
-
-Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
-
-### Supabase
-
-You can sign up with the request below. You will get an access token to use in your requests.
+You can sign up with the request below. You will get an access token to use in your requests in development. In production you will need to confirm your email address first.
 
 ```bash
 curl --request POST \
@@ -166,6 +139,19 @@ curl --request POST \
   --data '{"email": "someone@email.com","password": "1234567890"}'
 ```
 
+A login can be done like this:
+
+```bash
+curl --request POST \
+  --url 'http://localhost:54321/auth/v1/token?grant_type=password' \
+  --header 'apikey: <SUPABASE_ANON_KEY>' \
+  --header 'content-type: application/json' \
+  --data '{"email": "someone@email.com","password": "1234567890"}'
+
+```
+
+Then you can do requests like this:
+
 ```bash
 curl --request POST \
   --url http://localhost:8080/post/adopt \
@@ -175,29 +161,7 @@ curl --request POST \
 
 ```
 
-The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
-
-#### Auth0 (deprecated)
-
-```bash
-curl --request POST \
-  --url https://your-tenant.eu.auth0.com/oauth/token \
-  --header 'content-type: application/json' \
-  --data '{"client_id": "<YOUR CLIENT ID>","client_secret": "<YOUR CLIENT SECRET>","audience": "<YOUR AUDIENCE>","grant_type": "client_credentials"}'
-# fill in the <VALUS> fields
-```
-
-This will respond with an `access_token`. Use it to make authenticated requests.
-
-```bash
-curl --request POST \
-  --url http://localhost:8080/post/adopt \
-  --header 'authorization: Bearer <ACCESS_TOKEN>' \
-  --header 'content-type: application/json' \
-  --data '{"tree_id":"_01","uuid": "auth0|123"}'
-```
-
-Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
+**Hint:** The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
 
 ## Tests
 
@@ -259,13 +223,11 @@ INSERT INTO "public"."radolan_harvester" ("id", "collection_date", "start_date",
 - Update the table `radolan_geometry` with sql file [radolan_geometry.sql](sql/radolan_geometry.sql) This geometry is Berlin only.
 - Populate the table radolan_data with the content of [radolan_data.sql](sql/radolan_data.sql)
 
-This process is actually a little blackbox we need to solve.
-
 ### OSM Pumpen Harvester
 
 The [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repository fetches Pumpen data from Supabase via a Github Action defined in [pumps.yml](https://github.com/technologiestiftung/giessdenkiez-de/blob/master/.github/workflows/pumps.yml). The data is pushed to a Supabase bucket `data_assets`. For local development, it is created via [seed.sql](supabase/seed.sql). For deployments, the bucket needs to be created:
 
-```
+```sql
 -- Create the public data_assets bucket
 INSERT INTO storage.buckets(id, name)
 	VALUES ('data_assets', 'data_assets');
@@ -281,84 +243,6 @@ SET
 WHERE
 	buckets.id = 'data_assets';
 ```
-
-## API Routes
-
-There are 3 main routes `/get`, `/post` and `/delete`.
-
-On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
-
-```bash
-curl --request GET \
-  --url 'http://localhost:8080/get/byid&id=_123456789' \
-
-```
-
-You can see all the available routes in the [docs/api.http](./docs/api.http) file with all their needed `URLSearchParams` and JSON bodies or by inspecting the JSON Schema that is returned when you do a request to the `/get`, `/post` or `/delete` route.
-
-Currently we have these routes (for routes that still use auth0 remove the v3 prefix)
-
-| `/v3/get`            | `/v3/post` | `/v3/delete` |
-| -------------------- | ---------- | ------------ |
-| `/byid`              | `/adopt`   | `/unadopt`   |
-| `/treesbyids`        | `/water`   | `/unwater`   |
-| `/adopted`           |            |              |
-| `/istreeadopted`     |            |              |
-| `/wateredandadopted` |            |              |
-| `/lastwatered`       |            |              |
-| `/wateredbyuser`     |            |              |
-
-### API Authorization
-
-#### Supabase
-
-Some of the requests need a authorized user. You can create a new user using email password via the Supabase API.
-
-```bash
-curl --request POST \
-  --url http://localhost:54321/auth/v1/signup \
-  --header 'apikey: <SUPABASE_ANON_KEY>' \
-  --header 'content-type: application/json' \
-  --data '{"email": "someone@email.com","password": "1234567890"}'
-```
-
-This will give you in development already an aceess token. In production you will need to confirm your email address first.
-
-A login can be done like this:
-
-```bash
-curl --request POST \
-  --url 'http://localhost:54321/auth/v1/token?grant_type=password' \
-  --header 'apikey: <SUPABASE_ANON_KEY>' \
-  --header 'content-type: application/json' \
-  --data '{"email": "someone@email.com","password": "1234567890"}'
-```
-
-See the [docs/api.http](./docs/api.http) file for more examples or take a look into the API documentation in your local supabase instance under http://localhost:54323/project/default/api?page=users
-
-#### Auth0 (deprecated)
-
-Some of the request will need an authorization header. You can obtain a token by making a request to your auth0 token issuer.
-
-```bash
-curl --request POST \
-  --url https://your-tenant.eu.auth0.com/oauth/token \
-  --header 'content-type: application/json' \
-  --data '{"client_id": "<YOUR CLIENT ID>","client_secret": "<YOUR CLIENT SECRET>","audience": "<YOUR AUDIENCE>","grant_type": "client_credentials"}'
-# fill in the <VALUS> fields
-```
-
-This will respond with an `access_token`. Use it to make authenticated requests.
-
-```bash
-curl --request POST \
-  --url http://localhost:8080/post \
-  --header 'authorization: Bearer <ACCESS_TOKEN>' \
-  --header 'content-type: application/json' \
-  --data '{"queryType":"adopt","tree_id":"_01","uuid": "auth0|123"}'
-```
-
-Take a look into [docs/api.http](./docs/api.http). The requests in this file can be run with the VSCode extension [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client).
 
 ## Tests
 
