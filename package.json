@@ -46,7 +46,7 @@
     "mock-jwks": "1.0.9",
     "next": "13.1.2",
     "postgres": "3.3.2",
-    "rome": "10.0.1",
+    "@biomejs/biome": "1.0.0",
     "test-listen": "1.1.0",
     "ts-jest": "29.0.5",
     "tsx": "3.12.1",
