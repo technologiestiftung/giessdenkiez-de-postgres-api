@@ -11,6 +11,8 @@ on:
     branches: [master, dev, staging]
   pull_request:
     branches: [master, dev, staging]
+  # see https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue#triggering-merge-group-checks-with-github-actions
+  merge_group:
 
 jobs:
   test:
@@ -19,7 +21,7 @@ jobs:
       SUPABASE_URL: http://localhost:54321
       SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0
       SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
-      SUPABASE_MAX_ROWS: 1000
+      SUPABASE_MAX_ROWS: 10000
       issuer: ${{ secrets.issuer }}
       audience: ${{ secrets.audience }}
       jwksuri: ${{ secrets.jwksuri }}
