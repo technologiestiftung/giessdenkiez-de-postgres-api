@@ -26,6 +26,7 @@ jobs:
       jwt_secret: ${{ secrets.jwt_secret }}
       client_secret: ${{ secrets.client_secret }}
       client_id: ${{ secrets.client_id }}
+      ACCESS_CONTROL_ALLOW_ORIGIN: ${{ secrets.ACCESS_CONTROL_ALLOW_ORIGIN }}
 
     runs-on: ubuntu-latest
     environment: ci_test
