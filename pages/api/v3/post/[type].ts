@@ -1,25 +1,25 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import setHeaders from "../../../_utils/set-headers";
-import { deleteSchemas, validate } from "../../../_utils/validation";
+import setHeaders from "../../../../_utils/set-headers";
+import { postSchemas, validate } from "../../../../_utils/validation";
+import { queryTypes as queryTypesList } from "../../../../_utils/routes-listing";
+import adoptHandler from "../../../../_requests/post/adopt";
+import waterHandler from "../../../../_requests/post/water";
+import { verifySupabaseToken } from "../../../../_utils/verify-supabase-token";
 
-import unadoptHandler from "../../../_requests/delete/unadopt";
-import unwaterHandler from "../../../_requests/delete/unwater";
-import { verifySupabaseToken } from "../../../_utils/verify-supabase-token";
-export const queryTypes = ["unadopt", "unwater"];
-// const schemas: Record<string, AjvSchema> = {
-// 	unadopt: unadoptSchema,
-// 	unwater: unwaterSchema,
-// };
+const queryTypes = Object.keys(queryTypesList["POST"]);
+
 // api/[name].ts -> /api/lee
 // req.query.name -> "lee"
-export default async function deleteHandler(
+
+export default async function postHandler(
 	request: VercelRequest,
 	response: VercelResponse
 ) {
-	setHeaders(response, "DELETE");
+	setHeaders(response, "POST");
 	if (request.method === "OPTIONS") {
 		return response.status(200).end();
 	}
+
 	const { data: userData, error } = await verifySupabaseToken(request);
 	if (error) {
 		return response.status(401).json({ error: "unauthorized" });
@@ -37,26 +37,27 @@ export default async function deleteHandler(
 	}
 	const [isBodyValid, validationErrors] = validate(
 		request.body,
-		deleteSchemas[type]
+		postSchemas[type]
 	);
 	if (!isBodyValid) {
 		return response
 			.status(400)
 			.json({ error: `invalid body: ${JSON.stringify(validationErrors)}` });
 	}
-
 	switch (type) {
 		default: {
-			// this is here to be sure there is no fall through case,
-			// but we actually already checked for the type above.
-			// So this is actually unreachable
+			// Since we safegaurd agains invalid types,
+			// we can safely assume that the type is valid.
+			// Should not be a fall through case.
 			return response.status(400).json({ error: "invalid query type" });
 		}
-		case "unadopt": {
-			return await unadoptHandler(request, response, userData);
+		// https://github.com/technologiestiftung/giessdenkiez-de-postgres-api/issues/159
+
+		case "adopt": {
+			return await adoptHandler(request, response, userData);
 		}
-		case "unwater": {
-			return await unwaterHandler(request, response, userData);
+		case "water": {
+			return await waterHandler(request, response, userData);
 		}
 	}
 }

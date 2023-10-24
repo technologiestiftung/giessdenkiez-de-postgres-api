@@ -1,20 +1,20 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import setHeaders from "../../../_utils/set-headers";
-import { queryTypes as queryTypesList } from "../../../_utils/routes-listing";
+import setHeaders from "../../../../_utils/set-headers";
+import { queryTypes as queryTypesList } from "../../../../_utils/routes-listing";
 import {
 	getSchemas,
 	paramsToObject,
 	validate,
-} from "../../../_utils/validation";
+} from "../../../../_utils/validation";
 
-import byidHandler from "../../../_requests/get/byid";
-import treesbyidsHandler from "../../../_requests/get/treesbyids";
-import wateredandadoptedHandler from "../../../_requests/get/wateredandadopted";
-import lastwateredHandler from "../../../_requests/get/lastwatered";
-import adoptedHandler from "../../../_requests/get/adopted";
-import istreeadoptedHandler from "../../../_requests/get/istreeadopted";
-import wateredbyuserHandler from "../../../_requests/get/wateredbyuser";
-import { verifySupabaseToken } from "../../../_utils/verify-supabase-token";
+import byidHandler from "../../../../_requests/get/byid";
+import treesbyidsHandler from "../../../../_requests/get/treesbyids";
+import wateredandadoptedHandler from "../../../../_requests/get/wateredandadopted";
+import lastwateredHandler from "../../../../_requests/get/lastwatered";
+import adoptedHandler from "../../../../_requests/get/adopted";
+import istreeadoptedHandler from "../../../../_requests/get/istreeadopted";
+import wateredbyuserHandler from "../../../../_requests/get/wateredbyuser";
+import { verifySupabaseToken } from "../../../../_utils/verify-supabase-token";
 
 export const method = "GET";
 const queryTypes = Object.keys(queryTypesList[method]);
