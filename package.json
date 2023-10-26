@@ -6,6 +6,7 @@
 	"scripts": {
 		"test": "jest",
 		"dev": "next dev",
+		"vercel:dev": "vercel dev --listen 8080",
 		"lint": "eslint ./**/*.ts ",
 		"format": "prettier ./**/*.ts --write",
 		"generate:types": "npx just generate-types"
@@ -18,7 +19,7 @@
 		"@supabase/supabase-js": "2.1.0",
 		"ajv": "8.11.2",
     	"edge-csrf": "1.0.3",
-		"next": "13.4.4"
+		"@vercel/node": "2.6.4"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "7.6.0",
@@ -40,7 +41,8 @@
 		"postgres": "3.3.2",
 		"test-listen": "1.1.0",
 		"ts-jest": "29.0.5",
-		"typescript": "4.9.4"
+		"typescript": "4.9.4",
+		"vercel": "28.16.15"
 	},
 	"description": "vercel functions for the giessdenkiez.de project to interact with the supabase database",
 	"main": "api/index.ts",
