@@ -7,7 +7,7 @@ import {
 
 import { getEnvs } from "../_utils/envs";
 
-const { SUPABASE_URL } = getEnvs();
+const { SUPABASE_URL, SUPABASE_MAX_ROWS } = getEnvs();
 
 describe("getRange", () => {
 	test("should return range and no error for valid response", async () => {
@@ -15,7 +15,7 @@ describe("getRange", () => {
 		expect(result.error).toBeNull();
 		expect(result.range).toEqual({
 			start: 0,
-			end: 12779,
+			end: SUPABASE_MAX_ROWS - 1,
 			total: 12780,
 		} as ContentRange);
 	});
@@ -27,7 +27,7 @@ describe("getRange", () => {
 	});
 
 	test("should return full range", async () => {
-		const expected = { end: 12779, start: 0, total: 12780 };
+		const expected = { end: SUPABASE_MAX_ROWS - 1, start: 0, total: 12780 };
 		const { error, range: result } = await getRange(
 			`${SUPABASE_URL}/rest/v1/trees`
 			//

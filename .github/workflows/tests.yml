@@ -11,6 +11,8 @@ on:
     branches: [master, dev, staging]
   pull_request:
     branches: [master, dev, staging]
+  # see https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue#triggering-merge-group-checks-with-github-actions
+  merge_group:
 
 jobs:
   test:
@@ -27,6 +29,7 @@ jobs:
       client_secret: ${{ secrets.client_secret }}
       client_id: ${{ secrets.client_id }}
       ACCESS_CONTROL_ALLOW_ORIGIN: ${{ secrets.ACCESS_CONTROL_ALLOW_ORIGIN }}
+      SUPABASE_MAX_ROWS: 10000
 
     runs-on: ubuntu-latest
     environment: ci_test
@@ -44,7 +47,7 @@ jobs:
           node-version-file: ".nvmrc"
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.36.6
+          version: 1.106.1
       - run: supabase start
       - run: npm ci
       - run: npm run build --if-present
