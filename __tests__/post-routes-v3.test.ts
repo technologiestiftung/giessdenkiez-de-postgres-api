@@ -1,7 +1,7 @@
 import { test, describe, expect } from "@jest/globals";
 import each from "jest-each";
 import fetch from "cross-fetch";
-import handler from "../api/v3/post/[type]";
+import handler from "../pages/api/v3/post/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import {
 	createSupabaseUser,

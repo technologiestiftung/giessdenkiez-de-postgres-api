@@ -1,7 +1,7 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
 import { test, expect } from "@jest/globals";
-import handler from "../api/index";
+import handler from "../pages/api/index";
 
 import { createTestServer } from "../__test-utils/create-test-server";
 import { Methods } from "../_utils/routes-listing";

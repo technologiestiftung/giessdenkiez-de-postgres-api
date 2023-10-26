@@ -1,7 +1,7 @@
 import each from "jest-each";
 import fetch from "cross-fetch";
 import { test, describe, expect } from "@jest/globals";
-import v3handler from "../api/v3/get/[type]";
+import v3handler from "../pages/api/v3/get/[type]";
 import { createTestServer } from "../__test-utils/create-test-server";
 import {
 	deleteSupabaseUser,

@@ -10,7 +10,7 @@ import {
 	truncateTreesWaterd,
 } from "../__test-utils/postgres";
 import { createTestServer } from "../__test-utils/create-test-server";
-import v3DeleteHandler from "../api/v3/delete/[type]";
+import v3DeleteHandler from "../pages/api/v3/delete/[type]";
 import {
 	createSupabaseUser,
 	requestSupabaseTestToken,

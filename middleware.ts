@@ -3,8 +3,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // initalize protection function
-console.log("hallo middleware")
-
 const csrfProtect = csrf({
   cookie: {
     name: "_csrfSecret",
