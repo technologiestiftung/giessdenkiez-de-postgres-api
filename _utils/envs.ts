@@ -4,6 +4,7 @@ interface Envs {
 	SUPABASE_ANON_KEY: string;
 	SUPABASE_SERVICE_ROLE_KEY: string;
 	SUPABASE_MAX_ROWS: number;
+	ACCESS_CONTROL_ALLOW_ORIGIN: string;
 }
 export function getEnvs(): Envs {
 	const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -22,10 +23,15 @@ export function getEnvs(): Envs {
 		throw new Error("SUPABASE_MAX_ROWS is not parseable to a number");
 	const SUPABASE_MAX_ROWS = parseInt(SUPABASE_MAX_ROWS_RAW);
 
+	const ACCESS_CONTROL_ALLOW_ORIGIN = process.env.ACCESS_CONTROL_ALLOW_ORIGIN;
+	if(ACCESS_CONTROL_ALLOW_ORIGIN === undefined)
+		throw new Error("ACCESS_CONTROL_ALLOW_ORIGIN is undefined")
+
 	return {
 		SUPABASE_URL,
 		SUPABASE_ANON_KEY,
 		SUPABASE_SERVICE_ROLE_KEY,
 		SUPABASE_MAX_ROWS,
+		ACCESS_CONTROL_ALLOW_ORIGIN
 	};
 }
