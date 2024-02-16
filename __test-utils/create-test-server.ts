@@ -13,8 +13,8 @@ export async function createTestServer(
 	query: Record<string, string>,
 	handler: (
 		request: VercelRequest,
-		response: VercelResponse,
-	) => Promise<VercelResponse>,
+		response: VercelResponse
+	) => Promise<VercelResponse>
 ): Promise<{
 	server: Server;
 	url: string;
