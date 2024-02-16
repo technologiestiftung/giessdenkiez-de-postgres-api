@@ -4,7 +4,7 @@
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import { apiResolver } from "next/dist/server/api-utils/node/api-resolver";
 import http, { Server } from "http";
-import listen from "test-listen";
+import listen from "async-listen";
 
 /**
  *
