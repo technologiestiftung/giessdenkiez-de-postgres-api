@@ -19,7 +19,7 @@
 		"ajv": "8.11.2"
 	},
 	"devDependencies": {
-		"@faker-js/faker": "7.6.0",
+		"@faker-js/faker": "8.4.1",
 		"@saithodev/semantic-release-backmerge": "4.0.1",
 		"@technologiestiftung/semantic-release-config": "1.2.4",
 		"@types/jest": "29.5.12",
