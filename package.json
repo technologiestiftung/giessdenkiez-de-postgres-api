@@ -16,7 +16,7 @@
 	"dependencies": {
 		"@jest/globals": "29.7.0",
 		"@supabase/supabase-js": "2.39.6",
-		"ajv": "8.11.2"
+		"ajv": "8.12.0"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "8.4.1",
