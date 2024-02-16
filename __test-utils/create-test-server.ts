@@ -2,7 +2,7 @@
 // And https://github.com/Xunnamius/next-test-api-route-handler/blob/main/src/index.ts#L94
 // import dns from "dns";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { apiResolver } from "next/dist/server/api-utils/node";
+import { apiResolver } from "next/dist/server/api-utils/node/api-resolver";
 import http, { Server } from "http";
 import listen from "test-listen";
 
