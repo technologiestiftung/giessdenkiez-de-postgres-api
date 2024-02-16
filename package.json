@@ -16,7 +16,6 @@
 	"dependencies": {
 		"@jest/globals": "29.7.0",
 		"@supabase/supabase-js": "2.39.6",
-		"@vercel/node": "2.6.4",
 		"ajv": "8.11.2"
 	},
 	"devDependencies": {
@@ -28,6 +27,7 @@
 		"@types/test-listen": "1.1.0",
 		"@typescript-eslint/eslint-plugin": "7.0.1",
 		"@typescript-eslint/parser": "7.0.1",
+		"@vercel/node": "3.0.19",
 		"cross-fetch": "4.0.0",
 		"dotenv": "16.4.4",
 		"eslint": "8.56.0",
