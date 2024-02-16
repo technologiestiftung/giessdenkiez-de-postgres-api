@@ -33,14 +33,14 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_USERNAME  }}
           password: ${{ secrets.DOCKER_PASSWORD  }}
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.106.1
+          version: 1.136.3
       - run: supabase start
       - run: npm ci
       - run: npm run build --if-present
@@ -53,21 +53,16 @@ jobs:
     name: semantic-release
     needs: [test]
     runs-on: ubuntu-latest
-    outputs:
-      new-release-published: ${{ steps.semantic-release.outputs.new_release_published }}
-      new-release-version: ${{ steps.semantic-release.outputs.new_release_version }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           persist-credentials: false
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
       - run: npm ci
-      - id: semantic-release
-        uses: cycjimmy/semantic-release-action@v3
-        with:
-          semantic_version: 18
+      - run: npx semantic-release
+        id: semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           # NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
