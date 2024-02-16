@@ -15,7 +15,7 @@
 	},
 	"dependencies": {
 		"@jest/globals": "29.7.0",
-		"@supabase/supabase-js": "2.1.0",
+		"@supabase/supabase-js": "2.39.6",
 		"@vercel/node": "2.6.4",
 		"ajv": "8.11.2"
 	},
