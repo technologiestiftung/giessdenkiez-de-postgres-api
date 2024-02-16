@@ -13,13 +13,14 @@ export async function createTestServer(
 	query: Record<string, string>,
 	handler: (
 		request: VercelRequest,
-		response: VercelResponse
-	) => Promise<VercelResponse>
+		response: VercelResponse,
+	) => Promise<VercelResponse>,
 ): Promise<{
 	server: Server;
 	url: string;
 }> {
 	const server = http.createServer((req, res) => {
+		//eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return apiResolver(req, res, query, handler, undefined as any, false);
 	});
 	const url = await listen(server);
