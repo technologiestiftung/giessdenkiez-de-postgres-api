@@ -24,7 +24,7 @@
 		"@saithodev/semantic-release-backmerge": "2.2.0",
 		"@technologiestiftung/semantic-release-config": "1.1.0",
 		"@types/jest": "29.5.12",
-		"@types/node": "18.11.9",
+		"@types/node": "20.11.19",
 		"@types/test-listen": "1.1.0",
 		"@typescript-eslint/eslint-plugin": "7.0.1",
 		"@typescript-eslint/parser": "7.0.1",
