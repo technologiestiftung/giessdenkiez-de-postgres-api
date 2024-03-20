@@ -2,9 +2,9 @@
 // And https://github.com/Xunnamius/next-test-api-route-handler/blob/main/src/index.ts#L94
 // import dns from "dns";
 import { VercelRequest, VercelResponse } from "@vercel/node";
-import { apiResolver } from "next/dist/server/api-utils/node";
+import { apiResolver } from "next/dist/server/api-utils/node/api-resolver";
 import http, { Server } from "http";
-import listen from "test-listen";
+import listen from "async-listen";
 
 /**
  *
@@ -20,6 +20,7 @@ export async function createTestServer(
 	url: string;
 }> {
 	const server = http.createServer((req, res) => {
+		//eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return apiResolver(req, res, query, handler, undefined as any, false);
 	});
 	const url = await listen(server);

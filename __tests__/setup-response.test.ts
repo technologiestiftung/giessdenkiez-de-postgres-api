@@ -4,17 +4,7 @@ import * as pkg from "../_utils/package";
 jest.mock("../_utils/envs", () => {
 	return {
 		getEnvs: () => {
-			return {
-				jwksUri: "",
-				audience: "",
-				issuer: "",
-				audienceFrontend: "",
-				auth0ClientIdManagementApi: "xyz",
-				auth0ClientSecretManagementApi: "xyz",
-				auth0ManagementApiAudience: "xyz",
-				auth0TokenApiUrlManagementApi: "http://api.xyz",
-				auth0ManagementApiUrl: "http://api.abc",
-			};
+			return {};
 		},
 	};
 });

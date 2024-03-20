@@ -2,7 +2,6 @@ import { getLimitAndOffeset } from "../_utils/limit-and-offset";
 
 import { getEnvs } from "../_utils/envs";
 const { SUPABASE_MAX_ROWS } = getEnvs();
-//TODO: Replace 1000 with SUPABASE_MAX_ROWS
 describe("getLimitAndOffeset", () => {
 	test("returns default values when both limit and offset are missing", () => {
 		const query = {};

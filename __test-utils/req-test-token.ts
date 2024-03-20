@@ -1,30 +1,9 @@
 import { SignupResponse } from "../_types/user";
-import { SUPABASE_ANON_KEY, SUPABASE_URL } from "./supabase";
-const issuer = process.env.issuer || "";
-const client_id = process.env.client_id || "";
-const client_secret = process.env.client_secret || "";
-const audience = process.env.audience || "";
-
-export async function requestAuth0TestToken() {
-	const response = await fetch(`${issuer}oauth/token`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-		},
-		body: JSON.stringify({
-			client_id,
-			client_secret,
-			audience,
-			grant_type: "client_credentials",
-		}),
-	});
-	if (!response.ok) {
-		const json = await response.text();
-		throw new Error(`Could not get test token, ${json}`);
-	}
-	const json = await response.json();
-	return json.access_token;
-}
+import {
+	SUPABASE_ANON_KEY,
+	SUPABASE_URL,
+	supabaseServiceRoleClient,
+} from "./supabase";
 
 export async function requestSupabaseTestToken(
 	email: string,
@@ -52,33 +31,17 @@ export async function requestSupabaseTestToken(
 	return json.access_token;
 }
 
-export async function createSupabaseUser(
-	email: string,
-	password: string,
-	opts?: { returnFullUser: boolean }
-) {
-	const response = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
-		method: "POST",
-		headers: {
-			"Content-Type": "application/json",
-			apikey: SUPABASE_ANON_KEY,
-		},
-		body: JSON.stringify({
-			email,
-			password,
-		}),
+export async function createSupabaseUser(email: string, password: string) {
+	const { error } = await supabaseServiceRoleClient.auth.admin.createUser({
+		email,
+		password,
+		email_confirm: true,
 	});
-	if (!response.ok) {
-		console.log(response.status);
-		const json = await response.text();
-		throw new Error(`Could not create test user, ${json}`);
+
+	if (error) {
+		console.log(error.message);
+		throw new Error(`Could not create test user, ${error.message}`);
 	}
-	const json = (await response.json()) as {
-		access_token: string;
-		user: { id: string };
-	};
-	if (opts?.returnFullUser) {
-		return json;
-	}
-	return json.access_token;
+
+	return requestSupabaseTestToken(email, password);
 }

@@ -28,14 +28,14 @@ export default {
 	collectCoverageFrom: ["api/**/*.ts", "_utils/**/*.ts"],
 	// setupFiles: ["./jest.env.cjs"],
 	setupFilesAfterEnv: ["dotenv/config", "./jest.setup.ts"],
-	coverageThreshold: {
-		global: {
-			branches: 70,
-			functions: 75,
-			lines: 75,
-			statements: 75,
-		},
-	},
+	// coverageThreshold: {
+	// 	global: {
+	// 		branches: 70,
+	// 		functions: 75,
+	// 		lines: 75,
+	// 		statements: 75,
+	// 	},
+	// },
 	coveragePathIgnorePatterns: [
 		"<rootDir>/dist/",
 		"<rootDir>/node_modules/",

@@ -8,6 +8,7 @@ import {
 	supabaseAnonClient,
 	supabaseServiceRoleClient,
 } from "../__test-utils/supabase";
+import { requestSupabaseTestToken } from "../__test-utils/req-test-token";
 describe("misc test testing the schema function of the database", () => {
 	test("inserting an existing username should alter the new name and add a uuid at end", async () => {
 		const email1 = "someone@email.com";
@@ -49,12 +50,16 @@ describe("misc test testing the schema function of the database", () => {
 		const numberOfTrees = 10;
 		const email = "user@email.com";
 		await deleteSupabaseUser(email); // clean up before running
-		const { data, error } = await supabaseAnonClient.auth.signUp({
-			email: email,
-			password: "12345678",
-		});
+		const { data, error } =
+			await supabaseServiceRoleClient.auth.admin.createUser({
+				email: email,
+				password: "12345678",
+				email_confirm: true,
+			});
 		expect(error).toBeNull();
-		expect(data).toBeDefined();
+		expect(data.user).toBeDefined();
+		const accessToken = await requestSupabaseTestToken(email, "12345678");
+		expect(accessToken).toBeDefined();
 		const { data: trees, error: treesError } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
@@ -98,7 +103,7 @@ describe("misc test testing the schema function of the database", () => {
 			headers: {
 				apikey: SUPABASE_ANON_KEY,
 				"Content-Type": "application/json",
-				Authorization: `Bearer ${data.session?.access_token}`,
+				Authorization: `Bearer ${accessToken}`,
 			},
 		});
 		expect(response.ok).toBeTruthy();
@@ -107,7 +112,7 @@ describe("misc test testing the schema function of the database", () => {
 			await supabaseAnonClient
 				.from("trees_watered")
 				.select("*")
-				.eq("uuid", data.user?.id);
+				.eq("uuid", data.user!.id);
 		expect(treesAfterError).toBeNull();
 		expect(treesAfter).toHaveLength(0);
 
@@ -115,7 +120,7 @@ describe("misc test testing the schema function of the database", () => {
 			await supabaseAnonClient
 				.from("trees_adopted")
 				.select("*")
-				.eq("uuid", data.user?.id);
+				.eq("uuid", data.user!.id);
 		expect(adoptedTreesAfterError).toBeNull();
 		expect(adoptedTreesAfter).toHaveLength(0);
 		await truncateTreesWaterd();
@@ -126,12 +131,16 @@ describe("misc test testing the schema function of the database", () => {
 		const numberOfTrees = 10;
 		await deleteSupabaseUser(email);
 		await truncateTreesWaterd();
-		const { data, error } = await supabaseAnonClient.auth.signUp({
-			email: email,
-			password: "12345678",
-		});
+		const { data, error } =
+			await supabaseServiceRoleClient.auth.admin.createUser({
+				email: email,
+				password: "12345678",
+				email_confirm: true,
+			});
 		expect(error).toBeNull();
-		expect(data).toBeDefined();
+		expect(data.user).toBeDefined();
+		const accessToken = await requestSupabaseTestToken(email, "12345678");
+		expect(accessToken).toBeDefined();
 		const { data: trees, error: treesError } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
@@ -164,7 +173,7 @@ describe("misc test testing the schema function of the database", () => {
 				headers: {
 					apikey: SUPABASE_ANON_KEY,
 					"Content-Type": "application/json",
-					Authorization: `Bearer ${data.session?.access_token}`,
+					Authorization: `Bearer ${accessToken}`,
 				},
 				body: JSON.stringify({
 					username: "bar",
