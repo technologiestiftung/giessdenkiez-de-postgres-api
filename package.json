@@ -15,7 +15,7 @@
 	},
 	"dependencies": {
 		"@jest/globals": "29.7.0",
-		"@supabase/supabase-js": "2.39.6",
+		"@supabase/supabase-js": "2.40.0",
 		"ajv": "8.12.0"
 	},
 	"devDependencies": {
