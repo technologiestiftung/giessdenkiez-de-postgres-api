@@ -11,7 +11,7 @@ import byidHandler from "../../../_requests/get/byid";
 import treesbyidsHandler from "../../../_requests/get/treesbyids";
 import wateredandadoptedHandler from "../../../_requests/get/wateredandadopted";
 import lastwateredHandler from "../../../_requests/get/lastwatered";
-import wateredTodayHanlder from "../../../_requests/get/wateredtoday";
+import wateredTodayHandler from "../../../_requests/get/wateredtoday";
 import adoptedHandler from "../../../_requests/get/adopted";
 import istreeadoptedHandler from "../../../_requests/get/istreeadopted";
 import wateredbyuserHandler from "../../../_requests/get/wateredbyuser";
@@ -70,7 +70,7 @@ export default async function handler(
 			return await lastwateredHandler(request, response);
 		}
 		case "wateredtoday": {
-			return await wateredTodayHanlder(request, response);
+			return await wateredTodayHandler(request, response);
 		}
 		// All requests below this line are only available for authenticated users
 		// --------------------------------------------------------------------
