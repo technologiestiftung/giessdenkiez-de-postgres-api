@@ -31,7 +31,6 @@ export default async function handler(
 		return response.status(200).end();
 	}
 	const { type } = request.query;
-	console.log(JSON.stringify(request.query));
 	if (Array.isArray(type)) {
 		return response.status(400).json({ error: `${type} needs to be a string` });
 	}
@@ -54,7 +53,6 @@ export default async function handler(
 			.status(400)
 			.json({ error: `invalid params: ${JSON.stringify(validationError)}` });
 	}
-	console.log(type);
 	switch (type) {
 		default: {
 			return response.status(400).json({ error: "invalid query type" });
