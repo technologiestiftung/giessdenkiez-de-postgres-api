@@ -182,20 +182,20 @@ describe("route listing", () => {
 		      },
 		      "url": "get/wateredbyuser",
 		    },
-            "wateredtoday": {
-              "url": "get/wateredtoday",
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself"
-                  }
-                },
-                "required": [],
-                "additionalProperties": false
-              }
-            }
+		    "wateredtoday": {
+		      "schema": {
+		        "additionalProperties": false,
+		        "properties": {
+		          "type": {
+		            "description": "The type property is atomaticaly added by dynamic vercel api routes. You should not add it yourself",
+		            "type": "string",
+		          },
+		        },
+		        "required": [],
+		        "type": "object",
+		      },
+		      "url": "get/wateredtoday",
+		    },
 		  },
 		}
 	`);
