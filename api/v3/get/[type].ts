@@ -11,6 +11,7 @@ import byidHandler from "../../../_requests/get/byid";
 import treesbyidsHandler from "../../../_requests/get/treesbyids";
 import wateredandadoptedHandler from "../../../_requests/get/wateredandadopted";
 import lastwateredHandler from "../../../_requests/get/lastwatered";
+import wateredTodayHanlder from "../../../_requests/get/wateredtoday";
 import adoptedHandler from "../../../_requests/get/adopted";
 import istreeadoptedHandler from "../../../_requests/get/istreeadopted";
 import wateredbyuserHandler from "../../../_requests/get/wateredbyuser";
@@ -30,6 +31,7 @@ export default async function handler(
 		return response.status(200).end();
 	}
 	const { type } = request.query;
+	console.log(JSON.stringify(request.query));
 	if (Array.isArray(type)) {
 		return response.status(400).json({ error: `${type} needs to be a string` });
 	}
@@ -52,7 +54,7 @@ export default async function handler(
 			.status(400)
 			.json({ error: `invalid params: ${JSON.stringify(validationError)}` });
 	}
-
+	console.log(type);
 	switch (type) {
 		default: {
 			return response.status(400).json({ error: "invalid query type" });
@@ -68,6 +70,9 @@ export default async function handler(
 		}
 		case "lastwatered": {
 			return await lastwateredHandler(request, response);
+		}
+		case "wateredtoday": {
+			return await wateredTodayHanlder(request, response);
 		}
 		// All requests below this line are only available for authenticated users
 		// --------------------------------------------------------------------
