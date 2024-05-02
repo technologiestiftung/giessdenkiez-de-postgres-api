@@ -11,6 +11,7 @@ import {
 	wateredandadoptedSchemata,
 	wateredbyuserSchema,
 	waterSchema,
+	wateredTodaySchema,
 } from "./validation";
 
 export const queryTypes: Record<string, Record<string, AjvSchema>> = {
@@ -22,6 +23,7 @@ export const queryTypes: Record<string, Record<string, AjvSchema>> = {
 		wateredandadopted: wateredandadoptedSchemata,
 		lastwatered: lastwateredSchema,
 		wateredbyuser: wateredbyuserSchema,
+		wateredtoday: wateredTodaySchema,
 	},
 	POST: { adopt: adoptSchema, water: waterSchema },
 	DELETE: { unadopt: unadoptSchema, unwater: unwaterSchema },

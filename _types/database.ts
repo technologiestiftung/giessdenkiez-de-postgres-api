@@ -3,35 +3,10 @@ export type Json =
 	| number
 	| boolean
 	| null
-	| { [key: string]: Json }
+	| { [key: string]: Json | undefined }
 	| Json[];
 
 export interface Database {
-	graphql_public: {
-		Tables: {
-			[_ in never]: never;
-		};
-		Views: {
-			[_ in never]: never;
-		};
-		Functions: {
-			graphql: {
-				Args: {
-					operationName?: string;
-					query?: string;
-					variables?: Json;
-					extensions?: Json;
-				};
-				Returns: Json;
-			};
-		};
-		Enums: {
-			[_ in never]: never;
-		};
-		CompositeTypes: {
-			[_ in never]: never;
-		};
-	};
 	public: {
 		Tables: {
 			profiles: {
@@ -47,6 +22,15 @@ export interface Database {
 					id?: string;
 					username?: string | null;
 				};
+				Relationships: [
+					{
+						foreignKeyName: "fk_users_profiles";
+						columns: ["id"];
+						isOneToOne: false;
+						referencedRelation: "users";
+						referencedColumns: ["id"];
+					}
+				];
 			};
 			radolan_data: {
 				Row: {
@@ -67,6 +51,7 @@ export interface Database {
 					measured_at?: string | null;
 					value?: number | null;
 				};
+				Relationships: [];
 			};
 			radolan_geometry: {
 				Row: {
@@ -84,6 +69,7 @@ export interface Database {
 					geometry?: unknown | null;
 					id?: number;
 				};
+				Relationships: [];
 			};
 			radolan_harvester: {
 				Row: {
@@ -104,6 +90,7 @@ export interface Database {
 					id?: number;
 					start_date?: string | null;
 				};
+				Relationships: [];
 			};
 			radolan_temp: {
 				Row: {
@@ -124,20 +111,21 @@ export interface Database {
 					measured_at?: string | null;
 					value?: number | null;
 				};
+				Relationships: [];
 			};
 			trees: {
 				Row: {
 					adopted: string | null;
-					artbot: string | null;
-					artdtsch: string | null;
+					art_bot: string | null;
+					art_dtsch: string | null;
 					baumhoehe: string | null;
 					bezirk: string | null;
 					caretaker: string | null;
 					eigentuemer: string | null;
 					gattung: string | null;
-					gattungdeutsch: string | null;
+					gattung_deutsch: string | null;
 					geom: unknown | null;
-					gmlid: string | null;
+					gml_id: string | null;
 					hausnr: string | null;
 					id: string;
 					kennzeich: string | null;
@@ -157,16 +145,16 @@ export interface Database {
 				};
 				Insert: {
 					adopted?: string | null;
-					artbot?: string | null;
-					artdtsch?: string | null;
+					art_bot?: string | null;
+					art_dtsch?: string | null;
 					baumhoehe?: string | null;
 					bezirk?: string | null;
 					caretaker?: string | null;
 					eigentuemer?: string | null;
 					gattung?: string | null;
-					gattungdeutsch?: string | null;
+					gattung_deutsch?: string | null;
 					geom?: unknown | null;
-					gmlid?: string | null;
+					gml_id?: string | null;
 					hausnr?: string | null;
 					id: string;
 					kennzeich?: string | null;
@@ -186,16 +174,16 @@ export interface Database {
 				};
 				Update: {
 					adopted?: string | null;
-					artbot?: string | null;
-					artdtsch?: string | null;
+					art_bot?: string | null;
+					art_dtsch?: string | null;
 					baumhoehe?: string | null;
 					bezirk?: string | null;
 					caretaker?: string | null;
 					eigentuemer?: string | null;
 					gattung?: string | null;
-					gattungdeutsch?: string | null;
+					gattung_deutsch?: string | null;
 					geom?: unknown | null;
-					gmlid?: string | null;
+					gml_id?: string | null;
 					hausnr?: string | null;
 					id?: string;
 					kennzeich?: string | null;
@@ -213,6 +201,7 @@ export interface Database {
 					watered?: string | null;
 					zusatz?: string | null;
 				};
+				Relationships: [];
 			};
 			trees_adopted: {
 				Row: {
@@ -230,6 +219,15 @@ export interface Database {
 					tree_id?: string;
 					uuid?: string | null;
 				};
+				Relationships: [
+					{
+						foreignKeyName: "fk_trees_adopted_trees";
+						columns: ["tree_id"];
+						isOneToOne: false;
+						referencedRelation: "trees";
+						referencedColumns: ["id"];
+					}
+				];
 			};
 			trees_watered: {
 				Row: {
@@ -256,6 +254,15 @@ export interface Database {
 					username?: string | null;
 					uuid?: string | null;
 				};
+				Relationships: [
+					{
+						foreignKeyName: "fk_trees_watered_trees";
+						columns: ["tree_id"];
+						isOneToOne: false;
+						referencedRelation: "trees";
+						referencedColumns: ["id"];
+					}
+				];
 			};
 		};
 		Views: {
@@ -300,6 +307,7 @@ export interface Database {
 					id: string;
 					name: string;
 					owner: string | null;
+					owner_id: string | null;
 					public: boolean | null;
 					updated_at: string | null;
 				};
@@ -311,6 +319,7 @@ export interface Database {
 					id: string;
 					name: string;
 					owner?: string | null;
+					owner_id?: string | null;
 					public?: boolean | null;
 					updated_at?: string | null;
 				};
@@ -322,9 +331,11 @@ export interface Database {
 					id?: string;
 					name?: string;
 					owner?: string | null;
+					owner_id?: string | null;
 					public?: boolean | null;
 					updated_at?: string | null;
 				};
+				Relationships: [];
 			};
 			migrations: {
 				Row: {
@@ -345,6 +356,7 @@ export interface Database {
 					id?: number;
 					name?: string;
 				};
+				Relationships: [];
 			};
 			objects: {
 				Row: {
@@ -355,6 +367,7 @@ export interface Database {
 					metadata: Json | null;
 					name: string | null;
 					owner: string | null;
+					owner_id: string | null;
 					path_tokens: string[] | null;
 					updated_at: string | null;
 					version: string | null;
@@ -367,6 +380,7 @@ export interface Database {
 					metadata?: Json | null;
 					name?: string | null;
 					owner?: string | null;
+					owner_id?: string | null;
 					path_tokens?: string[] | null;
 					updated_at?: string | null;
 					version?: string | null;
@@ -379,10 +393,20 @@ export interface Database {
 					metadata?: Json | null;
 					name?: string | null;
 					owner?: string | null;
+					owner_id?: string | null;
 					path_tokens?: string[] | null;
 					updated_at?: string | null;
 					version?: string | null;
 				};
+				Relationships: [
+					{
+						foreignKeyName: "objects_bucketId_fkey";
+						columns: ["bucket_id"];
+						isOneToOne: false;
+						referencedRelation: "buckets";
+						referencedColumns: ["id"];
+					}
+				];
 			};
 		};
 		Views: {
@@ -414,7 +438,7 @@ export interface Database {
 				Args: {
 					name: string;
 				};
-				Returns: string[];
+				Returns: unknown;
 			};
 			get_size_by_bucket: {
 				Args: Record<PropertyKey, never>;
@@ -452,3 +476,83 @@ export interface Database {
 		};
 	};
 }
+
+export type Tables<
+	PublicTableNameOrOptions extends
+		| keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+		| { schema: keyof Database },
+	TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+		? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+				Database[PublicTableNameOrOptions["schema"]]["Views"])
+		: never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+	? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+			Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+			Row: infer R;
+	  }
+		? R
+		: never
+	: PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+			Database["public"]["Views"])
+	? (Database["public"]["Tables"] &
+			Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+			Row: infer R;
+	  }
+		? R
+		: never
+	: never;
+
+export type TablesInsert<
+	PublicTableNameOrOptions extends
+		| keyof Database["public"]["Tables"]
+		| { schema: keyof Database },
+	TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+		? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+		: never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+	? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+			Insert: infer I;
+	  }
+		? I
+		: never
+	: PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+	? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+			Insert: infer I;
+	  }
+		? I
+		: never
+	: never;
+
+export type TablesUpdate<
+	PublicTableNameOrOptions extends
+		| keyof Database["public"]["Tables"]
+		| { schema: keyof Database },
+	TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+		? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+		: never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+	? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+			Update: infer U;
+	  }
+		? U
+		: never
+	: PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+	? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+			Update: infer U;
+	  }
+		? U
+		: never
+	: never;
+
+export type Enums<
+	PublicEnumNameOrOptions extends
+		| keyof Database["public"]["Enums"]
+		| { schema: keyof Database },
+	EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+		? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+		: never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+	? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+	: PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+	? Database["public"]["Enums"][PublicEnumNameOrOptions]
+	: never;

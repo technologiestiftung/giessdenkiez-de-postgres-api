@@ -107,6 +107,15 @@ export const wateredbyuserSchema: AjvSchema = {
 	additionalProperties: false,
 };
 
+export const wateredTodaySchema: AjvSchema = {
+	type: "object",
+	properties: {
+		type,
+	},
+	required: [],
+	additionalProperties: false,
+};
+
 export const getSchemas: Record<string, AjvSchema> = {
 	byid: byidSchema,
 	treesbyids: treesbyidsSchema,
@@ -115,6 +124,7 @@ export const getSchemas: Record<string, AjvSchema> = {
 	adopted: adoptedSchema,
 	istreeadopted: istreeadoptedSchema,
 	wateredbyuser: wateredbyuserSchema,
+	wateredtoday: wateredTodaySchema,
 };
 
 export const waterSchema: AjvSchema = {
