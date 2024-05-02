@@ -5,14 +5,14 @@ exports[`GET v3 routes snapshot tests default responses Should return 200 on tre
   "data": [
     {
       "adopted": null,
-      "artbot": "Fraxinus ornus",
-      "artdtsch": "Blumen-Esche",
+      "art_bot": "Fraxinus ornus",
+      "art_dtsch": "Blumen-Esche",
       "baumhoehe": "0",
       "bezirk": "Pankow",
       "caretaker": null,
       "eigentuemer": "Land Berlin",
       "gattung": "FRAXINUS",
-      "gattungdeutsch": "ESCHE",
+      "gattung_deutsch": "ESCHE",
       "geom": {
         "coordinates": [
           13.50326,
@@ -26,7 +26,7 @@ exports[`GET v3 routes snapshot tests default responses Should return 200 on tre
         },
         "type": "Point",
       },
-      "gmlid": "00008100:0028b9c8",
+      "gml_id": "00008100:0028b9c8",
       "hausnr": null,
       "id": "_210028b9c8",
       "kennzeich": "00885",
@@ -767,14 +767,14 @@ exports[`GET v3 routes snapshot tests default responses Should return 200 on tre
     },
     {
       "adopted": null,
-      "artbot": "Carpinus betulus",
-      "artdtsch": "Hainbuche",
+      "art_bot": "Carpinus betulus",
+      "art_dtsch": "Hainbuche",
       "baumhoehe": "7",
       "bezirk": "Pankow",
       "caretaker": null,
       "eigentuemer": "Land Berlin",
       "gattung": "CARPINUS",
-      "gattungdeutsch": "HAINBUCHE",
+      "gattung_deutsch": "HAINBUCHE",
       "geom": {
         "coordinates": [
           13.50295,
@@ -788,7 +788,7 @@ exports[`GET v3 routes snapshot tests default responses Should return 200 on tre
         },
         "type": "Point",
       },
-      "gmlid": "00008100:00294b1f",
+      "gml_id": "00008100:00294b1f",
       "hausnr": null,
       "id": "_2100294b1f",
       "kennzeich": "41374",
@@ -1584,14 +1584,14 @@ exports[`GET v3 routes snapshot tests default responses should return 200 on tre
   "data": [
     {
       "adopted": null,
-      "artbot": "Carpinus betulus",
-      "artdtsch": "Hainbuche",
+      "art_bot": "Carpinus betulus",
+      "art_dtsch": "Hainbuche",
       "baumhoehe": "7",
       "bezirk": "Pankow",
       "caretaker": null,
       "eigentuemer": "Land Berlin",
       "gattung": "CARPINUS",
-      "gattungdeutsch": "HAINBUCHE",
+      "gattung_deutsch": "HAINBUCHE",
       "geom": {
         "coordinates": [
           13.50295,
@@ -1605,7 +1605,7 @@ exports[`GET v3 routes snapshot tests default responses should return 200 on tre
         },
         "type": "Point",
       },
-      "gmlid": "00008100:00294b1f",
+      "gml_id": "00008100:00294b1f",
       "hausnr": null,
       "id": "_2100294b1f",
       "kennzeich": "41374",
