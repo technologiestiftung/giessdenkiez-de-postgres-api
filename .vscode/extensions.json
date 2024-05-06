@@ -1,7 +1,3 @@
 {
-  "recommendations": [
-    "humao.rest-client",
-    "mikestead.dotenv",
-    "mkhl.direnv"
-  ]
+	"recommendations": ["humao.rest-client", "mikestead.dotenv", "mkhl.direnv"]
 }

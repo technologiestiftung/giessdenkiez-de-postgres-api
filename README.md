@@ -15,13 +15,15 @@
     - [Deployment](#deployment)
     - [Radolan Harvester](#radolan-harvester)
     - [OSM Pumpen Harvester](#osm-pumpen-harvester)
+
   - [Tests](#tests-1)
   - [Contributors ✨](#contributors-)
   - [Credits](#credits)
 
 # Giess den Kiez API
 
-Built with Typescript connects to Supabase and runs on vercel.com.
+
+Built with Typescript, connects to Supabase and runs on vercel.com.
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
 
@@ -60,8 +62,6 @@ cp .env.example .env
 # SUPABASE_URL=...
 # SUPABASE_ANON_KEY=...
 # SUPABASE_MAX_ROWS=1000
-# you will also need some values from Auth0.com this will change in the future when
-# we are fully migrated to supabase.
 ```
 
 ### Environments and Variables
@@ -87,11 +87,6 @@ vercel env add SUPABASE_URL
 vercel env add SUPABASE_ANON_KEY
 # the max rows allowed to fetch from supabase (default 1000)
 vercel env add SUPABASE_MAX_ROWS
-# below are all taken from auth0.com
-# the v3 api does not need them anymore
-# vercel env add jwksuri
-# vercel env add audience
-# vercel env add issuer
 ```
 
 To let these variables take effect you need to deploy your application once more.
@@ -130,6 +125,7 @@ Currently we have these routes
 
 You can sign up with the request below. You will get an access token to use in your requests in development. In production you will need to confirm your email address first.
 
+
 ```bash
 curl --request POST \
   --url http://localhost:54321/auth/v1/signup \
@@ -152,6 +148,7 @@ curl --request POST \
 
 Then you can do requests like this:
 
+
 ```bash
 curl --request POST \
   --url http://localhost:8080/post/adopt \
@@ -163,6 +160,7 @@ curl --request POST \
 
 **Hint:** The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
 
+
 ## Tests
 
 Locally you will need supabase running and a `.env` file with the right values in it.
@@ -172,11 +170,11 @@ cd giessdenkiez-de-postgres-api
 supabase start
 # Once the backaned is up and running, run the tests
 # Make sure to you habe your .env file setup right
-# with all the values from `supabase status` and your API from Auth0.com
+# with all the values from `supabase status`
 npm test
 ```
 
-On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml) you still need an API on Auth0.com
+On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
 
 ## Supabase
 
@@ -253,11 +251,11 @@ cd giessdenkiez-de-postgres-api
 supabase start
 # Once the backaned is up and running, run the tests
 # Make sure to you habe your .env file setup right
-# with all the values from `supabase status` and your API from Auth0.com
+# with all the values from `supabase status`
 npm test
 ```
 
-On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml) you still need an API on Auth0.com
+On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
 
 ## Contributors ✨
 
@@ -317,3 +315,5 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 [gdk-supabase]: https://github.com/technologiestiftung/giessdenkiez-de-supabase/
 [supabase]: https://supabase.com/
+
+<!-- bump -->
