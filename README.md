@@ -1,31 +1,27 @@
 ![](https://img.shields.io/badge/Built%20with%20%E2%9D%A4%EF%B8%8F-at%20Technologiestiftung%20Berlin-blue)
 
 - [Giess den Kiez API](#giess-den-kiez-api)
-  - [W.I.P. API Migration](#wip-api-migration)
   - [Prerequisites](#prerequisites)
   - [Setup](#setup)
     - [Supabase (local)](#supabase-local)
     - [Environments and Variables](#environments-and-variables)
     - [Vercel](#vercel)
-      - [Vercel Environment Variables](#vercel-environment-variables)
+        - [Vercel Environment Variables](#vercel-environment-variables)
   - [API Routes /v3](#api-routes-v3)
-    - [](#)
-    - [API Authorization](#api-authorization)
-    - [Supabase](#supabase)
+    - [Supabase Authorization](#supabase-authorization)
   - [Tests](#tests)
-  - [Supabase](#supabase-1)
+  - [Supabase](#supabase)
     - [Migrations and Types](#migrations-and-types)
     - [Deployment](#deployment)
     - [Radolan Harvester](#radolan-harvester)
     - [OSM Pumpen Harvester](#osm-pumpen-harvester)
-  - [API Routes](#api-routes)
-    - [API Authorization](#api-authorization-1)
-      - [Supabase](#supabase-2)
+
   - [Tests](#tests-1)
   - [Contributors ✨](#contributors-)
   - [Credits](#credits)
 
 # Giess den Kiez API
+
 
 Built with Typescript, connects to Supabase and runs on vercel.com.
 
@@ -125,13 +121,10 @@ Currently we have these routes
 | `/lastwatered`       |            |              |
 | `/wateredbyuser`     |            |              |
 
-###
+### Supabase Authorization
 
-### API Authorization
+You can sign up with the request below. You will get an access token to use in your requests in development. In production you will need to confirm your email address first.
 
-### Supabase
-
-You can sign up with the request below. You will get an access token to use in your requests.
 
 ```bash
 curl --request POST \
@@ -142,6 +135,20 @@ curl --request POST \
   --data '{"email": "someone@email.com","password": "1234567890"}'
 ```
 
+A login can be done like this:
+
+```bash
+curl --request POST \
+  --url 'http://localhost:54321/auth/v1/token?grant_type=password' \
+  --header 'apikey: <SUPABASE_ANON_KEY>' \
+  --header 'content-type: application/json' \
+  --data '{"email": "someone@email.com","password": "1234567890"}'
+
+```
+
+Then you can do requests like this:
+
+
 ```bash
 curl --request POST \
   --url http://localhost:8080/post/adopt \
@@ -151,7 +158,8 @@ curl --request POST \
 
 ```
 
-The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
+**Hint:** The user id will be removed in future versions since the supabase SDK can get the user id from the access token and each token is bound to a specific user.
+
 
 ## Tests
 
@@ -213,13 +221,11 @@ INSERT INTO "public"."radolan_harvester" ("id", "collection_date", "start_date",
 - Update the table `radolan_geometry` with sql file [radolan_geometry.sql](sql/radolan_geometry.sql) This geometry is Berlin only.
 - Populate the table radolan_data with the content of [radolan_data.sql](sql/radolan_data.sql)
 
-This process is actually a little blackbox we need to solve.
-
 ### OSM Pumpen Harvester
 
 The [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repository fetches Pumpen data from Supabase via a Github Action defined in [pumps.yml](https://github.com/technologiestiftung/giessdenkiez-de/blob/master/.github/workflows/pumps.yml). The data is pushed to a Supabase bucket `data_assets`. For local development, it is created via [seed.sql](supabase/seed.sql). For deployments, the bucket needs to be created:
 
-```
+```sql
 -- Create the public data_assets bucket
 INSERT INTO storage.buckets(id, name)
 	VALUES ('data_assets', 'data_assets');
@@ -235,60 +241,6 @@ SET
 WHERE
 	buckets.id = 'data_assets';
 ```
-
-## API Routes
-
-There are 3 main routes `/get`, `/post` and `/delete`.
-
-On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
-
-```bash
-curl --request GET \
-  --url 'http://localhost:8080/get/byid&id=_123456789' \
-
-```
-
-You can see all the available routes in the [docs/api.http](./docs/api.http) file with all their needed `URLSearchParams` and JSON bodies or by inspecting the JSON Schema that is returned when you do a request to the `/get`, `/post` or `/delete` route.
-
-Currently we have these routes
-
-| `/v3/get`            | `/v3/post` | `/v3/delete` |
-| -------------------- | ---------- | ------------ |
-| `/byid`              | `/adopt`   | `/unadopt`   |
-| `/treesbyids`        | `/water`   | `/unwater`   |
-| `/adopted`           |            |              |
-| `/istreeadopted`     |            |              |
-| `/wateredandadopted` |            |              |
-| `/lastwatered`       |            |              |
-| `/wateredbyuser`     |            |              |
-
-### API Authorization
-
-#### Supabase
-
-Some of the requests need a authorized user. You can create a new user using email password via the Supabase API.
-
-```bash
-curl --request POST \
-  --url http://localhost:54321/auth/v1/signup \
-  --header 'apikey: <SUPABASE_ANON_KEY>' \
-  --header 'content-type: application/json' \
-  --data '{"email": "someone@email.com","password": "1234567890"}'
-```
-
-This will give you in development already an aceess token. In production you will need to confirm your email address first.
-
-A login can be done like this:
-
-```bash
-curl --request POST \
-  --url 'http://localhost:54321/auth/v1/token?grant_type=password' \
-  --header 'apikey: <SUPABASE_ANON_KEY>' \
-  --header 'content-type: application/json' \
-  --data '{"email": "someone@email.com","password": "1234567890"}'
-```
-
-See the [docs/api.http](./docs/api.http) file for more examples or take a look into the API documentation in your local supabase instance under http://localhost:54323/project/default/api?page=users
 
 ## Tests
 
