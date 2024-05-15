@@ -31,17 +31,34 @@ describe("misc test testing the schema function of the database", () => {
 		expect(error2).toBeNull();
 		expect(user2).toBeDefined();
 
+		await supabaseAnonClient.auth.signInWithPassword({
+			email: email1,
+			password: password,
+		});
+
 		const { data: users, error: usersError } = await supabaseAnonClient
 			.from("profiles")
 			.select("*")
-			.in("id", [user1?.user?.id, user2?.user?.id]);
+			.in("id", [user1?.user?.id]);
 
 		expect(usersError).toBeNull();
-		expect(users).toHaveLength(2);
+		expect(users).toHaveLength(1);
 		expect(users?.[0].username).toBe("someone");
-		expect(users?.[1].username).not.toBe("someone");
-		expect(users?.[1].username).toContain("someone-");
-		expect(users?.[1].username).toMatch(/^someone-[a-zA-Z0-9]{6}$/);
+
+		await supabaseAnonClient.auth.signInWithPassword({
+			email: email2,
+			password: password,
+		});
+		const { data: userTwo, error: userTwoError } = await supabaseAnonClient
+			.from("profiles")
+			.select("*")
+			.in("id", [user2?.user?.id]);
+
+		expect(userTwoError).toBeNull();
+		expect(userTwo?.[0].username).not.toBe("someone");
+		expect(userTwo?.[0].username).toContain("someone-");
+		expect(userTwo?.[0].username).toMatch(/^someone-[a-zA-Z0-9]{6}$/);
+
 		await deleteSupabaseUser(email1);
 		await deleteSupabaseUser(email2);
 	});
