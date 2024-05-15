@@ -20,23 +20,10 @@ describe("misc test testing the schema function of the database", () => {
 			email: email1,
 			password: password,
 		});
-		const { data: user2, error: error2 } = await supabaseAnonClient.auth.signUp(
-			{
-				email: email2,
-				password: password,
-			}
-		);
 		expect(error).toBeNull();
 		expect(user1).toBeDefined();
-		expect(error2).toBeNull();
-		expect(user2).toBeDefined();
 
-		await supabaseAnonClient.auth.signInWithPassword({
-			email: email1,
-			password: password,
-		});
-
-		const { data: users, error: usersError } = await supabaseAnonClient
+		const { data: users, error: usersError } = await supabaseServiceRoleClient
 			.from("profiles")
 			.select("*")
 			.in("id", [user1?.user?.id]);
@@ -45,14 +32,20 @@ describe("misc test testing the schema function of the database", () => {
 		expect(users).toHaveLength(1);
 		expect(users?.[0].username).toBe("someone");
 
-		await supabaseAnonClient.auth.signInWithPassword({
-			email: email2,
-			password: password,
-		});
-		const { data: userTwo, error: userTwoError } = await supabaseAnonClient
-			.from("profiles")
-			.select("*")
-			.in("id", [user2?.user?.id]);
+		const { data: user2, error: error2 } = await supabaseAnonClient.auth.signUp(
+			{
+				email: email2,
+				password: password,
+			}
+		);
+		expect(error2).toBeNull();
+		expect(user2).toBeDefined();
+
+		const { data: userTwo, error: userTwoError } =
+			await supabaseServiceRoleClient
+				.from("profiles")
+				.select("*")
+				.in("id", [user2?.user?.id]);
 
 		expect(userTwoError).toBeNull();
 		expect(userTwo?.[0].username).not.toBe("someone");
