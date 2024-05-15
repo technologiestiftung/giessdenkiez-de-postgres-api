@@ -193,10 +193,15 @@ describe("misc test testing the schema function of the database", () => {
 
 		expect(changeResponse.ok).toBeTruthy();
 		expect(changeResponse.status).toBe(204);
+		expect(data?.user?.id).toBeDefined();
+
+		if (!data?.user?.id) {
+			throw new Error("data.user.id is undefined");
+		}
 
 		const { data: treesAfter, error: treesAfterError } =
 			await supabaseServiceRoleClient
-				.rpc("waterings_for_user", { u_id: data?.user?.id! })
+				.rpc("waterings_for_user", { u_id: data?.user?.id })
 				.eq("username", "bar")
 				.select("*");
 
