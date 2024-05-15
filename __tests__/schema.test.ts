@@ -196,9 +196,9 @@ describe("misc test testing the schema function of the database", () => {
 
 		const { data: treesAfter, error: treesAfterError } =
 			await supabaseServiceRoleClient
-				.from("trees_watered")
-				.select("*")
-				.eq("username", "bar");
+				.rpc("waterings_for_user", { u_id: data?.user?.id! })
+				.eq("username", "bar")
+				.select("*");
 
 		expect(treesAfterError).toBeNull();
 		expect(treesAfter).toHaveLength(numberOfTrees);
