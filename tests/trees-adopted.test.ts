@@ -2,55 +2,36 @@ import {
 	supabaseAnonClient,
 	supabaseServiceRoleClient,
 } from "../src/supabase-client";
+import { createTwoUsers, deleteUsers } from "./helper";
 
 describe("trees_adopted", () => {
-	let userId1: string | undefined = "";
-	let userId2: string | undefined = "";
 	let userAdoptId1: number | undefined;
 
-	beforeAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user1@test.com",
-				password: "password1",
-				email_confirm: true,
-			});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		userId1 = data.user?.id;
+	let users: { userId1: string; userId2: string } = {
+		userId1: "",
+		userId2: "",
+	};
 
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user2@test.com",
-				password: "password2",
-				email_confirm: true,
-			});
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
-		userId2 = data1.user?.id;
+	beforeAll(async () => {
+		users = await createTwoUsers();
 	});
 
 	afterAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId1!);
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId2!);
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
+		await deleteUsers(users);
 		const { error: deleteError } = await supabaseServiceRoleClient
 			.from("trees_adopted")
 			.delete()
 			.neq("id", -1);
-		expect(deleteError).toBeNull();
+		if (deleteError) {
+			throw new Error("Failed to delete trees_adopted");
+		}
 	});
 
 	it("should not be able to adopt a tree if not authenticated", async () => {
 		const { data: adopt1, error: adoptError1 } = await supabaseAnonClient
 			.from("trees_adopted")
 			.insert({
-				uuid: userId1,
+				uuid: users.userId1,
 				tree_id: "_0epuygrgg",
 			})
 			.select("*");
@@ -69,7 +50,7 @@ describe("trees_adopted", () => {
 		const { data: adopt1, error: adoptError1 } = await supabaseServiceRoleClient
 			.from("trees_adopted")
 			.insert({
-				uuid: userId1,
+				uuid: users.userId1,
 				tree_id: "_0epuygrgg",
 			})
 			.select("*");
@@ -88,7 +69,7 @@ describe("trees_adopted", () => {
 		const { data: adopt2, error: adoptError2 } = await supabaseServiceRoleClient
 			.from("trees_adopted")
 			.insert({
-				uuid: userId2,
+				uuid: users.userId2,
 				tree_id: "_0epuygrgg",
 			});
 		expect(adopt2).toBeDefined();

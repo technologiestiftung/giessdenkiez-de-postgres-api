@@ -2,55 +2,35 @@ import {
 	supabaseAnonClient,
 	supabaseServiceRoleClient,
 } from "../src/supabase-client";
+import { createTwoUsers, deleteUsers } from "./helper";
 
 describe("trees_watered", () => {
-	let userId1: string | undefined = "";
-	let userId2: string | undefined = "";
+	let users: { userId1: string; userId2: string } = {
+		userId1: "",
+		userId2: "",
+	};
 	let userWateringId1: number | undefined;
 
 	beforeAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user1@test.com",
-				password: "password1",
-				email_confirm: true,
-			});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		userId1 = data.user?.id;
-
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user2@test.com",
-				password: "password2",
-				email_confirm: true,
-			});
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
-		userId2 = data1.user?.id;
+		users = await createTwoUsers();
 	});
 
 	afterAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId1!);
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId2!);
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
+		await deleteUsers(users);
 		const { error: deleteError } = await supabaseServiceRoleClient
-			.from("trees_watered")
+			.from("trees_adopted")
 			.delete()
 			.neq("id", -1);
-		expect(deleteError).toBeNull();
+		if (deleteError) {
+			throw new Error("Failed to delete trees_adopted");
+		}
 	});
 
 	it("should not be able to water a tree if not authenticated", async () => {
 		const { data: water1, error: waterError1 } = await supabaseAnonClient
 			.from("trees_watered")
 			.insert({
-				uuid: userId1,
+				uuid: users.userId1,
 				amount: 10,
 				timestamp: new Date().toISOString(),
 				username: "user1",
@@ -73,7 +53,7 @@ describe("trees_watered", () => {
 			await supabaseServiceRoleClient
 				.from("trees_watered")
 				.insert({
-					uuid: userId1,
+					uuid: users.userId1,
 					amount: 10,
 					timestamp: new Date().toISOString(),
 					username: "user1",
@@ -94,7 +74,7 @@ describe("trees_watered", () => {
 
 		const { data: watering2, error: wateringError2 } =
 			await supabaseServiceRoleClient.from("trees_watered").insert({
-				uuid: userId2,
+				uuid: users.userId2,
 				amount: 20,
 				timestamp: new Date().toISOString(),
 				username: "user2",
@@ -129,7 +109,7 @@ describe("trees_watered", () => {
 		expect(error).toBeNull();
 
 		const { data: waterings } = await supabaseAnonClient
-			.rpc("waterings_for_user", { u_id: userId1! })
+			.rpc("waterings_for_user", { u_id: users.userId1! })
 			.select("*");
 
 		expect(waterings).toBeDefined();

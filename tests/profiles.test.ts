@@ -1,43 +1,18 @@
-import {
-	supabaseAnonClient,
-	supabaseServiceRoleClient,
-} from "../src/supabase-client";
+import { supabaseAnonClient } from "../src/supabase-client";
+import { createTwoUsers, deleteUsers } from "./helper";
 
 describe("profiles table", () => {
-	let userId1: string | undefined = "";
-	let userId2: string | undefined = "";
+	let users: { userId1: string; userId2: string } = {
+		userId1: "",
+		userId2: "",
+	};
 
 	beforeAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user1@test.com",
-				password: "password1",
-				email_confirm: true,
-			});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		userId1 = data.user?.id;
-
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user2@test.com",
-				password: "password2",
-				email_confirm: true,
-			});
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
-		userId2 = data1.user?.id;
+		users = await createTwoUsers();
 	});
 
 	afterAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId1!);
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId2!);
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
+		await deleteUsers(users);
 	});
 
 	it("not be able to fetch profiles as anon user", async () => {

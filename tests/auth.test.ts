@@ -1,34 +1,24 @@
-import {
-	supabaseAnonClient,
-	supabaseServiceRoleClient,
-} from "../src/supabase-client";
+import { supabaseAnonClient } from "../src/supabase-client";
+import { createTwoUsers, deleteUsers } from "./helper";
 
 describe("auth", () => {
-	let userId: string | undefined = "";
+	let users: { userId1: string; userId2: string } = {
+		userId1: "",
+		userId2: "",
+	};
 
 	beforeAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.createUser({
-				email: "user@test.com",
-				password: "password",
-				email_confirm: true,
-			});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-		userId = data.user?.id;
+		users = await createTwoUsers();
 	});
 
 	afterAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId!);
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
+		await deleteUsers(users);
 	});
 
 	it("should be able to login providing username and password", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user@test.com",
-			password: "password",
+			email: "user1@test.com",
+			password: "password1",
 		});
 		expect(data).toBeDefined();
 		expect(error).toBeNull();
@@ -36,7 +26,7 @@ describe("auth", () => {
 
 	it("should not be able to login providing username and wrong password", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user@test.com",
+			email: "user1@test.com",
 			password: "not-the-password",
 		});
 		expect(data.user).toBeNull();
