@@ -6,6 +6,7 @@ import {
 describe("trees_watered", () => {
 	let userId1: string | undefined = "";
 	let userId2: string | undefined = "";
+	let userWateringId1: number | undefined;
 
 	beforeAll(async () => {
 		const { data, error } =
@@ -27,17 +28,54 @@ describe("trees_watered", () => {
 		expect(data1).toBeDefined();
 		expect(error1).toBeNull();
 		userId2 = data1.user?.id;
+	});
+
+	afterAll(async () => {
+		const { data, error } =
+			await supabaseServiceRoleClient.auth.admin.deleteUser(userId1!);
+		expect(data).toBeDefined();
+		expect(error).toBeNull();
+		const { data: data1, error: error1 } =
+			await supabaseServiceRoleClient.auth.admin.deleteUser(userId2!);
+		expect(data1).toBeDefined();
+		expect(error1).toBeNull();
+		const { error: deleteError } = await supabaseServiceRoleClient
+			.from("trees_watered")
+			.delete()
+			.neq("id", -1);
+		expect(deleteError).toBeNull();
+	});
+
+	it("should be able to water a tree", async () => {
+		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
+			email: "user1@test.com",
+			password: "password1",
+		});
+		expect(data).toBeDefined();
+		expect(error).toBeNull();
 
 		const { data: watering1, error: wateringError1 } =
-			await supabaseServiceRoleClient.from("trees_watered").insert({
-				uuid: userId1,
-				amount: 10,
-				timestamp: new Date().toISOString(),
-				username: "user1",
-				tree_id: "_0epuygrgg",
-			});
+			await supabaseServiceRoleClient
+				.from("trees_watered")
+				.insert({
+					uuid: userId1,
+					amount: 10,
+					timestamp: new Date().toISOString(),
+					username: "user1",
+					tree_id: "_0epuygrgg",
+				})
+				.select("*");
 		expect(watering1).toBeDefined();
 		expect(wateringError1).toBeNull();
+		userWateringId1 = watering1![0].id;
+
+		const { data: data1, error: error1 } =
+			await supabaseAnonClient.auth.signInWithPassword({
+				email: "user2@test.com",
+				password: "password2",
+			});
+		expect(data1).toBeDefined();
+		expect(error1).toBeNull();
 
 		const { data: watering2, error: wateringError2 } =
 			await supabaseServiceRoleClient.from("trees_watered").insert({
@@ -51,25 +89,7 @@ describe("trees_watered", () => {
 		expect(wateringError2).toBeNull();
 	});
 
-	afterAll(async () => {
-		const { data, error } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId1!);
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
-
-		const { data: data1, error: error1 } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(userId2!);
-		expect(data1).toBeDefined();
-		expect(error1).toBeNull();
-
-		const { error: deleteError } = await supabaseServiceRoleClient
-			.from("trees_watered")
-			.delete()
-			.neq("id", -1);
-		expect(deleteError).toBeNull();
-	});
-
-	it("should NOT be able to select waterings thanks to RLS", async () => {
+	it("should NOT be able to select waterings that are not their own thanks to RLS", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -82,7 +102,7 @@ describe("trees_watered", () => {
 			.select("*");
 
 		expect(waterings).toBeDefined();
-		expect(waterings!.length).toBe(0);
+		expect(waterings!.length).toBe(1);
 	});
 
 	it("should be able to select user's own waterings via RPC", async () => {
@@ -117,5 +137,27 @@ describe("trees_watered", () => {
 
 		expect(waterings).toBeDefined();
 		expect(waterings!.length).toBe(2);
+	});
+
+	it("should be able to delete own waterings", async () => {
+		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
+			email: "user1@test.com",
+			password: "password1",
+		});
+		expect(data).toBeDefined();
+		expect(error).toBeNull();
+
+		const { error: wateringsError } = await supabaseAnonClient
+			.from("trees_watered")
+			.delete()
+			.eq("id", userWateringId1!);
+
+		expect(wateringsError).toBeNull();
+
+		const { data: newWaterings } = await supabaseServiceRoleClient
+			.from("trees_watered")
+			.select("*");
+		expect(newWaterings).toBeDefined();
+		expect(newWaterings!.length).toBe(1);
 	});
 });

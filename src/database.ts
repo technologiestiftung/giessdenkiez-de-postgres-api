@@ -300,7 +300,6 @@ export type Database = {
           t_id: string
         }
         Returns: {
-          uuid: string
           amount: number
           timestamp: string
           username: string
@@ -313,7 +312,6 @@ export type Database = {
           u_id: string
         }
         Returns: {
-          uuid: string
           amount: number
           timestamp: string
           username: string
