@@ -4,6 +4,7 @@
 	"private": true,
 	"license": "MIT",
 	"scripts": {
+		"test": "jest",
 		"lint": "eslint ./**/*.ts ",
 		"format": "prettier ./**/*.ts --write"
 	},
