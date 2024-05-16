@@ -11,7 +11,7 @@ AS $function$
 BEGIN
 	RETURN query
 	
-	SELECT amount, timestamp, username, id, tree_id FROM trees_watered WHERE trees_watered.tree_id = t_id;
+	SELECT trees_watered.amount, trees_watered.timestamp, trees_watered.username, trees_watered.id, trees_watered.tree_id FROM trees_watered WHERE trees_watered.tree_id = t_id;
 		
 END;
 $function$;
