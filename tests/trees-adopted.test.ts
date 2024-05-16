@@ -17,7 +17,7 @@ describe("trees_adopted", () => {
 	});
 
 	afterAll(async () => {
-		await deleteUsers(users);
+		await deleteUsers([users.userId1, users.userId2]);
 		const { error: deleteError } = await supabaseServiceRoleClient
 			.from("trees_adopted")
 			.delete()

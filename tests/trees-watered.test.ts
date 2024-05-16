@@ -16,7 +16,7 @@ describe("trees_watered", () => {
 	});
 
 	afterAll(async () => {
-		await deleteUsers(users);
+		await deleteUsers([users.userId1]);
 		const { error: deleteError } = await supabaseServiceRoleClient
 			.from("trees_watered")
 			.delete()
@@ -177,5 +177,19 @@ describe("trees_watered", () => {
 		expect(newWaterings).toBeDefined();
 		expect(newWaterings!.length).toBe(1);
 		expect(newWaterings![0].username).toBe("user2-update");
+	});
+
+	it("should set username and uuid in waterings to NULL if user gets deleted", async () => {
+		const { error: deleteError } =
+			await supabaseServiceRoleClient.auth.admin.deleteUser(users.userId2);
+		expect(deleteError).toBeNull();
+
+		const { data: newWaterings } = await supabaseServiceRoleClient
+			.from("trees_watered")
+			.select("*");
+		expect(newWaterings).toBeDefined();
+		expect(newWaterings!.length).toBe(1);
+		expect(newWaterings![0].username).toBeNull();
+		expect(newWaterings![0].uuid).toBeNull();
 	});
 });

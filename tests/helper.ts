@@ -30,16 +30,14 @@ export async function createTwoUsers(): Promise<{
 	return { userId1, userId2 };
 }
 
-export async function deleteUsers(users: { userId1: string; userId2: string }) {
-	const { data, error } = await supabaseServiceRoleClient.auth.admin.deleteUser(
-		users.userId1
-	);
-	if (!data || error) {
-		throw new Error("Failed to delete user1");
-	}
-	const { data: data1, error: error1 } =
-		await supabaseServiceRoleClient.auth.admin.deleteUser(users.userId2);
-	if (!data1 || error1) {
-		throw new Error("Failed to delete user1");
+export async function deleteUsers(usersIds: string[]) {
+	for (let idx = 0; idx < usersIds.length; idx++) {
+		const userId = usersIds[idx];
+		const { error } = await supabaseServiceRoleClient.auth.admin.deleteUser(
+			userId
+		);
+		if (error) {
+			throw new Error(`Failed to delete user with id = ${userId}`);
+		}
 	}
 }

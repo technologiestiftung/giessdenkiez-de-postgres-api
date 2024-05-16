@@ -12,7 +12,7 @@ describe("auth", () => {
 	});
 
 	afterAll(async () => {
-		await deleteUsers(users);
+		await deleteUsers([users.userId1, users.userId2]);
 	});
 
 	it("should be able to login providing username and password", async () => {

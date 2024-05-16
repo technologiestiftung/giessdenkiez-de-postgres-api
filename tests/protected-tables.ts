@@ -19,7 +19,7 @@ describe("protected tables", () => {
 	});
 
 	afterAll(async () => {
-		await deleteUsers(users);
+		await deleteUsers([users.userId1, users.userId2]);
 	});
 
 	it("not be able to fetch data from protected tables as user with anon key", async () => {

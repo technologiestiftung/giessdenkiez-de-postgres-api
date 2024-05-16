@@ -12,7 +12,7 @@ describe("profiles table", () => {
 	});
 
 	afterAll(async () => {
-		await deleteUsers(users);
+		await deleteUsers([users.userId1, users.userId2]);
 	});
 
 	it("not be able to fetch profiles as anon user", async () => {
