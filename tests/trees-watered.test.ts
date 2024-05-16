@@ -18,11 +18,11 @@ describe("trees_watered", () => {
 	afterAll(async () => {
 		await deleteUsers(users);
 		const { error: deleteError } = await supabaseServiceRoleClient
-			.from("trees_adopted")
+			.from("trees_watered")
 			.delete()
 			.neq("id", -1);
 		if (deleteError) {
-			throw new Error("Failed to delete trees_adopted");
+			throw new Error("Failed to delete trees_watered");
 		}
 	});
 
@@ -109,7 +109,7 @@ describe("trees_watered", () => {
 		expect(error).toBeNull();
 
 		const { data: waterings } = await supabaseAnonClient
-			.rpc("waterings_for_user", { u_id: users.userId1! })
+			.rpc("waterings_for_user", { u_id: users.userId1 })
 			.select("*");
 
 		expect(waterings).toBeDefined();
@@ -154,5 +154,28 @@ describe("trees_watered", () => {
 			.select("*");
 		expect(newWaterings).toBeDefined();
 		expect(newWaterings!.length).toBe(1);
+	});
+
+	it("should change username in waterings if username changes", async () => {
+		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
+			email: "user2@test.com",
+			password: "password2",
+		});
+		expect(data).toBeDefined();
+		expect(error).toBeNull();
+
+		const { error: profileUpdateError } = await supabaseAnonClient
+			.from("profiles")
+			.update({ username: "user2-update" })
+			.eq("id", users.userId2);
+
+		expect(profileUpdateError).toBeNull();
+
+		const { data: newWaterings } = await supabaseServiceRoleClient
+			.from("trees_watered")
+			.select("*");
+		expect(newWaterings).toBeDefined();
+		expect(newWaterings!.length).toBe(1);
+		expect(newWaterings![0].username).toBe("user2-update");
 	});
 });
