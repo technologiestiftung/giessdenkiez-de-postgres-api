@@ -46,6 +46,18 @@ describe("trees_adopted", () => {
 		expect(deleteError).toBeNull();
 	});
 
+	it("should not be able to adopt a tree if not authenticated", async () => {
+		const { data: adopt1, error: adoptError1 } = await supabaseAnonClient
+			.from("trees_adopted")
+			.insert({
+				uuid: userId1,
+				tree_id: "_0epuygrgg",
+			})
+			.select("*");
+		expect(adoptError1).toBeDefined();
+		expect(adopt1).toBeNull();
+	});
+
 	it("should be able to adopt a tree", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",

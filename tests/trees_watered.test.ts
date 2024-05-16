@@ -46,6 +46,21 @@ describe("trees_watered", () => {
 		expect(deleteError).toBeNull();
 	});
 
+	it("should not be able to water a tree if not authenticated", async () => {
+		const { data: water1, error: waterError1 } = await supabaseAnonClient
+			.from("trees_watered")
+			.insert({
+				uuid: userId1,
+				amount: 10,
+				timestamp: new Date().toISOString(),
+				username: "user1",
+				tree_id: "_0epuygrgg",
+			})
+			.select("*");
+		expect(waterError1).toBeDefined();
+		expect(water1).toBeNull();
+	});
+
 	it("should be able to water a tree", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
