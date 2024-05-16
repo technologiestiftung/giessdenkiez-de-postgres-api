@@ -4,7 +4,7 @@
 	"private": true,
 	"license": "MIT",
 	"scripts": {
-		"test": "jest",
+		"test": "jest --runInBand",
 		"lint": "eslint ./**/*.ts ",
 		"format": "prettier ./**/*.ts --write"
 	},

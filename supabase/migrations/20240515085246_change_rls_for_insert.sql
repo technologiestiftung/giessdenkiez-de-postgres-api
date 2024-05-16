@@ -15,6 +15,8 @@ for delete
 to authenticated
 using (uuid = auth.uid()::text);
 
+drop policy "Enable read for authenticated users only" on trees_adopted;
+
 create policy "Authenticated users can insert their own adoptions"
 on trees_adopted
 for insert to authenticated
