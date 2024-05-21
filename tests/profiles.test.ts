@@ -15,7 +15,7 @@ describe("profiles table", () => {
 		await deleteUsers([users.userId1, users.userId2]);
 	});
 
-	it("not be able to fetch profiles as anon user", async () => {
+	it("should not be able to fetch profiles as anon user", async () => {
 		const { data, error } = await supabaseAnonClient
 			.from("profiles")
 			.select("*");
@@ -24,7 +24,7 @@ describe("profiles table", () => {
 		expect(data!.length).toBe(0);
 	});
 
-	it("fetch own profile only as authenticated user", async () => {
+	it("should fetch own profile only as authenticated user", async () => {
 		const { data: data1, error: error1 } =
 			await supabaseAnonClient.auth.signInWithPassword({
 				email: "user1@test.com",
