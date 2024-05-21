@@ -79,77 +79,62 @@ describe("trees_adopted", () => {
 		userAdoptId2 = adopt2![0].id;
 	});
 
-	it("should return only the adoptions that are connected to the logged in user", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+	describe("as a logged in user", () => {
+		beforeAll(async () => {
+			await supabaseAnonClient.auth.signInWithPassword({
+				email: "user1@test.com",
+				password: "password1",
+			});
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { data: adoptions } = await supabaseAnonClient
-			.from("trees_adopted")
-			.select("*");
-
-		expect(adoptions).toBeDefined();
-		expect(adoptions!.length).toBe(1);
-	});
-
-	it("should return watered and adopted trees via RPC", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+		afterAll(async () => {
+			await supabaseAnonClient.auth.signOut();
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { data: adoptions } = await supabaseAnonClient
-			.rpc("get_watered_and_adopted")
-			.select("*");
+		it("should return only the adoptions that are connected to the logged in user", async () => {
+			const { data: adoptions } = await supabaseAnonClient
+				.from("trees_adopted")
+				.select("*");
 
-		expect(adoptions).toBeDefined();
-		expect(adoptions!.length).toBe(1);
-	});
-
-	it("should be able to delete own adoptions as a logged in user", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+			expect(adoptions).toBeDefined();
+			expect(adoptions!.length).toBe(1);
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { error: adoptionsError } = await supabaseAnonClient
-			.from("trees_adopted")
-			.delete()
-			.eq("id", userAdoptId1!);
+		it("should return watered and adopted trees via RPC", async () => {
+			const { data: adoptions } = await supabaseAnonClient
+				.rpc("get_watered_and_adopted")
+				.select("*");
 
-		expect(adoptionsError).toBeNull();
-
-		const { data: newAdoptions } = await supabaseServiceRoleClient
-			.from("trees_adopted")
-			.select("*");
-		expect(newAdoptions).toBeDefined();
-		expect(newAdoptions!.length).toBe(1);
-	});
-
-	it("should NOT be able to delete adoptions of other users as a logged in user", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+			expect(adoptions).toBeDefined();
+			expect(adoptions!.length).toBe(1);
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		await supabaseAnonClient
-			.from("trees_adopted")
-			.delete()
-			.eq("id", userAdoptId2!);
+		it("should be able to delete own adoptions as a logged in user", async () => {
+			const { error: adoptionsError } = await supabaseAnonClient
+				.from("trees_adopted")
+				.delete()
+				.eq("id", userAdoptId1!);
 
-		const { data: newAdoptions } = await supabaseServiceRoleClient
-			.from("trees_adopted")
-			.select("*");
-		expect(newAdoptions).toBeDefined();
-		expect(newAdoptions!.length).toBe(1);
+			expect(adoptionsError).toBeNull();
+
+			const { data: newAdoptions } = await supabaseServiceRoleClient
+				.from("trees_adopted")
+				.select("*");
+			expect(newAdoptions).toBeDefined();
+			expect(newAdoptions!.length).toBe(1);
+		});
+
+		it("should NOT be able to delete adoptions of other users as a logged in user", async () => {
+			await supabaseAnonClient
+				.from("trees_adopted")
+				.delete()
+				.eq("id", userAdoptId2!);
+
+			const { data: newAdoptions } = await supabaseServiceRoleClient
+				.from("trees_adopted")
+				.select("*");
+			expect(newAdoptions).toBeDefined();
+			expect(newAdoptions!.length).toBe(1);
+		});
 	});
 });

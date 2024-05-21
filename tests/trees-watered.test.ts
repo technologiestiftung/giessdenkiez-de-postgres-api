@@ -87,133 +87,105 @@ describe("trees_watered", () => {
 		userWateringId2 = watering2![0].id;
 	});
 
-	it("should return only waterings that are connected to the logged in user", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+	describe("as a logged in user", () => {
+		beforeAll(async () => {
+			await supabaseAnonClient.auth.signInWithPassword({
+				email: "user1@test.com",
+				password: "password1",
+			});
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { data: waterings } = await supabaseAnonClient
-			.from("trees_watered")
-			.select("*");
-
-		expect(waterings).toBeDefined();
-		expect(waterings!.length).toBe(1);
-	});
-
-	it("should return only waterings that are connected to the logged in user via RPC", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+		afterAll(async () => {
+			await supabaseAnonClient.auth.signOut();
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { data: waterings } = await supabaseAnonClient
-			.rpc("waterings_for_user", { u_id: users.userId1 })
-			.select("*");
+		it("should change username in waterings automatically if username get's changed", async () => {
+			const { error: profileUpdateError } = await supabaseAnonClient
+				.from("profiles")
+				.update({ username: "user1-update" })
+				.eq("id", users.userId1);
 
-		expect(waterings).toBeDefined();
-		expect(waterings!.length).toBe(1);
-		expect(waterings![0].amount).toBe(10);
-		expect(waterings![0].username).toBe("user1");
-	});
+			expect(profileUpdateError).toBeNull();
 
-	it("should return only waterings of a specific tree via RPC", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+			const { data: newWaterings } = await supabaseServiceRoleClient
+				.from("trees_watered")
+				.select("*")
+				.eq("uuid", users.userId1);
+			expect(newWaterings).toBeDefined();
+			expect(newWaterings!.length).toBe(1);
+			expect(newWaterings![0].username).toBe("user1-update");
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { data: waterings } = await supabaseAnonClient
-			.rpc("waterings_for_tree", { t_id: "_0epuygrgg" })
-			.select("*");
+		it("should set username and uuid in waterings to NULL automatically if user gets deleted", async () => {
+			const { error: deleteError } =
+				await supabaseServiceRoleClient.auth.admin.deleteUser(users.userId2);
+			expect(deleteError).toBeNull();
 
-		expect(waterings).toBeDefined();
-		expect(waterings!.length).toBe(2);
-	});
-
-	it("should be able to delete own waterings as a logged in user", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+			const { data: newWaterings } = await supabaseServiceRoleClient
+				.from("trees_watered")
+				.select("*");
+			expect(newWaterings).toBeDefined();
+			expect(newWaterings!.length).toBe(2);
+			expect(newWaterings![1].username).toBeNull();
+			expect(newWaterings![1].uuid).toBeNull();
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { error: wateringsError } = await supabaseAnonClient
-			.from("trees_watered")
-			.delete()
-			.eq("id", userWateringId1!);
+		it("should return only waterings that are connected to the logged in user", async () => {
+			const { data: waterings } = await supabaseAnonClient
+				.from("trees_watered")
+				.select("*");
 
-		expect(wateringsError).toBeNull();
-
-		const { data: newWaterings } = await supabaseServiceRoleClient
-			.from("trees_watered")
-			.select("*");
-		expect(newWaterings).toBeDefined();
-		expect(newWaterings!.length).toBe(1);
-	});
-
-	it("should NOT be able to delete waterings of another user as a logged in user", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user1@test.com",
-			password: "password1",
+			expect(waterings).toBeDefined();
+			expect(waterings!.length).toBe(1);
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		await supabaseAnonClient
-			.from("trees_watered")
-			.delete()
-			.eq("id", userWateringId2!);
+		it("should return only waterings that are connected to the logged in user via RPC", async () => {
+			const { data: waterings } = await supabaseAnonClient
+				.rpc("waterings_for_user", { u_id: users.userId1 })
+				.select("*");
 
-		const { data: newWaterings } = await supabaseServiceRoleClient
-			.from("trees_watered")
-			.select("*");
-
-		expect(newWaterings).toBeDefined();
-		expect(newWaterings!.length).toBe(1);
-	});
-
-	it("should change username in waterings automatically if username get's changed", async () => {
-		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
-			email: "user2@test.com",
-			password: "password2",
+			expect(waterings).toBeDefined();
+			expect(waterings!.length).toBe(1);
+			expect(waterings![0].amount).toBe(10);
+			expect(waterings![0].username).toBe("user1-update");
 		});
-		expect(data).toBeDefined();
-		expect(error).toBeNull();
 
-		const { error: profileUpdateError } = await supabaseAnonClient
-			.from("profiles")
-			.update({ username: "user2-update" })
-			.eq("id", users.userId2);
+		it("should return only waterings of a specific tree via RPC", async () => {
+			const { data: waterings } = await supabaseAnonClient
+				.rpc("waterings_for_tree", { t_id: "_0epuygrgg" })
+				.select("*");
 
-		expect(profileUpdateError).toBeNull();
+			expect(waterings).toBeDefined();
+			expect(waterings!.length).toBe(2);
+		});
 
-		const { data: newWaterings } = await supabaseServiceRoleClient
-			.from("trees_watered")
-			.select("*");
-		expect(newWaterings).toBeDefined();
-		expect(newWaterings!.length).toBe(1);
-		expect(newWaterings![0].username).toBe("user2-update");
-	});
+		it("should be able to delete own waterings as a logged in user", async () => {
+			const { error: wateringsError } = await supabaseAnonClient
+				.from("trees_watered")
+				.delete()
+				.eq("id", userWateringId1!);
 
-	it("should set username and uuid in waterings to NULL automatically if user gets deleted", async () => {
-		const { error: deleteError } =
-			await supabaseServiceRoleClient.auth.admin.deleteUser(users.userId2);
-		expect(deleteError).toBeNull();
+			expect(wateringsError).toBeNull();
 
-		const { data: newWaterings } = await supabaseServiceRoleClient
-			.from("trees_watered")
-			.select("*");
-		expect(newWaterings).toBeDefined();
-		expect(newWaterings!.length).toBe(1);
-		expect(newWaterings![0].username).toBeNull();
-		expect(newWaterings![0].uuid).toBeNull();
+			const { data: newWaterings } = await supabaseServiceRoleClient
+				.from("trees_watered")
+				.select("*");
+			expect(newWaterings).toBeDefined();
+			expect(newWaterings!.length).toBe(1);
+		});
+
+		it("should NOT be able to delete waterings of another user as a logged in user", async () => {
+			await supabaseAnonClient
+				.from("trees_watered")
+				.delete()
+				.eq("id", userWateringId2!);
+
+			const { data: newWaterings } = await supabaseServiceRoleClient
+				.from("trees_watered")
+				.select("*");
+
+			expect(newWaterings).toBeDefined();
+			expect(newWaterings!.length).toBe(1);
+		});
 	});
 });
