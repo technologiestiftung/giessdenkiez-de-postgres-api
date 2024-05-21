@@ -10,6 +10,7 @@ describe("trees_watered", () => {
 		userId2: "",
 	};
 	let userWateringId1: number | undefined;
+	let userWateringId2: number | undefined;
 
 	beforeAll(async () => {
 		users = await createTwoUsers();
@@ -49,17 +50,16 @@ describe("trees_watered", () => {
 		expect(data).toBeDefined();
 		expect(error).toBeNull();
 
-		const { data: watering1, error: wateringError1 } =
-			await supabaseServiceRoleClient
-				.from("trees_watered")
-				.insert({
-					uuid: users.userId1,
-					amount: 10,
-					timestamp: new Date().toISOString(),
-					username: "user1",
-					tree_id: "_0epuygrgg",
-				})
-				.select("*");
+		const { data: watering1, error: wateringError1 } = await supabaseAnonClient
+			.from("trees_watered")
+			.insert({
+				uuid: users.userId1,
+				amount: 10,
+				timestamp: new Date().toISOString(),
+				username: "user1",
+				tree_id: "_0epuygrgg",
+			})
+			.select("*");
 		expect(watering1).toBeDefined();
 		expect(wateringError1).toBeNull();
 		userWateringId1 = watering1![0].id;
@@ -72,16 +72,19 @@ describe("trees_watered", () => {
 		expect(data1).toBeDefined();
 		expect(error1).toBeNull();
 
-		const { data: watering2, error: wateringError2 } =
-			await supabaseServiceRoleClient.from("trees_watered").insert({
+		const { data: watering2, error: wateringError2 } = await supabaseAnonClient
+			.from("trees_watered")
+			.insert({
 				uuid: users.userId2,
 				amount: 20,
 				timestamp: new Date().toISOString(),
 				username: "user2",
 				tree_id: "_0epuygrgg",
-			});
+			})
+			.select("*");
 		expect(watering2).toBeDefined();
 		expect(wateringError2).toBeNull();
+		userWateringId2 = watering2![0].id;
 	});
 
 	it("should return only waterings that are connected to the logged in user", async () => {
@@ -152,6 +155,27 @@ describe("trees_watered", () => {
 		const { data: newWaterings } = await supabaseServiceRoleClient
 			.from("trees_watered")
 			.select("*");
+		expect(newWaterings).toBeDefined();
+		expect(newWaterings!.length).toBe(1);
+	});
+
+	it("should NOT be able to delete waterings of another user as a logged in user", async () => {
+		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
+			email: "user1@test.com",
+			password: "password1",
+		});
+		expect(data).toBeDefined();
+		expect(error).toBeNull();
+
+		await supabaseAnonClient
+			.from("trees_watered")
+			.delete()
+			.eq("id", userWateringId2!);
+
+		const { data: newWaterings } = await supabaseServiceRoleClient
+			.from("trees_watered")
+			.select("*");
+
 		expect(newWaterings).toBeDefined();
 		expect(newWaterings!.length).toBe(1);
 	});
