@@ -6,6 +6,7 @@ import { createTwoUsers, deleteUsers } from "./helper";
 
 describe("trees_adopted", () => {
 	let userAdoptId1: number | undefined;
+	let userAdoptId2: number | undefined;
 
 	let users: { userId1: string; userId2: string } = {
 		userId1: "",
@@ -71,9 +72,11 @@ describe("trees_adopted", () => {
 			.insert({
 				uuid: users.userId2,
 				tree_id: "_0epuygrgg",
-			});
+			})
+			.select("*");
 		expect(adopt2).toBeDefined();
 		expect(adoptError2).toBeNull();
+		userAdoptId2 = adopt2![0].id;
 	});
 
 	it("should return only the adoptions that are connected to the logged in user", async () => {
@@ -122,6 +125,26 @@ describe("trees_adopted", () => {
 			.eq("id", userAdoptId1!);
 
 		expect(adoptionsError).toBeNull();
+
+		const { data: newAdoptions } = await supabaseServiceRoleClient
+			.from("trees_adopted")
+			.select("*");
+		expect(newAdoptions).toBeDefined();
+		expect(newAdoptions!.length).toBe(1);
+	});
+
+	it("should NOT be able to delete adoptions of other users as a logged in user", async () => {
+		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
+			email: "user1@test.com",
+			password: "password1",
+		});
+		expect(data).toBeDefined();
+		expect(error).toBeNull();
+
+		await supabaseAnonClient
+			.from("trees_adopted")
+			.delete()
+			.eq("id", userAdoptId2!);
 
 		const { data: newAdoptions } = await supabaseServiceRoleClient
 			.from("trees_adopted")
