@@ -22,7 +22,7 @@ describe("protected tables", () => {
 		await deleteUsers([users.userId1, users.userId2]);
 	});
 
-	it("should not be able to fetch data from protected tables as user with anon key", async () => {
+	it("should return no data on protected tables if user is not logged in", async () => {
 		for (let idx = 0; idx < tables.length; idx++) {
 			const table = tables[idx];
 			const { data, error } = await supabaseAnonClient.from(table).select("*");
@@ -32,7 +32,7 @@ describe("protected tables", () => {
 		}
 	});
 
-	it("should not be able to fetch data from protected tables as authenticated user with anon key", async () => {
+	it("should return no data on protected tables even if user is logged in", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",

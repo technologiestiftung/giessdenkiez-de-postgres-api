@@ -27,7 +27,7 @@ describe("trees_adopted", () => {
 		}
 	});
 
-	it("should not be able to adopt a tree if not authenticated", async () => {
+	it("should not be able to adopt a tree if not logged in", async () => {
 		const { data: adopt1, error: adoptError1 } = await supabaseAnonClient
 			.from("trees_adopted")
 			.insert({
@@ -39,7 +39,7 @@ describe("trees_adopted", () => {
 		expect(adopt1).toBeNull();
 	});
 
-	it("should be able to adopt a tree", async () => {
+	it("should be able to adopt a tree if logged in", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -76,7 +76,7 @@ describe("trees_adopted", () => {
 		expect(adoptError2).toBeNull();
 	});
 
-	it("should NOT be able to select adoptions that are not their own thanks to RLS", async () => {
+	it("should return only the adoptions that are connected to the logged in user", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -92,7 +92,7 @@ describe("trees_adopted", () => {
 		expect(adoptions!.length).toBe(1);
 	});
 
-	it("should be able to select trees adoptions via RPC", async () => {
+	it("should return watered and adopted trees via RPC", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -108,7 +108,7 @@ describe("trees_adopted", () => {
 		expect(adoptions!.length).toBe(1);
 	});
 
-	it("should be able to delete own adoptions", async () => {
+	it("should be able to delete own adoptions as a logged in user", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",

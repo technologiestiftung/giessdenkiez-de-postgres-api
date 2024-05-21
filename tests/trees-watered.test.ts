@@ -26,7 +26,7 @@ describe("trees_watered", () => {
 		}
 	});
 
-	it("should not be able to water a tree if not authenticated", async () => {
+	it("should not be able to water a tree if user is not logged in", async () => {
 		const { data: water1, error: waterError1 } = await supabaseAnonClient
 			.from("trees_watered")
 			.insert({
@@ -41,7 +41,7 @@ describe("trees_watered", () => {
 		expect(water1).toBeNull();
 	});
 
-	it("should be able to water a tree", async () => {
+	it("should be able to water a tree if user is logged in", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -84,7 +84,7 @@ describe("trees_watered", () => {
 		expect(wateringError2).toBeNull();
 	});
 
-	it("should NOT be able to select waterings that are not their own thanks to RLS", async () => {
+	it("should return only waterings that are connected to the logged in user", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -100,7 +100,7 @@ describe("trees_watered", () => {
 		expect(waterings!.length).toBe(1);
 	});
 
-	it("should be able to select user's own waterings via RPC", async () => {
+	it("should return only waterings that are connected to the logged in user via RPC", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -118,7 +118,7 @@ describe("trees_watered", () => {
 		expect(waterings![0].username).toBe("user1");
 	});
 
-	it("should be able to select waterings of a specific tree via RPC", async () => {
+	it("should return only waterings of a specific tree via RPC", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -134,7 +134,7 @@ describe("trees_watered", () => {
 		expect(waterings!.length).toBe(2);
 	});
 
-	it("should be able to delete own waterings", async () => {
+	it("should be able to delete own waterings as a logged in user", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -156,7 +156,7 @@ describe("trees_watered", () => {
 		expect(newWaterings!.length).toBe(1);
 	});
 
-	it("should change username in waterings if username changes", async () => {
+	it("should change username in waterings automatically if username get's changed", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user2@test.com",
 			password: "password2",
@@ -179,7 +179,7 @@ describe("trees_watered", () => {
 		expect(newWaterings![0].username).toBe("user2-update");
 	});
 
-	it("should set username and uuid in waterings to NULL if user gets deleted", async () => {
+	it("should set username and uuid in waterings to NULL automatically if user gets deleted", async () => {
 		const { error: deleteError } =
 			await supabaseServiceRoleClient.auth.admin.deleteUser(users.userId2);
 		expect(deleteError).toBeNull();

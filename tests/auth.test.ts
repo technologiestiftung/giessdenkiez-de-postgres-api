@@ -15,7 +15,7 @@ describe("auth", () => {
 		await deleteUsers([users.userId1, users.userId2]);
 	});
 
-	it("should be able to login providing username and password", async () => {
+	it("should return data on login when username/password combination is correct", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "password1",
@@ -24,7 +24,7 @@ describe("auth", () => {
 		expect(error).toBeNull();
 	});
 
-	it("should not be able to login providing username and wrong password", async () => {
+	it("should reject login when username/password combination is wrong", async () => {
 		const { data, error } = await supabaseAnonClient.auth.signInWithPassword({
 			email: "user1@test.com",
 			password: "not-the-password",

@@ -16,7 +16,7 @@ describe("triggers", () => {
 		await deleteUsers([users.userId1, users.userId2]);
 	});
 
-	it("should create a user profile upon creation of a user", async () => {
+	it("should create a user profile automatically upon signup of a user", async () => {
 		const { data: profiles, error } = await supabaseServiceRoleClient
 			.from("profiles")
 			.select("*");
@@ -26,7 +26,7 @@ describe("triggers", () => {
 		expect(profiles![1].username).toBe("user2");
 	});
 
-	it("should create a user profile with an postfixed string if username exists already", async () => {
+	it("should create a user profile with an postfixed string if username exists already upon signup", async () => {
 		const { data, error } =
 			await supabaseServiceRoleClient.auth.admin.createUser({
 				email: "user1@somethingelse.com",
@@ -46,7 +46,7 @@ describe("triggers", () => {
 		expect(profiles![2].username).toContain("user1-");
 	});
 
-	it("should delete the user profile if the user is deleted", async () => {
+	it("should delete the user profile automatically if the user is deleted", async () => {
 		const { error: deleteError } =
 			await supabaseServiceRoleClient.auth.admin.deleteUser(additionalUserId);
 		expect(deleteError).toBeNull();

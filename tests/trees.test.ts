@@ -5,7 +5,7 @@ describe("trees table", () => {
 
 	afterAll(async () => {});
 
-	it("should fetch some trees as anon user", async () => {
+	it("should return some trees as anon user", async () => {
 		const { data, error } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
@@ -15,7 +15,7 @@ describe("trees table", () => {
 		expect(data?.length).toBe(10);
 	});
 
-	it("should fetch a single tree", async () => {
+	it("should return a single tree", async () => {
 		const { data, error } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
