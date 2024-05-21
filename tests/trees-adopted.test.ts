@@ -48,7 +48,7 @@ describe("trees_adopted", () => {
 		expect(data).toBeDefined();
 		expect(error).toBeNull();
 
-		const { data: adopt1, error: adoptError1 } = await supabaseServiceRoleClient
+		const { data: adopt1, error: adoptError1 } = await supabaseAnonClient
 			.from("trees_adopted")
 			.insert({
 				uuid: users.userId1,
@@ -67,7 +67,7 @@ describe("trees_adopted", () => {
 		expect(data1).toBeDefined();
 		expect(error1).toBeNull();
 
-		const { data: adopt2, error: adoptError2 } = await supabaseServiceRoleClient
+		const { data: adopt2, error: adoptError2 } = await supabaseAnonClient
 			.from("trees_adopted")
 			.insert({
 				uuid: users.userId2,
