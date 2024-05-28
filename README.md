@@ -1,39 +1,13 @@
 ![](https://img.shields.io/badge/Built%20with%20%E2%9D%A4%EF%B8%8F-at%20Technologiestiftung%20Berlin-blue)
 
-- [Giess den Kiez API](#giess-den-kiez-api)
-  - [W.I.P. API Migration](#wip-api-migration)
-  - [Prerequisites](#prerequisites)
-  - [Setup](#setup)
-    - [Supabase (local)](#supabase-local)
-    - [Environments and Variables](#environments-and-variables)
-    - [Vercel](#vercel)
-      - [Vercel Environment Variables](#vercel-environment-variables)
-  - [API Routes /v3](#api-routes-v3)
-    - [](#)
-    - [API Authorization](#api-authorization)
-    - [Supabase](#supabase)
-  - [Tests](#tests)
-  - [Supabase](#supabase-1)
-    - [Migrations and Types](#migrations-and-types)
-    - [Deployment](#deployment)
-    - [Radolan Harvester](#radolan-harvester)
-    - [OSM Pumpen Harvester](#osm-pumpen-harvester)
-  - [API Routes](#api-routes)
-    - [API Authorization](#api-authorization-1)
-      - [Supabase](#supabase-2)
-  - [Tests](#tests-1)
-  - [Contributors ✨](#contributors-)
-  - [Credits](#credits)
+# Giess den Kiez API based on Supabase
 
-# Giess den Kiez API
-
-Built with Typescript, connects to Supabase and runs on vercel.com.
+Supabase setup for Giess den Kiez
 
 🚨 Might become part of the [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repo eventually.
 
 ## Prerequisites
 
-- [Vercel.com](https://vercel.com) Account
 - [Supabase](https://supabase.com) Account
 - Supabase CLI install with brew `brew install supabase/tap/supabase`
 - [Docker](https://www.docker.com/) Dependency for Supabase
@@ -73,61 +47,6 @@ cp .env.example .env
 In the example code above the Postgres database Postgrest API are run locally. You **SHOULD NOT** use production variables in your local or CI environments. The tests will modify the database and also truncate tables through the API and also with direct calls.
 
 Again. Be a smart developer, read https://12factor.net/config, https://github.com/motdotla/dotenv#should-i-have-multiple-env-files and never ever touch production with your local code!
-
-### Vercel
-
-Setup your Vercel.com account. You might need to login. Run `npx vercel login` in your shell. You will have to link your local project to a vercel project by running `npx vercel link` and follow the instructions or deploy your application with `npx vercel`. This will create a new project on vercel.com and deploy the application.
-
-##### Vercel Environment Variables
-
-Add all your environment variables to the Vercel project by running the commands below. The cli will prompt for the values as input and lets you select if they should be added to `development`, `preview` and `production`. For local development you can overwrite these value with an `.env` file in the root of your project. It is wise to have one Supabase project for production and one for preview. The preview will then be used in deployment previews on GitHub. You can connect your vercel project with your GitHub repository on the vercel backend.
-
-```bash
-# the master key for supabase
-vercel env add SUPABASE_SERVICE_ROLE_KEY
-# the url to your supabase project
-vercel env add SUPABASE_URL
-# the anon key for supabase
-vercel env add SUPABASE_ANON_KEY
-# the max rows allowed to fetch from supabase (default 1000)
-vercel env add SUPABASE_MAX_ROWS
-```
-
-To let these variables take effect you need to deploy your application once more.
-
-```bash
-vercel --prod
-```
-
-## API Routes /v3
-
-There are 3 main routes `/v3/get`, `/v3/post` and `/v3/delete`.
-
-On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
-
-```bash
-curl --request GET \
-  --url 'http://localhost:3000/get/byid&id=_123456789' \
-
-```
-
-You can see all the available routes in the [docs/api.http](./docs/api.http) file with all their needed `URLSearchParams` and JSON bodies or by inspecting the JSON Schema that is returned when you do a request to the `/get`, `/post` or `/delete` route.
-
-Currently we have these routes
-
-| `/v3/get`            | `/v3/post` | `/v3/delete` |
-| :------------------- | :--------- | :----------- |
-| `/byid`              | `/adopt`   | `/unadopt`   |
-| `/treesbyids`        | `/water`   | `/unwater`   |
-| `/adopted`           |            |              |
-| `/istreeadopted`     |            |              |
-| `/wateredandadopted` |            |              |
-| `/lastwatered`       |            |              |
-| `/wateredbyuser`     |            |              |
-
-###
-
-### API Authorization
 
 ### Supabase
 
@@ -186,83 +105,6 @@ On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.
     - `SUPABASE_ACCESS_TOKEN`
 - **(Not recommended but possible)** Link your local project directly to the remote `supabase link --project-ref <YOUR PROJECT REF>` (will ask you for your database password from the creation process)
 - **(Not recommended but possible)** Push your local state directly to your remote project `supabase db push` (will ask you for your database password from the creation process)
-
-### Radolan Harvester
-
-if you want to use the [DWD Radolan harvester](https://github.com/technologiestiftung/giessdenkiez-de-dwd-harvester) you need to prepare some data in your database
-
-- Update the table `radolan_harvester` with a time range for the last 30 days
-
-```sql
-INSERT INTO "public"."radolan_harvester" ("id", "collection_date", "start_date", "end_date")
-	VALUES (1, (
-			SELECT
-				CURRENT_DATE - INTEGER '1' AS yesterday_date),
-		(
-			SELECT
-				(
-					SELECT
-						CURRENT_DATE - INTEGER '31')::timestamp + '00:50:00'),
-				(
-					SELECT
-						(
-							SELECT
-								CURRENT_DATE - INTEGER '1')::timestamp + '23:50:00'));
-```
-
-- Update the table `radolan_geometry` with sql file [radolan_geometry.sql](sql/radolan_geometry.sql) This geometry is Berlin only.
-- Populate the table radolan_data with the content of [radolan_data.sql](sql/radolan_data.sql)
-
-This process is actually a little blackbox we need to solve.
-
-### OSM Pumpen Harvester
-
-The [giessdenkiez-de](https://github.com/technologiestiftung/giessdenkiez-de) repository fetches Pumpen data from Supabase via a Github Action defined in [pumps.yml](https://github.com/technologiestiftung/giessdenkiez-de/blob/master/.github/workflows/pumps.yml). The data is pushed to a Supabase bucket `data_assets`. For local development, it is created via [seed.sql](supabase/seed.sql). For deployments, the bucket needs to be created:
-
-```
--- Create the public data_assets bucket
-INSERT INTO storage.buckets(id, name)
-	VALUES ('data_assets', 'data_assets');
-
-CREATE POLICY "Public Access" ON storage.objects
-	FOR SELECT
-		USING (bucket_id = 'data_assets');
-
-UPDATE
-	"storage".buckets
-SET
-	"public" = TRUE
-WHERE
-	buckets.id = 'data_assets';
-```
-
-## API Routes
-
-There are 3 main routes `/get`, `/post` and `/delete`.
-
-On the `/get` route all actions are controlled by passing URL params. On the `/post` and `/delete` route you will have to work with additional POST bodies. For example to fetch a specific tree run the following command.
-
-```bash
-curl --request GET \
-  --url 'http://localhost:8080/get/byid&id=_123456789' \
-
-```
-
-You can see all the available routes in the [docs/api.http](./docs/api.http) file with all their needed `URLSearchParams` and JSON bodies or by inspecting the JSON Schema that is returned when you do a request to the `/get`, `/post` or `/delete` route.
-
-Currently we have these routes
-
-| `/v3/get`            | `/v3/post` | `/v3/delete` |
-| -------------------- | ---------- | ------------ |
-| `/byid`              | `/adopt`   | `/unadopt`   |
-| `/treesbyids`        | `/water`   | `/unwater`   |
-| `/adopted`           |            |              |
-| `/istreeadopted`     |            |              |
-| `/wateredandadopted` |            |              |
-| `/lastwatered`       |            |              |
-| `/wateredbyuser`     |            |              |
-
-### API Authorization
 
 #### Supabase
 
