@@ -125,8 +125,8 @@ export type Database = {
           gattung: string | null
           gattung_deutsch: string | null
           geom: unknown | null
-          gml_id: string
           hausnr: string | null
+          id: string
           kennzeich: string | null
           kronedurch: string | null
           lat: string | null
@@ -153,8 +153,8 @@ export type Database = {
           gattung?: string | null
           gattung_deutsch?: string | null
           geom?: unknown | null
-          gml_id: string
           hausnr?: string | null
+          id: string
           kennzeich?: string | null
           kronedurch?: string | null
           lat?: string | null
@@ -181,8 +181,8 @@ export type Database = {
           gattung?: string | null
           gattung_deutsch?: string | null
           geom?: unknown | null
-          gml_id?: string
           hausnr?: string | null
+          id?: string
           kennzeich?: string | null
           kronedurch?: string | null
           lat?: string | null
@@ -202,65 +202,65 @@ export type Database = {
       }
       trees_adopted: {
         Row: {
-          gml_id: string
           id: number
+          tree_id: string
           uuid: string | null
         }
         Insert: {
-          gml_id: string
           id?: number
+          tree_id: string
           uuid?: string | null
         }
         Update: {
-          gml_id?: string
           id?: number
+          tree_id?: string
           uuid?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "fk_trees_adopted_trees"
-            columns: ["gml_id"]
+            columns: ["tree_id"]
             isOneToOne: false
             referencedRelation: "trees"
-            referencedColumns: ["gml_id"]
+            referencedColumns: ["id"]
           },
         ]
       }
       trees_watered: {
         Row: {
           amount: number
-          gml_id: string
           id: number
           included_in_map_layer: boolean | null
           timestamp: string
+          tree_id: string
           username: string | null
           uuid: string | null
         }
         Insert: {
           amount: number
-          gml_id: string
           id?: number
           included_in_map_layer?: boolean | null
           timestamp: string
+          tree_id: string
           username?: string | null
           uuid?: string | null
         }
         Update: {
           amount?: number
-          gml_id?: string
           id?: number
           included_in_map_layer?: boolean | null
           timestamp?: string
+          tree_id?: string
           username?: string | null
           uuid?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "fk_trees_watered_trees"
-            columns: ["gml_id"]
+            columns: ["tree_id"]
             isOneToOne: false
             referencedRelation: "trees"
-            referencedColumns: ["gml_id"]
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -279,7 +279,7 @@ export type Database = {
       get_watered_and_adopted: {
         Args: Record<PropertyKey, never>
         Returns: {
-          gml_id: string
+          tree_id: string
           adopted: number
           watered: number
         }[]
@@ -297,14 +297,14 @@ export type Database = {
       }
       waterings_for_tree: {
         Args: {
-          g_id: string
+          t_id: string
         }
         Returns: {
           amount: number
           timestamp: string
           username: string
           id: number
-          gml_id: string
+          tree_id: string
         }[]
       }
       waterings_for_user: {
@@ -316,7 +316,7 @@ export type Database = {
           timestamp: string
           username: string
           id: number
-          gml_id: string
+          tree_id: string
         }[]
       }
     }
