@@ -35,7 +35,7 @@ describe("trees_watered", () => {
 				amount: 10,
 				timestamp: new Date().toISOString(),
 				username: "user1",
-				tree_id: "_0epuygrgg",
+				tree_id: "00008100:0021bf08",
 			})
 			.select("*");
 		expect(waterError1).toBeDefined();
@@ -57,7 +57,7 @@ describe("trees_watered", () => {
 				amount: 10,
 				timestamp: new Date().toISOString(),
 				username: "user1",
-				tree_id: "_0epuygrgg",
+				tree_id: "00008100:0021bf08",
 			})
 			.select("*");
 		expect(watering1).toBeDefined();
@@ -79,7 +79,7 @@ describe("trees_watered", () => {
 				amount: 20,
 				timestamp: new Date().toISOString(),
 				username: "user2",
-				tree_id: "_0epuygrgg",
+				tree_id: "00008100:0021bf08",
 			})
 			.select("*");
 		expect(watering2).toBeDefined();
@@ -152,7 +152,7 @@ describe("trees_watered", () => {
 
 		it("should return only waterings of a specific tree via RPC", async () => {
 			const { data: waterings } = await supabaseAnonClient
-				.rpc("waterings_for_tree", { t_id: "_0epuygrgg" })
+				.rpc("waterings_for_tree", { t_id: "00008100:0021bf08" })
 				.select("*");
 
 			expect(waterings).toBeDefined();

@@ -125,7 +125,6 @@ export type Database = {
           gattung: string | null
           gattung_deutsch: string | null
           geom: unknown | null
-          gml_id: string | null
           hausnr: string | null
           id: string
           kennzeich: string | null
@@ -154,7 +153,6 @@ export type Database = {
           gattung?: string | null
           gattung_deutsch?: string | null
           geom?: unknown | null
-          gml_id?: string | null
           hausnr?: string | null
           id: string
           kennzeich?: string | null
@@ -183,7 +181,6 @@ export type Database = {
           gattung?: string | null
           gattung_deutsch?: string | null
           geom?: unknown | null
-          gml_id?: string | null
           hausnr?: string | null
           id?: string
           kennzeich?: string | null
@@ -233,6 +230,7 @@ export type Database = {
         Row: {
           amount: number
           id: number
+          included_in_map_layer: boolean | null
           timestamp: string
           tree_id: string
           username: string | null
@@ -241,6 +239,7 @@ export type Database = {
         Insert: {
           amount: number
           id?: number
+          included_in_map_layer?: boolean | null
           timestamp: string
           tree_id: string
           username?: string | null
@@ -249,6 +248,7 @@ export type Database = {
         Update: {
           amount?: number
           id?: number
+          included_in_map_layer?: boolean | null
           timestamp?: string
           tree_id?: string
           username?: string | null
