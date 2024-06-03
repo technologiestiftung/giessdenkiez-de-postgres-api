@@ -23,6 +23,6 @@ describe("trees table", () => {
 			.single();
 		expect(error).toBeNull();
 		expect(data).toBeDefined();
-		expect(data?.id).toBe("00008100:0021bf08");
+		expect(data?.gml_id).toBe("00008100:0021bf08");
 	});
 });
