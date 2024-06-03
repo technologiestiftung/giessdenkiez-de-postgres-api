@@ -19,7 +19,7 @@ describe("trees table", () => {
 		const { data, error } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
-			.eq("gml_id", "00008100:0021bf08")
+			.eq("id", "00008100:0021bf08")
 			.single();
 		expect(error).toBeNull();
 		expect(data).toBeDefined();
