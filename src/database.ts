@@ -279,7 +279,7 @@ export type Database = {
       get_watered_and_adopted: {
         Args: Record<PropertyKey, never>
         Returns: {
-          tree_id: string
+          gml_id: string
           adopted: number
           watered: number
         }[]
@@ -297,14 +297,14 @@ export type Database = {
       }
       waterings_for_tree: {
         Args: {
-          t_id: string
+          g_id: string
         }
         Returns: {
           amount: number
           timestamp: string
           username: string
           id: number
-          tree_id: string
+          gml_id: string
         }[]
       }
       waterings_for_user: {
@@ -316,7 +316,7 @@ export type Database = {
           timestamp: string
           username: string
           id: number
-          tree_id: string
+          gml_id: string
         }[]
       }
     }

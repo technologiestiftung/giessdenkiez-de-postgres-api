@@ -152,7 +152,7 @@ describe("trees_watered", () => {
 
 		it("should return only waterings of a specific tree via RPC", async () => {
 			const { data: waterings } = await supabaseAnonClient
-				.rpc("waterings_for_tree", { t_id: "00008100:0021bf08" })
+				.rpc("waterings_for_tree", { g_id: "00008100:0021bf08" })
 				.select("*");
 
 			expect(waterings).toBeDefined();
