@@ -19,10 +19,10 @@ describe("trees table", () => {
 		const { data, error } = await supabaseAnonClient
 			.from("trees")
 			.select("*")
-			.eq("id", "_0epuygrgg")
+			.eq("id", "00008100:0021bf08")
 			.single();
 		expect(error).toBeNull();
 		expect(data).toBeDefined();
-		expect(data?.id).toBe("_0epuygrgg");
+		expect(data?.id).toBe("00008100:0021bf08");
 	});
 });

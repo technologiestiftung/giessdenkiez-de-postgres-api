@@ -33,7 +33,7 @@ describe("trees_adopted", () => {
 			.from("trees_adopted")
 			.insert({
 				uuid: users.userId1,
-				tree_id: "_0epuygrgg",
+				tree_id: "00008100:0021bf08",
 			})
 			.select("*");
 		expect(adoptError1).toBeDefined();
@@ -52,7 +52,7 @@ describe("trees_adopted", () => {
 			.from("trees_adopted")
 			.insert({
 				uuid: users.userId1,
-				tree_id: "_0epuygrgg",
+				tree_id: "00008100:0021bf08",
 			})
 			.select("*");
 		expect(adopt1).toBeDefined();
@@ -71,7 +71,7 @@ describe("trees_adopted", () => {
 			.from("trees_adopted")
 			.insert({
 				uuid: users.userId2,
-				tree_id: "_0epuygrgg",
+				tree_id: "00008100:0021bf08",
 			})
 			.select("*");
 		expect(adopt2).toBeDefined();
