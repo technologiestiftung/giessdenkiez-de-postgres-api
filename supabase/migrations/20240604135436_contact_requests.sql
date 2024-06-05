@@ -4,7 +4,7 @@ create table contact_requests (
   contact_id uuid references auth.users(id) not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   contact_message text,
-  contact_mail_id text default null, -- the resend.io ID of the sent contact mail
+  contact_mail_id text default null -- the resend.io ID of the sent contact mail
 );
 
 alter table "public"."contact_requests" enable row level security;
