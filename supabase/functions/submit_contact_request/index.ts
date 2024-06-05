@@ -41,6 +41,32 @@ const handler = async (_request: Request): Promise<Response> => {
 		return new Response(undefined, { status: 404 });
 	}
 
+	// Check if the user has already tried to contact the contact
+	const { data: lookupData, error: lookupError } = await supabaseClient
+		.from("contact_requests")
+		.select("*")
+		.eq("user_id", authData.user.id)
+		.eq("contact_id", contactData.id);
+
+	if (lookupError) {
+		return new Response(undefined, { status: 500 });
+	}
+
+	if (lookupData.length > 0) {
+		return new Response(
+			JSON.stringify({
+				message:
+					"User has already send a contact request, not allowed to send another one.",
+			}),
+			{
+				status: 400,
+				headers: {
+					"Content-Type": "application/json",
+				},
+			}
+		);
+	}
+
 	// Lookup the contat email address via serviceRoleClient
 	const { data: fullContactData, error: fullContactError } =
 		await supabaseServiceRoleClient
