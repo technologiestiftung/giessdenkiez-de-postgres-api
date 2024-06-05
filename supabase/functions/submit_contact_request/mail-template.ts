@@ -1,3 +1,8 @@
+export const mailTemplate = (
+	username: string,
+	message: string,
+	email: string
+) => `
 <!DOCTYPE html>
 <html lang="de">
 	<head>
@@ -419,3 +424,4 @@
 		</table>
 	</body>
 </html>
+`;
