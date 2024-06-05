@@ -29,5 +29,21 @@ on contact_requests
 for update to authenticated
 using (auth.uid() = user_id);
 
--- not possible to set RLS on views
-create view public.users_view as select * from auth.users;
+grant select on table auth.users to service_role;
+
+CREATE OR REPLACE FUNCTION public.get_user_data_for_id(u_id uuid)
+ RETURNS TABLE(id uuid, email character varying)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+	RETURN query
+	
+	SELECT 
+	    au.id, au.email
+	FROM 
+	    auth.users au
+	WHERE 
+	    au.id = u_id;
+		
+END;
+$function$;

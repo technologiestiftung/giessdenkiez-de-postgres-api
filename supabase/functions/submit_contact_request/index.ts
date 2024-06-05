@@ -70,9 +70,8 @@ const handler = async (_request: Request): Promise<Response> => {
 	// Lookup the contat email address via serviceRoleClient
 	const { data: fullContactData, error: fullContactError } =
 		await supabaseServiceRoleClient
-			.from("users_view")
+			.rpc("get_user_data_for_id", { u_id: contactData.id })
 			.select("email")
-			.eq("id", contactData.id)
 			.single();
 
 	if (fullContactError) {
