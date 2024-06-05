@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { mailTemplate } from "./mail-template.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const SUPABASE_URL = Deno.env.get("URL");
@@ -7,6 +8,12 @@ const SUPABASE_ANON_KEY = Deno.env.get("ANON_KEY");
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
 
 const handler = async (_request: Request): Promise<Response> => {
+	if (_request.method === "OPTIONS") {
+		console.log("OPTIONS request");
+		return new Response(null, { headers: corsHeaders, status: 204 });
+	}
+
+	console.log("POST request");
 	const { userContactName, message } = await _request.json();
 
 	const authHeader = _request.headers.get("Authorization")!;
@@ -38,7 +45,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (contactError) {
-		return new Response(undefined, { status: 404 });
+		return new Response(undefined, { status: 404, headers: corsHeaders });
 	}
 
 	// Check if the user has already tried to contact the contact
@@ -49,18 +56,20 @@ const handler = async (_request: Request): Promise<Response> => {
 		.eq("contact_id", contactData.id);
 
 	if (lookupError) {
-		return new Response(undefined, { status: 500 });
+		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
 	if (lookupData.length > 0) {
 		return new Response(
 			JSON.stringify({
+				code: "already_sent_contact_request",
 				message:
 					"User has already send a contact request, not allowed to send another one.",
 			}),
 			{
 				status: 400,
 				headers: {
+					...corsHeaders,
 					"Content-Type": "application/json",
 				},
 			}
@@ -75,7 +84,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (fullContactError) {
-		return new Response(undefined, { status: 404 });
+		return new Response(undefined, { status: 404, headers: corsHeaders });
 	}
 
 	// Save the contact request
@@ -90,7 +99,7 @@ const handler = async (_request: Request): Promise<Response> => {
 		.single();
 
 	if (insertError) {
-		return new Response(undefined, { status: 500 });
+		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
 	// Send the email
@@ -109,7 +118,7 @@ const handler = async (_request: Request): Promise<Response> => {
 	});
 
 	if (res.status !== 200) {
-		return new Response(undefined, { status: 500 });
+		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
 	const emailData = await res.json();
@@ -123,12 +132,13 @@ const handler = async (_request: Request): Promise<Response> => {
 		.eq("id", insertData.id);
 
 	if (updateError) {
-		return new Response(undefined, { status: 500 });
+		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
 	return new Response(JSON.stringify(""), {
 		status: 200,
 		headers: {
+			...corsHeaders,
 			"Content-Type": "application/json",
 		},
 	});
