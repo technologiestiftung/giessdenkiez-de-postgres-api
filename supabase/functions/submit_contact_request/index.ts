@@ -2,6 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { mailTemplate } from "./mail-template.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import nodemailer from "npm:nodemailer";
+import { sub } from "npm:date-fns";
 
 const SMTP_HOST = Deno.env.get("SMTP_HOST");
 const SMTP_USER = Deno.env.get("SMTP_USER");
@@ -14,11 +15,9 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
 
 const handler = async (_request: Request): Promise<Response> => {
 	if (_request.method === "OPTIONS") {
-		console.log("OPTIONS request");
 		return new Response(null, { headers: corsHeaders, status: 204 });
 	}
 
-	console.log("POST request");
 	const { userContactName, message } = await _request.json();
 
 	const authHeader = _request.headers.get("Authorization")!;
@@ -58,7 +57,8 @@ const handler = async (_request: Request): Promise<Response> => {
 		.from("contact_requests")
 		.select("*")
 		.eq("user_id", authData.user.id)
-		.eq("contact_id", contactData.id);
+		.eq("contact_id", contactData.id)
+		.not("contact_mail_id", "is", null); // only count sent emails
 
 	if (lookupError) {
 		return new Response(undefined, { status: 500, headers: corsHeaders });
@@ -72,7 +72,38 @@ const handler = async (_request: Request): Promise<Response> => {
 					"User has already send a contact request, not allowed to send another one.",
 			}),
 			{
-				status: 400,
+				status: 200,
+				headers: {
+					...corsHeaders,
+					"Content-Type": "application/json",
+				},
+			}
+		);
+	}
+
+	// Check if the user has sent 3 contact requests in the last 24 hours
+	const { data: lookupDailyData, error: lookupDailyError } =
+		await supabaseClient
+			.from("contact_requests")
+			.select("*")
+			.eq("user_id", authData.user.id)
+			.not("contact_mail_id", "is", null) // only count sent emails
+			.gt("created_at", sub(new Date(), { days: 1 }).toISOString());
+
+	if (lookupDailyError) {
+		console.log(lookupDailyError);
+		return new Response(undefined, { status: 500, headers: corsHeaders });
+	}
+
+	if (lookupDailyData.length >= 3) {
+		return new Response(
+			JSON.stringify({
+				code: "already_sent_more_than_3_contact_requests",
+				message:
+					"User has already sent more than 3 contact requests in the last 24 hours, not allowed to send another one.",
+			}),
+			{
+				status: 200,
 				headers: {
 					...corsHeaders,
 					"Content-Type": "application/json",
@@ -129,7 +160,6 @@ const handler = async (_request: Request): Promise<Response> => {
 
 		// Send the email
 		const info = await transporter.sendMail(mailOptions);
-		console.log(info);
 
 		// Update the contact request with the email id
 		const { error: updateError } = await supabaseClient
@@ -157,15 +187,3 @@ const handler = async (_request: Request): Promise<Response> => {
 };
 
 Deno.serve(handler);
-
-/* To invoke locally:
-
-  1. Run `supabase start` (see: https://supabase.com/docs/reference/cli/supabase-start)
-  2. Make an HTTP request:
-
-  curl -i --location --request POST 'http://127.0.0.1:54321/functions/v1/resend' \
-    --header 'Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0' \
-    --header 'Content-Type: application/json' \
-    --data '{"name":"Functions"}'
-
-*/
