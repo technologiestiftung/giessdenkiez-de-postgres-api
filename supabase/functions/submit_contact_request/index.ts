@@ -1,8 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { mailTemplate } from "./mail-template.ts";
-import { corsHeaders } from "../_shared/cors.ts";
-import nodemailer from "npm:nodemailer";
 import { sub } from "npm:date-fns";
+import nodemailer from "npm:nodemailer";
+import { corsHeaders } from "../_shared/cors.ts";
+import { mailTemplate } from "./mail-template.ts";
 
 const SMTP_HOST = Deno.env.get("SMTP_HOST");
 const SMTP_USER = Deno.env.get("SMTP_USER");
@@ -18,7 +18,7 @@ const handler = async (_request: Request): Promise<Response> => {
 		return new Response(null, { headers: corsHeaders, status: 204 });
 	}
 
-	const { userContactName, message } = await _request.json();
+	const { recipientContactName, message } = await _request.json();
 
 	const authHeader = _request.headers.get("Authorization")!;
 
@@ -31,45 +31,46 @@ const handler = async (_request: Request): Promise<Response> => {
 		SUPABASE_SERVICE_ROLE_KEY
 	);
 
-	// Get the user from the token
+	// Get the user (= sender) data from the token
 	const token = authHeader.replace("Bearer ", "");
-	const { data: authData, error: authError } =
+	const { data: senderData, error: senderDataError } =
 		await supabaseClient.auth.getUser(token);
 
-	if (authError) {
+	if (senderDataError) {
 		return new Response(undefined, { status: 401 });
 	}
 
-	// Lookup the contact user id
-	const { data: contactData, error: contactError } =
+	// Lookup the recipient user id
+	const { data: recipientData, error: recipientDataError } =
 		await supabaseServiceRoleClient
 			.from("profiles")
 			.select("*")
-			.eq("username", userContactName)
+			.eq("username", recipientContactName)
 			.single();
 
-	if (contactError) {
+	if (recipientDataError) {
 		return new Response(undefined, { status: 404, headers: corsHeaders });
 	}
 
-	// Check if the user has already tried to contact the contact
-	const { data: lookupData, error: lookupError } = await supabaseClient
-		.from("contact_requests")
-		.select("*")
-		.eq("user_id", authData.user.id)
-		.eq("contact_id", contactData.id)
-		.not("contact_mail_id", "is", null); // only count sent emails
+	// Check if the user has already tried to contact the recipient
+	const { data: requestsToRecipient, error: requestsToRecipientError } =
+		await supabaseClient
+			.from("contact_requests")
+			.select("*")
+			.eq("user_id", senderData.user.id)
+			.eq("contact_id", recipientData.id)
+			.not("contact_mail_id", "is", null); // only count sent emails
 
-	if (lookupError) {
+	if (requestsToRecipientError) {
 		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
-	if (lookupData.length > 0) {
+	if (requestsToRecipient.length > 0) {
 		return new Response(
 			JSON.stringify({
-				code: "already_sent_contact_request",
+				code: "already_contacted_the_recipient_before",
 				message:
-					"User has already send a contact request, not allowed to send another one.",
+					"User has already sent a contact request to the recipient, not allowed to send another one.",
 			}),
 			{
 				status: 200,
@@ -82,20 +83,20 @@ const handler = async (_request: Request): Promise<Response> => {
 	}
 
 	// Check if the user has sent 3 contact requests in the last 24 hours
-	const { data: lookupDailyData, error: lookupDailyError } =
+	const { data: requestsOfLast24h, error: requestsOfLast24hError } =
 		await supabaseClient
 			.from("contact_requests")
 			.select("*")
-			.eq("user_id", authData.user.id)
+			.eq("user_id", senderData.user.id)
 			.not("contact_mail_id", "is", null) // only count sent emails
 			.gt("created_at", sub(new Date(), { days: 1 }).toISOString());
 
-	if (lookupDailyError) {
-		console.log(lookupDailyError);
+	if (requestsOfLast24hError) {
+		console.log(requestsOfLast24hError);
 		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
-	if (lookupDailyData.length >= 3) {
+	if (requestsOfLast24h.length >= 3) {
 		return new Response(
 			JSON.stringify({
 				code: "already_sent_more_than_3_contact_requests",
@@ -112,29 +113,31 @@ const handler = async (_request: Request): Promise<Response> => {
 		);
 	}
 
-	// Lookup the contat email address via serviceRoleClient
-	const { data: fullContactData, error: fullContactError } =
+	// Lookup the recipient email address via serviceRoleClient
+	const { data: fullRecipientData, error: fullRecipientDataError } =
 		await supabaseServiceRoleClient
-			.rpc("get_user_data_for_id", { u_id: contactData.id })
+			.rpc("get_user_data_for_id", { u_id: recipientData.id })
 			.select("email")
 			.single();
 
-	if (fullContactError) {
+	if (fullRecipientDataError) {
 		return new Response(undefined, { status: 404, headers: corsHeaders });
 	}
 
 	// Save the contact request
-	const { data: insertData, error: insertError } = await supabaseClient
-		.from("contact_requests")
-		.insert({
-			user_id: authData.user.id,
-			contact_id: contactData.id,
-			contact_message: message,
-		})
-		.select("*")
-		.single();
+	const { data: insertedRequest, error: insertedRequestError } =
+		await supabaseClient
+			.from("contact_requests")
+			.insert({
+				user_id: senderData.user.id,
+				contact_id: recipientData.id,
+				contact_message: message,
+			})
+			.select("*")
+			.single();
 
-	if (insertError) {
+	if (insertedRequestError) {
+		console.log(insertedRequestError);
 		return new Response(undefined, { status: 500, headers: corsHeaders });
 	}
 
@@ -153,23 +156,27 @@ const handler = async (_request: Request): Promise<Response> => {
 
 		const mailOptions = {
 			from: SMTP_FROM,
-			to: fullContactData.email,
+			to: fullRecipientData.email,
 			subject: "Du hast eine neue Gieß den Kiez Kontaktanfrage erhalten! 🌳",
-			html: mailTemplate(userContactName, message, fullContactData.email),
+			html: mailTemplate(
+				recipientContactName,
+				message,
+				fullRecipientData.email
+			),
 		};
 
 		// Send the email
 		const info = await transporter.sendMail(mailOptions);
 
 		// Update the contact request with the email id
-		const { error: updateError } = await supabaseClient
+		const { error: updateRequestError } = await supabaseClient
 			.from("contact_requests")
 			.update({
 				contact_mail_id: info.response,
 			})
-			.eq("id", insertData.id);
+			.eq("id", insertedRequest.id);
 
-		if (updateError) {
+		if (updateRequestError) {
 			return new Response(undefined, { status: 500, headers: corsHeaders });
 		}
 	} catch (e) {
