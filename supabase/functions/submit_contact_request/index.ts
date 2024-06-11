@@ -157,7 +157,7 @@ const handler = async (_request: Request): Promise<Response> => {
 		const mailOptions = {
 			from: SMTP_FROM,
 			to: fullRecipientData.email,
-			subject: "Du hast eine neue Gieß den Kiez Kontaktanfrage erhalten! 🌳",
+			subject: "[Gieß den Kiez] Kontaktanfrage / Contact request",
 			html: mailTemplate(
 				recipientContactName,
 				message,

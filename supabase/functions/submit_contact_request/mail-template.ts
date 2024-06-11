@@ -140,9 +140,11 @@ export const mailTemplate = (
 														"
 														class="content-cell"
 													>
+                                                        <p>
+                                                            Kontaktanfrage auf Gieß den Kiez
+                                                        </p>
 														<p>
-															* * * For the English version of this email,
-															please see below. * * *
+															* * * For the English version of this email, please see below. * * *
 														</p>
 														<h1
 															style="
@@ -172,9 +174,8 @@ export const mailTemplate = (
 																box-sizing: border-box;
 															"
 														>
-															Der Gieß den Kiez User <span style="margin-left: 5px; margin-right: 5px; font-weight: bold;">${username}</span> möchte dich
-															kontaktieren und hinterlässt Dir folgende
-															Nachricht
+															Der Gieß den Kiez User <span style="margin-left: 5px; margin-right: 5px; font-weight: bold;">${username}</span> möchte sich
+															mit Dir vernetzen und hat Dir folgende Nachricht gesendet:
 
 															<div
 																style="margin-top: 25px; margin-bottom: 25px; padding: 10px; background-color: lightgrey; border-radius: 10px"
@@ -182,9 +183,10 @@ export const mailTemplate = (
 																${message}</div
 															>
 
-															Wenn Du diese Kontaktanfrage akzeptieren möchtest, dann schreibe bitte eine Antwort an die E-Mail-Adresse des Users:
+															Um dem Nutzer per E-Mail zu antworten, schreibe bitte an:
 															<div style="margin-top: 25px; margin-bottom: 25px;"><a href="mailto:${email}" >${email}</a></div>
-                                                            Wenn du diese Kontaktanfrage ablehnen möchtest, dann ignoriere diese E-Mail einfach.
+
+                                                            <i>Sollte die Kontaktanfrage unangemessene Inhalte enthalten, tut uns das sehr leid. Bitte informiere unverzüglich unser Team über <a href="mailto:info@citylab-berlin.org">info@citylab-berlin.org</a>.</i> 
 														</p>
 
 														<p
@@ -259,8 +261,8 @@ export const mailTemplate = (
 																box-sizing: border-box;
 															"
 														>
-                                                        The Gieß den Kiez user <span style="margin-left: 5px; margin-right: 5px; font-weight: bold;">${username}</span> wants to contact
-                                                        you and leaves the following message:
+                                                        The Gieß den Kiez user <span style="margin-left: 5px; margin-right: 5px; font-weight: bold;">${username}</span> would like to connect with you
+                                                        and has sent you the following message:
 
                                                         <div
                                                             style="margin-top: 25px; margin-bottom: 25px; padding: 10px; background-color: lightgrey; border-radius: 10px"
@@ -268,9 +270,10 @@ export const mailTemplate = (
                                                             ${message}</div
                                                         >
 
-                                                        If you want to accept this contact request, please write an answer to the user's email address:
+                                                        To reply to the user by e-mail, please write to:
                                                         <div style="margin-top: 25px; margin-bottom: 25px;"><a href="mailto:${email}" >${email}</a></div>
-                                                        If you want to reject this contact request, simply ignore this email.
+                                                        
+                                                        <i>If the contact request contains inappropriate content, we are very sorry. Please inform our team immediately via <a href="mailto:info@citylab-berlin.org">info@citylab-berlin.org</a>.</i>
 														</p>
 
 														<p
