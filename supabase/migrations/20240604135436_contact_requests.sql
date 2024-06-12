@@ -1,7 +1,7 @@
 create table contact_requests (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid references auth.users(id) on delete cascade not null,
-  contact_id uuid references auth.users(id) on delete cascade not null,
+  user_id uuid references auth.users(id) not null,
+  contact_id uuid references auth.users(id) not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   contact_message text,
   contact_mail_id text default null -- the resend.io ID of the sent contact mail
