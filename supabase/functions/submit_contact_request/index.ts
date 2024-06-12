@@ -8,6 +8,7 @@ const SMTP_HOST = Deno.env.get("SMTP_HOST");
 const SMTP_USER = Deno.env.get("SMTP_USER");
 const SMTP_PASSWORD = Deno.env.get("SMTP_PASSWORD");
 const SMTP_FROM = Deno.env.get("SMTP_FROM");
+const SMTP_PORT = parseInt(Deno.env.get("SMTP_PORT"));
 
 const SUPABASE_URL = Deno.env.get("URL");
 const SUPABASE_ANON_KEY = Deno.env.get("ANON_KEY");
@@ -145,9 +146,9 @@ const handler = async (_request: Request): Promise<Response> => {
 	try {
 		const transporter = nodemailer.createTransport({
 			host: SMTP_HOST,
-			port: 25,
+			port: SMTP_PORT,
 			// Use `true` for port 465, `false` for all other ports, see: https://nodemailer.com/
-			secure: false,
+			secure: true,
 			auth: {
 				user: SMTP_USER,
 				pass: SMTP_PASSWORD,
