@@ -9,6 +9,7 @@ const SMTP_USER = Deno.env.get("SMTP_USER");
 const SMTP_PASSWORD = Deno.env.get("SMTP_PASSWORD");
 const SMTP_FROM = Deno.env.get("SMTP_FROM");
 const SMTP_PORT = parseInt(Deno.env.get("SMTP_PORT"));
+const SMTP_SECURE = Deno.env.get("SMTP_SECURE") === "true";
 
 const SUPABASE_URL = Deno.env.get("URL");
 const SUPABASE_ANON_KEY = Deno.env.get("ANON_KEY");
@@ -38,7 +39,7 @@ const handler = async (_request: Request): Promise<Response> => {
 		await supabaseClient.auth.getUser(token);
 
 	if (senderDataError) {
-		return new Response(undefined, { status: 401 });
+		return new Response(JSON.stringify({}), { status: 401 });
 	}
 
 	// Lookup the recipient user id
@@ -50,7 +51,10 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (recipientDataError) {
-		return new Response(undefined, { status: 404, headers: corsHeaders });
+		return new Response(JSON.stringify({}), {
+			status: 404,
+			headers: corsHeaders,
+		});
 	}
 
 	// Check if the user has already tried to contact the recipient
@@ -63,7 +67,10 @@ const handler = async (_request: Request): Promise<Response> => {
 			.not("contact_mail_id", "is", null); // only count sent emails
 
 	if (requestsToRecipientError) {
-		return new Response(undefined, { status: 500, headers: corsHeaders });
+		return new Response(JSON.stringify({}), {
+			status: 500,
+			headers: corsHeaders,
+		});
 	}
 
 	if (requestsToRecipient.length > 0) {
@@ -94,7 +101,10 @@ const handler = async (_request: Request): Promise<Response> => {
 
 	if (requestsOfLast24hError) {
 		console.log(requestsOfLast24hError);
-		return new Response(undefined, { status: 500, headers: corsHeaders });
+		return new Response(JSON.stringify({}), {
+			status: 500,
+			headers: corsHeaders,
+		});
 	}
 
 	if (requestsOfLast24h.length >= 3) {
@@ -122,7 +132,10 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (fullRecipientDataError) {
-		return new Response(undefined, { status: 404, headers: corsHeaders });
+		return new Response(JSON.stringify({}), {
+			status: 404,
+			headers: corsHeaders,
+		});
 	}
 
 	// Save the contact request
@@ -148,7 +161,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			host: SMTP_HOST,
 			port: SMTP_PORT,
 			// Use `true` for port 465, `false` for all other ports, see: https://nodemailer.com/
-			secure: true,
+			secure: SMTP_SECURE,
 			auth: {
 				user: SMTP_USER,
 				pass: SMTP_PASSWORD,
@@ -178,11 +191,17 @@ const handler = async (_request: Request): Promise<Response> => {
 			.eq("id", insertedRequest.id);
 
 		if (updateRequestError) {
-			return new Response(undefined, { status: 500, headers: corsHeaders });
+			return new Response(JSON.stringify({}), {
+				status: 500,
+				headers: corsHeaders,
+			});
 		}
 	} catch (e) {
 		console.log(e);
-		return new Response(undefined, { status: 500, headers: corsHeaders });
+		return new Response(JSON.stringify({}), {
+			status: 500,
+			headers: corsHeaders,
+		});
 	}
 
 	return new Response(JSON.stringify({ code: "contact_request_sent" }), {
