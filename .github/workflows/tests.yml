@@ -58,6 +58,11 @@ jobs:
       - run: supabase functions serve &
       - run: printenv
       - run: deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts
+      - name: Tmate session
+        uses: mxschmitt/action-tmate@v3
+        timeout-minutes: 15
+        with:
+          limit-access-to-actor: true
       - run: supabase stop
       # - run: npm run lint
   release:
