@@ -31,6 +31,12 @@ jobs:
       SMTP_SECURE: false
 
     runs-on: ubuntu-latest
+    services:
+      mailhog:
+        image: mailhog/mailhog
+        ports:
+          - 1025:1025 # SMTP port
+          - 8025:8025 # Web UI port
     environment: ci_test
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     steps:
@@ -51,11 +57,6 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      - name: Run SMTP Server
-        uses: upgundecha/start-sendria-github-action@v1.0.0
-        with:
-          smtp-port: 1025
-          http-port: 1080
       - run: supabase start
       # - run: npm ci
       # - run: npm run build --if-present
