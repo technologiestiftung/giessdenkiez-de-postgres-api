@@ -23,12 +23,12 @@ jobs:
       SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
       SUPABASE_MAX_ROWS: 10000
       ACCESS_CONTROL_ALLOW_ORIGIN: "*"
-      SMTP_HOST: smtp.ethereal.email
-      SMTP_USER: hope.kerluke44@ethereal.email
-      SMTP_PASSWORD: UGgyAEVuxy135WxnEb
+      SMTP_HOST: "127.0.0.1"
+      SMTP_USER: ""
+      SMTP_PASSWORD: ""
       SMTP_FROM: giessdenkiez@citylab-berlin.org
-      SMTP_PORT: 587
-      SMTP_SECURE: true
+      SMTP_PORT: 1025
+      SMTP_SECURE: false
 
     runs-on: ubuntu-latest
     environment: ci_test
@@ -51,6 +51,11 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+      - name: Run SMTP Server
+        uses: upgundecha/start-sendria-github-action@v1.0.0
+        with:
+          smtp-port: 1025
+          http-port: 1080
       - run: supabase start
       # - run: npm ci
       # - run: npm run build --if-present
