@@ -11,9 +11,9 @@ const SMTP_FROM = Deno.env.get("SMTP_FROM");
 const SMTP_PORT = parseInt(Deno.env.get("SMTP_PORT"));
 const SMTP_SECURE = Deno.env.get("SMTP_SECURE") === "true";
 
-const SUPABASE_URL = Deno.env.get("URL");
-const SUPABASE_ANON_KEY = Deno.env.get("ANON_KEY");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 const handler = async (_request: Request): Promise<Response> => {
 	if (_request.method === "OPTIONS") {
