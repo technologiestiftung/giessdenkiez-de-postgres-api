@@ -48,12 +48,10 @@ jobs:
         with:
           version: 1.142.2
       - run: supabase start
-      - run: supabase functions serve --no-verify-jwt
       - run: npm ci
       - run: npm run build --if-present
-      #  Make sure to run tests in band and force exit to avoid hanging tests
-      # until we know where the open handles are
       - run: npm test -- --runInBand --forceExit
+      - run: deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts
       - run: supabase stop
       - run: npm run lint
   release:
