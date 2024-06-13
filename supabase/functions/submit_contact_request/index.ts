@@ -43,6 +43,22 @@ const handler = async (_request: Request): Promise<Response> => {
 		return new Response(JSON.stringify({}), { status: 401 });
 	}
 
+	// Lookup the sender username
+	const { data: senderLookupData, error: senderLookupDataError } =
+		await supabaseServiceRoleClient
+			.from("profiles")
+			.select("*")
+			.eq("id", senderData.user.id)
+			.single();
+
+	if (senderLookupDataError) {
+		console.log(senderLookupDataError);
+		return new Response(JSON.stringify(senderLookupDataError), {
+			status: 404,
+			headers: corsHeaders,
+		});
+	}
+
 	// Lookup the recipient user id
 	const { data: recipientData, error: recipientDataError } =
 		await supabaseServiceRoleClient
@@ -184,7 +200,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			to: fullRecipientData.email,
 			subject: "[Gieß den Kiez] Kontaktanfrage / Contact request",
 			html: mailTemplate(
-				recipientContactName,
+				senderLookupData.username,
 				message,
 				fullRecipientData.email
 			),
