@@ -39,6 +39,7 @@ const handler = async (_request: Request): Promise<Response> => {
 		await supabaseClient.auth.getUser(token);
 
 	if (senderDataError) {
+		console.log(senderDataError);
 		return new Response(JSON.stringify({}), { status: 401 });
 	}
 
@@ -51,6 +52,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (recipientDataError) {
+		console.log(recipientDataError);
 		return new Response(JSON.stringify({}), {
 			status: 404,
 			headers: corsHeaders,
@@ -67,6 +69,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.not("contact_mail_id", "is", null); // only count sent emails
 
 	if (requestsToRecipientError) {
+		console.log(requestsToRecipientError);
 		return new Response(JSON.stringify({}), {
 			status: 500,
 			headers: corsHeaders,
@@ -132,6 +135,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (fullRecipientDataError) {
+		console.log(fullRecipientDataError);
 		return new Response(JSON.stringify({}), {
 			status: 404,
 			headers: corsHeaders,
@@ -191,6 +195,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.eq("id", insertedRequest.id);
 
 		if (updateRequestError) {
+			console.log(updateRequestError);
 			return new Response(JSON.stringify({}), {
 				status: 500,
 				headers: corsHeaders,

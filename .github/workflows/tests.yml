@@ -55,6 +55,7 @@ jobs:
       # - run: npm ci
       # - run: npm run build --if-present
       # - run: npm test -- --runInBand --forceExit
+      - run: supabase functions serve &
       - run: printenv
       - run: deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts
       - run: supabase stop
