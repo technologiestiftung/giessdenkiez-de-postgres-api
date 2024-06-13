@@ -186,47 +186,18 @@ export const mailTemplate = (
 															Um dem Nutzer per E-Mail zu antworten, schreibe bitte an:
 															<div style="margin-top: 25px; margin-bottom: 25px;"><a href="mailto:${email}" >${email}</a></div>
 
-                                                            <i>Sollte die Kontaktanfrage unangemessene Inhalte enthalten, tut uns das sehr leid. Bitte informiere unverzüglich unser Team über <a href="mailto:info@citylab-berlin.org">info@citylab-berlin.org</a>.</i> 
-														</p>
-
-														<p
-															style="
-																margin-top: 0;
-																color: #000;
-																padding: 1rem 0 0 0;
-																font-size: 14px;
-																line-height: 1.5em;
-																font-family: Arial, 'Helvetica Neue', Helvetica,
-																	sans-serif;
-																-webkit-box-sizing: border-box;
-																box-sizing: border-box;
-															"
-														>
-															<i
-																style="
-																	font-family: Arial, 'Helvetica Neue',
-																		Helvetica, sans-serif;
-																	-webkit-box-sizing: border-box;
-																	box-sizing: border-box;
-																"
-															>
-																Gieß den Kiez ist eine Anwendung, die hilft,
-																ehrenamtliches Engagement beim Gießen durstiger
-																Stadtbäume zu koordinieren. Gieß den Kiez ist
-																ein Projekt der
-																<a
-																	style="color: unset"
-																	href="https://www.technologiestiftung-berlin.de/"
-																	>Technologiestiftung Berlin</a
-																>
-																und wird vom
-																<a
-																	style="color: unset"
-																	href="https://citylab-berlin.org/"
-																	>CityLAB Berlin</a
-																>
-																entwickelt.
-															</i>
+                                                            <i style="
+                                                                margin-top: 0;
+                                                                line-height: 1.5em;
+                                                                font-family: Arial, 'Helvetica Neue', Helvetica,
+                                                                    sans-serif;
+                                                                -webkit-box-sizing: border-box;
+                                                                box-sizing: border-box;
+                                                                color: #aeaeae;
+                                                                font-size: 14px;
+                                                                text-align: center;">
+                                                                Sollte die Kontaktanfrage unangemessene Inhalte enthalten, tut uns das sehr leid. Bitte informiere unverzüglich unser Team über info@citylab-berlin.org.
+                                                            </i> 
 														</p>
 
 														<br />
@@ -273,45 +244,16 @@ export const mailTemplate = (
                                                         To reply to the user by e-mail, please write to:
                                                         <div style="margin-top: 25px; margin-bottom: 25px;"><a href="mailto:${email}" >${email}</a></div>
                                                         
-                                                        <i>If the contact request contains inappropriate content, we are very sorry. Please inform our team immediately via <a href="mailto:info@citylab-berlin.org">info@citylab-berlin.org</a>.</i>
-														</p>
-
-														<p
-															style="
-																margin-top: 0;
-																color: #000;
-																padding: 1rem 0 0 0;
-																font-size: 14px;
-																line-height: 1.5em;
-																font-family: Arial, 'Helvetica Neue', Helvetica,
-																	sans-serif;
-																-webkit-box-sizing: border-box;
-																box-sizing: border-box;
-															"
-														>
-															<i
-																style="
-																	font-family: Arial, 'Helvetica Neue',
-																		Helvetica, sans-serif;
-																	-webkit-box-sizing: border-box;
-																	box-sizing: border-box;
-																"
-															>
-																Gieß den Kiez is an application that helps to
-																coordinate volunteer engagement to water thirsty
-																urban trees. Gieß den Kiez is a project of the
-																<a
-																	style="color: unset"
-																	href="https://www.technologiestiftung-berlin.de/"
-																	>Technology Foundation Berlin</a
-																>
-																and is being developed by
-																<a
-																	style="color: unset"
-																	href="https://citylab-berlin.org/"
-																	>CityLAB Berlin</a
-																>.
-															</i>
+                                                        <i style="
+                                                        margin-top: 0;
+                                                        line-height: 1.5em;
+                                                        font-family: Arial, 'Helvetica Neue', Helvetica,
+                                                            sans-serif;
+                                                        -webkit-box-sizing: border-box;
+                                                        box-sizing: border-box;
+                                                        color: #aeaeae;
+                                                        font-size: 14px;
+                                                        text-align: center;">If the contact request contains inappropriate content, we are very sorry. Please inform our team immediately via info@citylab-berlin.org.</i>
 														</p>
 
 														<p
@@ -405,13 +347,31 @@ export const mailTemplate = (
 															"
 															class="sub center"
 														>
-															Du bekommst diese Nachricht, weil Du Dir auf
-															<a
-																style="color: unset"
-																href="https://www.giessdenkiez.de"
-																>giessdenkiez.de</a
-															>
-															mit dieser E-Mail einen Account anlegen wolltest.
+                                                        <i
+                                                        style="
+                                                            font-family: Arial, 'Helvetica Neue',
+                                                                Helvetica, sans-serif;
+                                                            -webkit-box-sizing: border-box;
+                                                            box-sizing: border-box;
+                                                        "
+                                                    >
+                                                        Gieß den Kiez ist eine Anwendung, die hilft,
+                                                        ehrenamtliches Engagement beim Gießen durstiger
+                                                        Stadtbäume zu koordinieren. Gieß den Kiez ist
+                                                        ein Projekt der
+                                                        <a
+                                                            style="color: unset"
+                                                            href="https://www.technologiestiftung-berlin.de/"
+                                                            >Technologiestiftung Berlin</a
+                                                        >
+                                                        und wird vom
+                                                        <a
+                                                            style="color: unset"
+                                                            href="https://citylab-berlin.org/"
+                                                            >CityLAB Berlin</a
+                                                        >
+                                                        entwickelt.
+                                                    </i>
 														</p>
 													</td>
 												</tr>
