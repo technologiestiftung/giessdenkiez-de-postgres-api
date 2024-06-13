@@ -53,7 +53,7 @@ const handler = async (_request: Request): Promise<Response> => {
 
 	if (recipientDataError) {
 		console.log(recipientDataError);
-		return new Response(JSON.stringify({}), {
+		return new Response(JSON.stringify(recipientDataError), {
 			status: 404,
 			headers: corsHeaders,
 		});
@@ -70,7 +70,7 @@ const handler = async (_request: Request): Promise<Response> => {
 
 	if (requestsToRecipientError) {
 		console.log(requestsToRecipientError);
-		return new Response(JSON.stringify({}), {
+		return new Response(JSON.stringify(requestsToRecipientError), {
 			status: 500,
 			headers: corsHeaders,
 		});
@@ -104,7 +104,7 @@ const handler = async (_request: Request): Promise<Response> => {
 
 	if (requestsOfLast24hError) {
 		console.log(requestsOfLast24hError);
-		return new Response(JSON.stringify({}), {
+		return new Response(JSON.stringify(requestsOfLast24hError), {
 			status: 500,
 			headers: corsHeaders,
 		});
@@ -136,7 +136,7 @@ const handler = async (_request: Request): Promise<Response> => {
 
 	if (fullRecipientDataError) {
 		console.log(fullRecipientDataError);
-		return new Response(JSON.stringify({}), {
+		return new Response(JSON.stringify(fullRecipientDataError), {
 			status: 404,
 			headers: corsHeaders,
 		});
@@ -156,7 +156,10 @@ const handler = async (_request: Request): Promise<Response> => {
 
 	if (insertedRequestError) {
 		console.log(insertedRequestError);
-		return new Response(undefined, { status: 500, headers: corsHeaders });
+		return new Response(JSON.stringify(insertedRequestError), {
+			status: 500,
+			headers: corsHeaders,
+		});
 	}
 
 	// Send the email
@@ -196,14 +199,14 @@ const handler = async (_request: Request): Promise<Response> => {
 
 		if (updateRequestError) {
 			console.log(updateRequestError);
-			return new Response(JSON.stringify({}), {
+			return new Response(JSON.stringify(updateRequestError), {
 				status: 500,
 				headers: corsHeaders,
 			});
 		}
 	} catch (e) {
 		console.log(e);
-		return new Response(JSON.stringify({}), {
+		return new Response(JSON.stringify(e), {
 			status: 500,
 			headers: corsHeaders,
 		});
