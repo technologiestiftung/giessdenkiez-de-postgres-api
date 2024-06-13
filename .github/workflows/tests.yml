@@ -28,7 +28,7 @@ jobs:
       SMTP_PASSWORD: UGgyAEVuxy135WxnEb
       SMTP_FROM: giessdenkiez@citylab-berlin.org
       SMTP_PORT: 587
-      SMTP_SECURE: false
+      SMTP_SECURE: true
 
     runs-on: ubuntu-latest
     environment: ci_test
