@@ -87,6 +87,16 @@ npm test
 
 On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
 
+To run the tests for the Supabase Edge Functions, execute locally:
+
+```bash
+cd giessdenkiez-de-postgres-api
+docker run -p 1025:1025 mailhog/mailhog
+supabase start
+supabase functions serve --no-verify-jwt --env-file supabase/.env.test
+deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts --env=supabase/.env.test
+```
+
 ## Supabase
 
 ### Migrations and Types
