@@ -168,7 +168,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			host: SMTP_HOST,
 			port: SMTP_PORT,
 			// Use `true` for port 465, `false` for all other ports, see: https://nodemailer.com/
-			secure: false,
+			secure: SMTP_SECURE,
 			// auth must be undefined if no SMTP_PASSWORD is set
 			auth:
 				SMTP_PASSWORD === ""

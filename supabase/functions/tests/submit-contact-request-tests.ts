@@ -104,9 +104,6 @@ const testContactRequestBlockReasons = async () => {
 				message: "Hello, world!",
 			},
 		});
-	const errorMessage = await firstContactRequestDataError.context.json();
-	console.log(errorMessage);
-	console.log(firstContactRequestDataError);
 	console.log(firstContactRequestData, firstContactRequestDataError);
 
 	assertEquals(firstContactRequestData.code, "contact_request_sent");
