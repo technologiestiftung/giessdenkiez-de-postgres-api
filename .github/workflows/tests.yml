@@ -60,14 +60,9 @@ jobs:
       # - run: npm ci
       # - run: npm run build --if-present
       # - run: npm test -- --runInBand --forceExit
-      - run: supabase functions serve &
+      - run: supabase functions serve --no-verify-jwt --env-file supabase/.env.test &
       - run: printenv
-      - run: deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts
-      - name: Tmate session
-        uses: mxschmitt/action-tmate@v3
-        timeout-minutes: 15
-        with:
-          limit-access-to-actor: true
+      - run: deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts --env=supabase/.env.test
       - run: supabase stop
       # - run: npm run lint
   release:
