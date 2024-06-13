@@ -23,6 +23,12 @@ jobs:
       SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU
       SUPABASE_MAX_ROWS: 10000
       ACCESS_CONTROL_ALLOW_ORIGIN: "*"
+      SMTP_HOST: smtp.ethereal.email
+      SMTP_USER: hope.kerluke44@ethereal.email
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD  }}
+      SMTP_FROM: giessdenkiez@citylab-berlin.org
+      SMTP_PORT: 587
+      SMTP_SECURE: false
 
     runs-on: ubuntu-latest
     environment: ci_test
@@ -42,6 +48,7 @@ jobs:
         with:
           version: 1.142.2
       - run: supabase start
+      - run: supabase functions serve --no-verify-jwt
       - run: npm ci
       - run: npm run build --if-present
       #  Make sure to run tests in band and force exit to avoid hanging tests
