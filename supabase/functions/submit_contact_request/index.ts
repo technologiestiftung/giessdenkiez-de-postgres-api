@@ -202,7 +202,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			html: mailTemplate(
 				senderLookupData.username,
 				message,
-				fullRecipientData.email
+				senderData.user.email
 			),
 		};
 
