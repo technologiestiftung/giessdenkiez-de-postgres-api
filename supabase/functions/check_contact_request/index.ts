@@ -40,7 +40,7 @@ const handler = async (_request: Request): Promise<Response> => {
 				reason,
 			}),
 			{
-				status: 403,
+				status: 200, // We have to use 200 here to allow the client to read the response body
 				headers: {
 					...corsHeaders,
 					"Content-Type": "application/json",

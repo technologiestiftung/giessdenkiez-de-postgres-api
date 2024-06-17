@@ -1,3 +1,4 @@
+import { SupabaseClient } from "npm:@supabase/supabase-js";
 import { sub } from "npm:date-fns";
 
 export interface CheckResult {
@@ -16,8 +17,8 @@ export interface ContactRequestLookupData {
 export async function checkIfContactRequestIsAllowed(
 	recipientContactName: string,
 	token: string,
-	supabaseClient,
-	supabaseServiceRoleClient
+	supabaseClient: SupabaseClient,
+	supabaseServiceRoleClient: SupabaseClient
 ): Promise<CheckResult> {
 	// Get the user (= sender) data from the token
 	const { data: senderData, error: senderDataError } =
