@@ -174,7 +174,7 @@ export const mailTemplate = (
 																box-sizing: border-box;
 															"
 														>
-															Der Gieß den Kiez User <span style="margin-left: 5px; margin-right: 5px; font-weight: bold;">${username}</span> möchte sich
+															<span style="font-weight: bold;">${username}</span> möchte sich
 															mit Dir vernetzen und hat Dir folgende Nachricht gesendet:
 
 															<div
@@ -232,7 +232,7 @@ export const mailTemplate = (
 																box-sizing: border-box;
 															"
 														>
-                                                        The Gieß den Kiez user <span style="margin-left: 5px; margin-right: 5px; font-weight: bold;">${username}</span> would like to connect with you
+                                                        <span style="font-weight: bold;">${username}</span> would like to connect with you
                                                         and has sent you the following message:
 
                                                         <div
@@ -241,7 +241,7 @@ export const mailTemplate = (
                                                             ${message}</div
                                                         >
 
-                                                        To reply to the user by e-mail, please write to:
+                                                        To reply to the user via e-mail, please write to:
                                                         <div style="margin-top: 25px; margin-bottom: 25px;"><a href="mailto:${email}" >${email}</a></div>
                                                         
                                                         <i style="
@@ -253,7 +253,7 @@ export const mailTemplate = (
                                                         box-sizing: border-box;
                                                         color: #aeaeae;
                                                         font-size: 14px;
-                                                        text-align: center;">If the contact request contains inappropriate content, we are very sorry. Please inform our team immediately via info@citylab-berlin.org.</i>
+                                                        text-align: center;">We apologize if the contact request contains inappropriate content. Please notify our team immediately via info@citylab-berlin.org.</i>
 														</p>
 
 														<p
