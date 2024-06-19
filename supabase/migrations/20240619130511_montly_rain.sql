@@ -11,5 +11,5 @@ create table if not exists monthly_radolan_data_temp (
     id serial primary key,
     measured_at date not null,
     value int2,
-    geom_id int2
+    geom_id int2 references radolan_geometry(id)
 );
