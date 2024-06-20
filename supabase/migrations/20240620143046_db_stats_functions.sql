@@ -11,7 +11,7 @@ BEGIN
 END;
 $function$;
 
-CREATE OR REPLACE FUNCTION public.calculate_top_tree_percentages()
+CREATE OR REPLACE FUNCTION public.calculate_top_tree_species()
  RETURNS TABLE(gattung_deutsch text, percentage numeric)
  LANGUAGE plpgsql
 AS $function$
