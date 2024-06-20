@@ -11,3 +11,16 @@ BEGIN
 END;
 $function$;
 
+CREATE OR REPLACE FUNCTION public.calculate_top_tree_percentages()
+ RETURNS TABLE(gattung_deutsch text, percentage numeric)
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT trees.gattung_deutsch, (COUNT(1) * 100.0) / (SELECT COUNT(1) FROM trees) AS percentage
+    FROM trees
+    GROUP BY trees.gattung_deutsch
+    ORDER BY COUNT(1) DESC
+    LIMIT 20;
+END;
+$function$;
