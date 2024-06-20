@@ -1,5 +1,6 @@
 create table if not exists daily_weather_data (
     id serial primary key,
+    created_at timestamp not null default now(),
     measure_day timestamp not null,
     day_finished boolean not null default false,
     sum_precipitation_mm_per_sqm float,
