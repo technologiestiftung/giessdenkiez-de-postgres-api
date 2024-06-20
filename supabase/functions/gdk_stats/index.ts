@@ -14,7 +14,8 @@ interface TreeSpecies {
 
 interface Monthly {
 	month: string;
-	value: string;
+	wateringCount: number;
+	averageAmountPerWatering: number;
 }
 
 interface GdkStats {
@@ -22,8 +23,7 @@ interface GdkStats {
 	numPumps: number;
 	numActiveUsers: number;
 	numWateringsThisYear: number;
-	averageNumWateringsPerMonth: Monthly[]; // Last 12 months
-	averageAmountPerWateringsPerMonth: Monthly[]; // Last 12 months
+	monthlyWaterings: Monthly[]; // Last 12 months
 	numTreeAdoptions: number;
 	mostFrequentTreeSpecies: TreeSpecies[];
 }
@@ -62,13 +62,24 @@ const handler = async (_request: Request): Promise<Response> => {
 	const geojson = await response.json();
 	const numPumps = geojson.features.length;
 
+	const { data } = await supabaseServiceRoleClient
+		.rpc("calculate_avg_waterings_per_month")
+		.select("*");
+
+	const monthlyWaterings = data.map((month: any) => {
+		return {
+			month: month.month,
+			wateringCount: month.watering_count,
+			averageAmountPerWatering: month.avg_amount_per_watering,
+		};
+	});
+
 	const stats: GdkStats = {
 		numTrees: treesCount,
 		numPumps: numPumps,
 		numActiveUsers: usersCount,
 		numWateringsThisYear: wateringsCount,
-		averageNumWateringsPerMonth: [],
-		averageAmountPerWateringsPerMonth: [],
+		monthlyWaterings: monthlyWaterings,
 		numTreeAdoptions: adoptionsCount,
 		mostFrequentTreeSpecies: [],
 	};
