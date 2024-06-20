@@ -1,11 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const SUPABASE_URL = Deno.env.get("URL");
-const SUPABASE_ANON_KEY = Deno.env.get("ANON_KEY");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
-const PUMPS_URL =
-	"https://ieokxbqvqedpcyvwmrsb.supabase.co/storage/v1/object/public/data_assets/pumps.geojson";
+const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const PUMPS_URL = Deno.env.get("PUMPS_URL");
 
 interface TreeSpecies {
 	speciesName?: string;
@@ -80,7 +78,7 @@ const getPumpsCount = async (): Promise<number> => {
 };
 
 const getMonthlyWaterings = async (): Promise<Monthly[]> => {
-	const { data } = await supabaseServiceRoleClient
+	const { data, error } = await supabaseServiceRoleClient
 		.rpc("calculate_avg_waterings_per_month")
 		.select("*");
 	return data.map((month: any) => ({
@@ -128,6 +126,7 @@ const handler = async (request: Request): Promise<Response> => {
 			},
 		});
 	} catch (error) {
+		console.log(error);
 		return new Response(JSON.stringify({ error: error.message }), {
 			status: 500,
 			headers: {
