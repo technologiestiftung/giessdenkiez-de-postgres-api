@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTIONgs public.accumulated_weather_per_month(limit_monts int)
+CREATE OR REPLACE FUNCTION public.accumulated_weather_per_month (limit_monts int)
 	RETURNS TABLE (
 		measure_day text, sum_precipitation_mm_per_sqm float, avg_temperature_celsius float, avg_pressure_msl float, sum_sunshine_minutes float, avg_wind_direction_deg float, avg_wind_speed_kmh float, avg_cloud_cover_percentage float, avg_dew_point_celcius float, avg_relative_humidity_percentage float, avg_visibility_m float, avg_wind_gust_direction_deg float, avg_wind_gust_speed_kmh float)
 	LANGUAGE plpgsql
@@ -24,7 +24,9 @@ BEGIN
 		daily_weather_data
 	GROUP BY
 		to_char(daily_weather_data.measure_day, 'YYYY-MM')
-    ORDER BY to_char(daily_weather_data.measure_day, 'YYYY-MM')
-    DESC LIMIT limit_monts;
+	ORDER BY
+		to_char(daily_weather_data.measure_day, 'YYYY-MM')
+	DESC
+LIMIT limit_monts;
 END;
 $function$;
