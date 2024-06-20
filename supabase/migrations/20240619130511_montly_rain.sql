@@ -16,3 +16,9 @@ create table if not exists daily_weather_data (
     avg_wind_gust_speed_kmh float,
     source_dwd_station_ids text[]
 );
+
+alter table "public"."daily_weather_data" enable row level security;
+create policy "Allow anonymous select on daily_weather_data"
+    on "public"."daily_weather_data"
+    for select
+    using (true);
