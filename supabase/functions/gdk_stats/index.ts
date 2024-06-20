@@ -26,7 +26,17 @@ interface GdkStats {
 	mostFrequentTreeSpecies: TreeSpecies[];
 }
 
-const HARD_CODED_TREE_COUNT = 885825;
+// As trees table barely changes, we can hardcode the values
+// It would be too expensive to calculate on each request
+
+// SELECT COUNT(1) FROM trees;
+const TREE_COUNT = 885825;
+
+// SELECT trees.gattung_deutsch, (COUNT(1) * 100.0) / (SELECT COUNT(1) FROM trees) AS percentage
+// FROM trees
+// GROUP BY trees.gattung_deutsch
+// ORDER BY COUNT(1) DESC
+// LIMIT 20;
 const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
 	{ speciesName: "AHORN", percentage: 22.8128580701605848 },
 	{ speciesName: "LINDE", percentage: 21.5930911861823724 },
@@ -109,7 +119,7 @@ const handler = async (request: Request): Promise<Response> => {
 		]);
 
 		const stats: GdkStats = {
-			numTrees: HARD_CODED_TREE_COUNT,
+			numTrees: TREE_COUNT,
 			numPumps: numPumps,
 			numActiveUsers: usersCount,
 			numWateringsThisYear: wateringsCount,
