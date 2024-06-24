@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      contact_requests: {
+        Row: {
+          contact_id: string
+          contact_mail_id: string | null
+          contact_message: string | null
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          contact_mail_id?: string | null
+          contact_message?: string | null
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          contact_mail_id?: string | null
+          contact_message?: string | null
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           id: string
@@ -275,6 +317,15 @@ export type Database = {
           end_year: number
         }
         Returns: number
+      }
+      get_user_data_for_id: {
+        Args: {
+          u_id: string
+        }
+        Returns: {
+          id: string
+          email: string
+        }[]
       }
       get_watered_and_adopted: {
         Args: Record<PropertyKey, never>
