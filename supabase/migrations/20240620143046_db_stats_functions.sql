@@ -1,10 +1,10 @@
 CREATE OR REPLACE FUNCTION public.calculate_avg_waterings_per_month()
- RETURNS TABLE(month text, watering_count bigint, avg_amount_per_watering numeric)
+ RETURNS TABLE(month text, watering_count bigint, avg_amount_per_watering numeric, total_sum numeric)
  LANGUAGE plpgsql
 AS $function$
 BEGIN
     RETURN QUERY
-    SELECT to_char(trees_watered.timestamp, 'yyyy-mm') AS month, COUNT(1) AS watering_count, SUM(trees_watered.amount) / COUNT(1) as avg_amount_per_watering
+    SELECT to_char(trees_watered.timestamp, 'yyyy-mm') AS month, COUNT(1) AS watering_count, SUM(trees_watered.amount) / COUNT(1) as avg_amount_per_watering, SUM(trees_watered.amount) as total_sum
     FROM trees_watered
     GROUP BY to_char(trees_watered.timestamp, 'yyyy-mm')
     ORDER BY to_char(trees_watered.timestamp, 'yyyy-mm') DESC;

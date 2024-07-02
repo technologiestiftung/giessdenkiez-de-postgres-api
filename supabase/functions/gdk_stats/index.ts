@@ -1,11 +1,10 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { loadEnvVars } from "../_shared/check-env.ts";
 
-const SUPABASE_URL = Deno.env.get("URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
-const PUMPS_URL = Deno.env.get("PUMPS_URL");
-
-console.log(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL);
+const ENV_VARS = ["URL", "SERVICE_ROLE_KEY", "PUMPS_URL"];
+const [SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL] =
+	loadEnvVars(ENV_VARS);
 
 interface TreeSpecies {
 	speciesName?: string;
@@ -40,6 +39,7 @@ interface GdkStats {
 	monthlyWaterings: Monthly[];
 	treeAdoptions: TreeAdoptions;
 	mostFrequentTreeSpecies: TreeSpecies[];
+	totalTreeSpeciesCount: number;
 	waterings: Watering[];
 }
 
@@ -76,6 +76,9 @@ const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
 	{ speciesName: "ERLE", percentage: 0.80907628481923630514 },
 	{ speciesName: "APFEL", percentage: 0.70092851296813704739 },
 ];
+
+// select count(gattung_deutsch) from trees group by gattung_deutsch;
+const TOTAL_TREE_SPECIES_COUNT = 97;
 
 const supabaseServiceRoleClient = createClient(
 	SUPABASE_URL,
@@ -176,6 +179,7 @@ const handler = async (request: Request): Promise<Response> => {
 			monthlyWaterings: monthlyWaterings,
 			treeAdoptions: treeAdoptions,
 			mostFrequentTreeSpecies: MOST_FREQUENT_TREE_SPECIES,
+			totalTreeSpeciesCount: TOTAL_TREE_SPECIES_COUNT,
 			waterings: waterings,
 		};
 
