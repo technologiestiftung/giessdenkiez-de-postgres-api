@@ -1,19 +1,33 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import nodemailer from "npm:nodemailer";
-import { checkIfContactRequestIsAllowed } from "../_shared/checks.ts";
+import { checkIfContactRequestIsAllowed } from "../_shared/contact-request-checks.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { mailTemplate } from "./mail-template.ts";
+import { loadEnvVars } from "../_shared/check-env.ts";
 
-const SMTP_HOST = Deno.env.get("SMTP_HOST");
-const SMTP_USER = Deno.env.get("SMTP_USER");
-const SMTP_PASSWORD = Deno.env.get("SMTP_PASSWORD");
-const SMTP_FROM = Deno.env.get("SMTP_FROM");
-const SMTP_PORT = parseInt(Deno.env.get("SMTP_PORT"));
-const SMTP_SECURE = Deno.env.get("SMTP_SECURE") === "true";
+const ENV_VARS = [
+	"SMTP_HOST",
+	"SMTP_USER",
+	"SMTP_PASSWORD",
+	"SMTP_FROM",
+	"SMTP_PORT",
+	"SMTP_SECURE",
+	"SUPABASE_URL",
+	"SUPABASE_ANON_KEY",
+	"SUPABASE_SERVICE_ROLE_KEY",
+];
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const [
+	SMTP_HOST,
+	SMTP_USER,
+	SMTP_PASSWORD,
+	SMTP_FROM,
+	SMTP_PORT,
+	SMTP_SECURE,
+	SUPABASE_URL,
+	SUPABASE_ANON_KEY,
+	SUPABASE_SERVICE_ROLE_KEY,
+] = loadEnvVars(ENV_VARS);
 
 const handler = async (_request: Request): Promise<Response> => {
 	if (_request.method === "OPTIONS") {

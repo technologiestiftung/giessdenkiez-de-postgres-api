@@ -24,10 +24,7 @@ export async function checkIfContactRequestIsAllowed(
 	const { data: senderData, error: senderDataError } =
 		await supabaseClient.auth.getUser(token);
 
-	console.log(senderData);
-
 	if (senderDataError) {
-		console.log(senderDataError);
 		return { isAllowed: false, reason: "unauthorized", lookupData: undefined };
 	}
 
@@ -39,10 +36,7 @@ export async function checkIfContactRequestIsAllowed(
 			.eq("id", senderData.user.id)
 			.single();
 
-	console.log(senderLookupData);
-
 	if (senderLookupDataError) {
-		console.log(senderLookupDataError);
 		return { isAllowed: false, reason: "not_found", lookupData: undefined };
 	}
 
@@ -55,7 +49,6 @@ export async function checkIfContactRequestIsAllowed(
 			.single();
 
 	if (recipientDataError) {
-		console.log(recipientDataError);
 		return { isAllowed: false, reason: "not_found", lookupData: undefined };
 	}
 
@@ -69,7 +62,6 @@ export async function checkIfContactRequestIsAllowed(
 			.not("contact_mail_id", "is", null); // only count sent emails
 
 	if (requestsToRecipientError) {
-		console.log(requestsToRecipientError);
 		return {
 			isAllowed: false,
 			reason: "internal_server_error",
@@ -95,7 +87,6 @@ export async function checkIfContactRequestIsAllowed(
 			.gt("created_at", sub(new Date(), { days: 1 }).toISOString());
 
 	if (requestsOfLast24hError) {
-		console.log(requestsOfLast24hError);
 		return {
 			isAllowed: false,
 			reason: "internal_server_error",
