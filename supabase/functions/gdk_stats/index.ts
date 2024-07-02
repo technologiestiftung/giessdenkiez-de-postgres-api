@@ -1,9 +1,11 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const SUPABASE_URL = Deno.env.get("URL");
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SERVICE_ROLE_KEY");
 const PUMPS_URL = Deno.env.get("PUMPS_URL");
+
+console.log(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL);
 
 interface TreeSpecies {
 	speciesName?: string;
@@ -14,6 +16,20 @@ interface Monthly {
 	month: string;
 	wateringCount: number;
 	averageAmountPerWatering: number;
+	totalSum: number;
+}
+
+interface Watering {
+	id: string;
+	lat: number;
+	lng: number;
+	amount: number;
+	timestamp: string;
+}
+
+interface TreeAdoptions {
+	count: number;
+	veryThirstyCount: number;
 }
 
 interface GdkStats {
@@ -22,8 +38,9 @@ interface GdkStats {
 	numActiveUsers: number;
 	numWateringsThisYear: number;
 	monthlyWaterings: Monthly[];
-	numTreeAdoptions: number;
+	treeAdoptions: TreeAdoptions;
 	mostFrequentTreeSpecies: TreeSpecies[];
+	waterings: Watering[];
 }
 
 // As trees table barely changes, we can hardcode the values
@@ -87,15 +104,46 @@ const getPumpsCount = async (): Promise<number> => {
 	return geojson.features.length;
 };
 
+const getAdoptedTreesCount = async (): Promise<TreeAdoptions> => {
+	const { data, error } = await supabaseServiceRoleClient
+		.rpc("calculate_adoptions")
+		.select("*");
+
+	return {
+		count: data[0].total_adoptions,
+		veryThirstyCount: data[0].very_thirsty_adoptions,
+	} as TreeAdoptions;
+};
+
 const getMonthlyWaterings = async (): Promise<Monthly[]> => {
 	const { data, error } = await supabaseServiceRoleClient
 		.rpc("calculate_avg_waterings_per_month")
 		.select("*");
+
 	return data.map((month: any) => ({
 		month: month.month,
 		wateringCount: month.watering_count,
+		totalSum: month.total_sum,
 		averageAmountPerWatering: month.avg_amount_per_watering,
 	}));
+};
+
+const getWaterings = async (): Promise<Watering[]> => {
+	const { data, error } = await supabaseServiceRoleClient
+		.rpc("get_waterings_with_location")
+		.select("*");
+
+	console.log(data, JSON.stringify(error));
+
+	return data.map((watering: any) => {
+		return {
+			id: watering.id,
+			lat: watering.lat,
+			lng: watering.lng,
+			amount: watering.amount,
+			timestamp: watering.timestamp,
+		};
+	});
 };
 
 const handler = async (request: Request): Promise<Response> => {
@@ -107,15 +155,17 @@ const handler = async (request: Request): Promise<Response> => {
 		const [
 			usersCount,
 			wateringsCount,
-			adoptionsCount,
+			treeAdoptions,
 			numPumps,
 			monthlyWaterings,
+			waterings,
 		] = await Promise.all([
 			getCount("profiles"),
 			getWateringsCount(),
-			getCount("trees_adopted"),
+			getAdoptedTreesCount(),
 			getPumpsCount(),
 			getMonthlyWaterings(),
+			getWaterings(),
 		]);
 
 		const stats: GdkStats = {
@@ -124,8 +174,9 @@ const handler = async (request: Request): Promise<Response> => {
 			numActiveUsers: usersCount,
 			numWateringsThisYear: wateringsCount,
 			monthlyWaterings: monthlyWaterings,
-			numTreeAdoptions: adoptionsCount,
+			treeAdoptions: treeAdoptions,
 			mostFrequentTreeSpecies: MOST_FREQUENT_TREE_SPECIES,
+			waterings: waterings,
 		};
 
 		return new Response(JSON.stringify(stats), {
