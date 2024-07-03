@@ -82,7 +82,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (fullRecipientDataError) {
-		console.log(fullRecipientDataError);
+		console.error(fullRecipientDataError);
 		return new Response(JSON.stringify(fullRecipientDataError), {
 			status: 404,
 			headers: corsHeaders,
@@ -102,7 +102,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (insertedRequestError) {
-		console.log(insertedRequestError);
+		console.error(insertedRequestError);
 		return new Response(JSON.stringify(insertedRequestError), {
 			status: 500,
 			headers: corsHeaders,
@@ -150,14 +150,14 @@ const handler = async (_request: Request): Promise<Response> => {
 			.eq("id", insertedRequest.id);
 
 		if (updateRequestError) {
-			console.log(updateRequestError);
+			console.error(updateRequestError);
 			return new Response(JSON.stringify(updateRequestError), {
 				status: 500,
 				headers: corsHeaders,
 			});
 		}
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return new Response(JSON.stringify(e), {
 			status: 500,
 			headers: corsHeaders,
