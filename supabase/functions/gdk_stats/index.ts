@@ -211,8 +211,6 @@ const handler = async (request: Request): Promise<Response> => {
 			},
 		});
 	} catch (error) {
-		console.error(error);
-
 		if (error instanceof GdkError) {
 			console.error(
 				`Error of type ${error.errorType} in gdk_stats function invocation: ${error.message}`
