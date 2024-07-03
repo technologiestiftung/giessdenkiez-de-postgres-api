@@ -9,7 +9,7 @@ const ENV_VARS = [
 	"SUPABASE_SERVICE_ROLE_KEY",
 ];
 
-const [SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL] =
+const [SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY] =
 	loadEnvVars(ENV_VARS);
 
 const handler = async (_request: Request): Promise<Response> => {

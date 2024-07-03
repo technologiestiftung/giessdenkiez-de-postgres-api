@@ -1,47 +1,19 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 import { loadEnvVars } from "../_shared/check-env.ts";
+import {
+	GdkStats,
+	Monthly,
+	MonthlyWeather,
+	TreeAdoptions,
+	TreeSpecies,
+	Watering,
+} from "../_shared/common.ts";
+import { GdkError, ErrorTypes } from "../_shared/errors.ts";
 
 const ENV_VARS = ["URL", "SERVICE_ROLE_KEY", "PUMPS_URL"];
 const [SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL] =
 	loadEnvVars(ENV_VARS);
-
-interface TreeSpecies {
-	speciesName?: string;
-	percentage: number;
-}
-
-interface Monthly {
-	month: string;
-	wateringCount: number;
-	averageAmountPerWatering: number;
-	totalSum: number;
-}
-
-interface Watering {
-	id: string;
-	lat: number;
-	lng: number;
-	amount: number;
-	timestamp: string;
-}
-
-interface TreeAdoptions {
-	count: number;
-	veryThirstyCount: number;
-}
-
-interface GdkStats {
-	numTrees: number;
-	numPumps: number;
-	numActiveUsers: number;
-	numWateringsThisYear: number;
-	monthlyWaterings: Monthly[];
-	treeAdoptions: TreeAdoptions;
-	mostFrequentTreeSpecies: TreeSpecies[];
-	totalTreeSpeciesCount: number;
-	waterings: Watering[];
-}
 
 // As trees table barely changes, we can hardcode the values
 // It would be too expensive to calculate on each request
@@ -77,7 +49,7 @@ const MOST_FREQUENT_TREE_SPECIES: TreeSpecies[] = [
 	{ speciesName: "APFEL", percentage: 0.70092851296813704739 },
 ];
 
-// select count(gattung_deutsch) from trees group by gattung_deutsch;
+// SELECT COUNT(gattung_deutsch) FROM trees GROUP BY gattung_deutsch;
 const TOTAL_TREE_SPECIES_COUNT = 97;
 
 const supabaseServiceRoleClient = createClient(
@@ -85,10 +57,18 @@ const supabaseServiceRoleClient = createClient(
 	SUPABASE_SERVICE_ROLE_KEY
 );
 
-const getCount = async (tableName: string): Promise<number> => {
+const getUserProfilesCount = async (): Promise<number> => {
 	const { count } = await supabaseServiceRoleClient
-		.from(tableName)
+		.from("profiles")
 		.select("*", { count: "exact", head: true });
+
+	if (count === null) {
+		throw new GdkError(
+			"Could not fetch count of profiles table",
+			ErrorTypes.GdkStatsUser
+		);
+	}
+
 	return count || 0;
 };
 
@@ -98,11 +78,22 @@ const getWateringsCount = async (): Promise<number> => {
 		.from("trees_watered")
 		.select("*", { count: "exact", head: true })
 		.gt("timestamp", beginningOfYear.toISOString());
+
+	if (count === null) {
+		throw new GdkError(
+			"Could not fetch count of trees_watered table",
+			ErrorTypes.GdkStatsWatering
+		);
+	}
+
 	return count || 0;
 };
 
 const getPumpsCount = async (): Promise<number> => {
 	const response = await fetch(PUMPS_URL);
+	if (response.status !== 200) {
+		throw new GdkError(response.statusText, ErrorTypes.GdkStatsPump);
+	}
 	const geojson = await response.json();
 	return geojson.features.length;
 };
@@ -111,6 +102,10 @@ const getAdoptedTreesCount = async (): Promise<TreeAdoptions> => {
 	const { data, error } = await supabaseServiceRoleClient
 		.rpc("calculate_adoptions")
 		.select("*");
+
+	if (error) {
+		throw new GdkError(error.message, ErrorTypes.GdkStatsAdoption);
+	}
 
 	return {
 		count: data[0].total_adoptions,
@@ -123,6 +118,10 @@ const getMonthlyWaterings = async (): Promise<Monthly[]> => {
 		.rpc("calculate_avg_waterings_per_month")
 		.select("*");
 
+	if (error) {
+		throw new GdkError(error.message, ErrorTypes.GdkStatsWatering);
+	}
+
 	return data.map((month: any) => ({
 		month: month.month,
 		wateringCount: month.watering_count,
@@ -131,12 +130,30 @@ const getMonthlyWaterings = async (): Promise<Monthly[]> => {
 	}));
 };
 
+const getMonthlyWeather = async (): Promise<MonthlyWeather[]> => {
+	const { data, error } = await supabaseServiceRoleClient
+		.rpc("get_monthly_weather")
+		.select("*");
+
+	if (error) {
+		throw new GdkError(error.message, ErrorTypes.GdkStatsWeather);
+	}
+
+	return data.map((month: any) => ({
+		month: month.month,
+		averageTemperatureCelsius: month.avg_temperature_celsius,
+		totalRainfallLiters: month.total_rainfall_liters,
+	}));
+};
+
 const getWaterings = async (): Promise<Watering[]> => {
 	const { data, error } = await supabaseServiceRoleClient
 		.rpc("get_waterings_with_location")
 		.select("*");
 
-	console.log(data, JSON.stringify(error));
+	if (error) {
+		throw new GdkError(error.message, ErrorTypes.GdkStatsWatering);
+	}
 
 	return data.map((watering: any) => {
 		return {
@@ -162,13 +179,15 @@ const handler = async (request: Request): Promise<Response> => {
 			numPumps,
 			monthlyWaterings,
 			waterings,
+			monthlyWeather,
 		] = await Promise.all([
-			getCount("profiles"),
+			getUserProfilesCount(),
 			getWateringsCount(),
 			getAdoptedTreesCount(),
 			getPumpsCount(),
 			getMonthlyWaterings(),
 			getWaterings(),
+			getMonthlyWeather(),
 		]);
 
 		const stats: GdkStats = {
@@ -181,6 +200,7 @@ const handler = async (request: Request): Promise<Response> => {
 			mostFrequentTreeSpecies: MOST_FREQUENT_TREE_SPECIES,
 			totalTreeSpeciesCount: TOTAL_TREE_SPECIES_COUNT,
 			waterings: waterings,
+			monthlyWeather: monthlyWeather,
 		};
 
 		return new Response(JSON.stringify(stats), {
@@ -191,8 +211,17 @@ const handler = async (request: Request): Promise<Response> => {
 			},
 		});
 	} catch (error) {
-		console.log(error);
-		return new Response(JSON.stringify({ error: error.message }), {
+		console.error(error);
+
+		if (error instanceof GdkError) {
+			console.error(
+				`Error of type ${error.errorType} in gdk_stats function invocation: ${error.message}`
+			);
+		} else {
+			console.error(JSON.stringify(error));
+		}
+
+		return new Response(JSON.stringify(error), {
 			status: 500,
 			headers: {
 				...corsHeaders,
