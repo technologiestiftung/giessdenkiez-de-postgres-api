@@ -11,7 +11,7 @@ import {
 } from "../_shared/common.ts";
 import { GdkError, ErrorTypes } from "../_shared/errors.ts";
 
-const ENV_VARS = ["URL", "SERVICE_ROLE_KEY", "PUMPS_URL"];
+const ENV_VARS = ["SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "PUMPS_URL"];
 const [SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, PUMPS_URL] =
 	loadEnvVars(ENV_VARS);
 
