@@ -1,28 +1,42 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import nodemailer from "npm:nodemailer";
-import { checkIfContactRequestIsAllowed } from "../_shared/checks.ts";
+import { checkIfContactRequestIsAllowed } from "../_shared/contact-request-checks.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { mailTemplate } from "./mail-template.ts";
+import { loadEnvVars } from "../_shared/check-env.ts";
 
-const SMTP_HOST = Deno.env.get("SMTP_HOST");
-const SMTP_USER = Deno.env.get("SMTP_USER");
-const SMTP_PASSWORD = Deno.env.get("SMTP_PASSWORD");
-const SMTP_FROM = Deno.env.get("SMTP_FROM");
-const SMTP_PORT = parseInt(Deno.env.get("SMTP_PORT"));
-const SMTP_SECURE = Deno.env.get("SMTP_SECURE") === "true";
+const ENV_VARS = [
+	"SMTP_HOST",
+	"SMTP_USER",
+	"SMTP_PASSWORD",
+	"SMTP_FROM",
+	"SMTP_PORT",
+	"SMTP_SECURE",
+	"SUPABASE_URL",
+	"SUPABASE_ANON_KEY",
+	"SUPABASE_SERVICE_ROLE_KEY",
+];
 
-const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const [
+	SMTP_HOST,
+	SMTP_USER,
+	SMTP_PASSWORD,
+	SMTP_FROM,
+	SMTP_PORT,
+	SMTP_SECURE,
+	SUPABASE_URL,
+	SUPABASE_ANON_KEY,
+	SUPABASE_SERVICE_ROLE_KEY,
+] = loadEnvVars(ENV_VARS);
 
-const handler = async (_request: Request): Promise<Response> => {
-	if (_request.method === "OPTIONS") {
+const handler = async (request: Request): Promise<Response> => {
+	if (request.method === "OPTIONS") {
 		return new Response(null, { headers: corsHeaders, status: 204 });
 	}
 
-	const { recipientContactName, message } = await _request.json();
+	const { recipientContactName, message } = await request.json();
 
-	const authHeader = _request.headers.get("Authorization")!;
+	const authHeader = request.headers.get("Authorization")!;
 
 	const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 		global: { headers: { Authorization: authHeader } },
@@ -68,7 +82,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (fullRecipientDataError) {
-		console.log(fullRecipientDataError);
+		console.error(fullRecipientDataError);
 		return new Response(JSON.stringify(fullRecipientDataError), {
 			status: 404,
 			headers: corsHeaders,
@@ -88,7 +102,7 @@ const handler = async (_request: Request): Promise<Response> => {
 			.single();
 
 	if (insertedRequestError) {
-		console.log(insertedRequestError);
+		console.error(insertedRequestError);
 		return new Response(JSON.stringify(insertedRequestError), {
 			status: 500,
 			headers: corsHeaders,
@@ -136,14 +150,14 @@ const handler = async (_request: Request): Promise<Response> => {
 			.eq("id", insertedRequest.id);
 
 		if (updateRequestError) {
-			console.log(updateRequestError);
+			console.error(updateRequestError);
 			return new Response(JSON.stringify(updateRequestError), {
 				status: 500,
 				headers: corsHeaders,
 			});
 		}
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		return new Response(JSON.stringify(e), {
 			status: 500,
 			headers: corsHeaders,

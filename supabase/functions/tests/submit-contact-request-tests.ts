@@ -97,14 +97,13 @@ const testContactRequestBlockReasons = async () => {
 	assertEquals(userLoginDataError, null);
 
 	// First contact request to user2 should be possible -> used 1/3 requests
-	const { data: firstContactRequestData, error: firstContactRequestDataError } =
+	const { data: firstContactRequestData } =
 		await supabaseAnonClient.functions.invoke("submit_contact_request", {
 			body: {
 				recipientContactName: "user2",
 				message: "Hello, world!",
 			},
 		});
-	console.log(firstContactRequestData, firstContactRequestDataError);
 
 	assertEquals(firstContactRequestData.code, "contact_request_sent");
 

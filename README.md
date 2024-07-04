@@ -116,7 +116,7 @@ deno test --allow-all supabase/functions/tests/submit-contact-request-tests.ts -
 - **(Not recommended but possible)** Link your local project directly to the remote `supabase link --project-ref <YOUR PROJECT REF>` (will ask you for your database password from the creation process)
 - **(Not recommended but possible)** Push your local state directly to your remote project `supabase db push` (will ask you for your database password from the creation process)
 
-#### Supabase
+#### Supabase Auth
 
 Some of the requests need a authorized user. You can create a new user using email password via the Supabase API.
 
@@ -141,6 +141,17 @@ curl --request POST \
 ```
 
 See the [docs/api.http](./docs/api.http) file for more examples or take a look into the API documentation in your local supabase instance under http://localhost:54323/project/default/api?page=users
+
+#### Supabase Edge Functions
+To run the Supabase Edge Functions locally:
+
+- Setup the .env file in [supabase/.env](supabase/.env) according to [supabase/.env.sample](supabase/.env.sample)
+- Note: The env variables `SUPABASE_SERVICE_ROLE_KEY` and `SUPABASE_URL` are injected automatically and can't be set the in the [supabase/.env](supabase/.env) file. If you want to overwrite them, you have to rename the environment variables to not start with `SUPABASE_`. For reference, see: https://supabase.com/docs/guides/functions/secrets
+- With the environment variables setup correctly, execute `supabase functions serve --no-verify-jwt --env-file supabase/.env`
+
+To deploy the Edge Functions in your linked remote Supabase project, execute:
+- `supabase functions deploy`
+- Make sure that you set the proper environment variables in the remote Supabase project too
 
 ## Tests
 
