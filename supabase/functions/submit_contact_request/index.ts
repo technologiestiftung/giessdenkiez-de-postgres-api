@@ -29,14 +29,14 @@ const [
 	SUPABASE_SERVICE_ROLE_KEY,
 ] = loadEnvVars(ENV_VARS);
 
-const handler = async (_request: Request): Promise<Response> => {
-	if (_request.method === "OPTIONS") {
+const handler = async (request: Request): Promise<Response> => {
+	if (request.method === "OPTIONS") {
 		return new Response(null, { headers: corsHeaders, status: 204 });
 	}
 
-	const { recipientContactName, message } = await _request.json();
+	const { recipientContactName, message } = await request.json();
 
-	const authHeader = _request.headers.get("Authorization")!;
+	const authHeader = request.headers.get("Authorization")!;
 
 	const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 		global: { headers: { Authorization: authHeader } },
