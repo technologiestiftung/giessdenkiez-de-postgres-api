@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { checkIfContactRequestIsAllowed } from "../_shared/checks.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { loadEnvVars } from "../_shared/check-env.ts";
+import { checkIfContactRequestIsAllowed } from "../_shared/contact-request-checks.ts";
 
 const ENV_VARS = [
 	"SUPABASE_URL",
