@@ -142,6 +142,7 @@ const getMonthlyWeather = async (): Promise<MonthlyWeather[]> => {
 	return data.map((month: any) => ({
 		month: month.month,
 		averageTemperatureCelsius: month.avg_temperature_celsius,
+		maximumTemperatureCelsius: month.max_temperature_celsius,
 		totalRainfallLiters: month.total_rainfall_liters,
 	}));
 };
