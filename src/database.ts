@@ -9,6 +9,108 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      contact_requests: {
+        Row: {
+          contact_id: string
+          contact_mail_id: string | null
+          contact_message: string | null
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          contact_id: string
+          contact_mail_id?: string | null
+          contact_message?: string | null
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          contact_id?: string
+          contact_mail_id?: string | null
+          contact_message?: string | null
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contact_requests_contact_id_fkey"
+            columns: ["contact_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contact_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_weather_data: {
+        Row: {
+          avg_cloud_cover_percentage: number | null
+          avg_dew_point_celcius: number | null
+          avg_pressure_msl: number | null
+          avg_relative_humidity_percentage: number | null
+          avg_temperature_celsius: number | null
+          avg_visibility_m: number | null
+          avg_wind_direction_deg: number | null
+          avg_wind_gust_direction_deg: number | null
+          avg_wind_gust_speed_kmh: number | null
+          avg_wind_speed_kmh: number | null
+          created_at: string
+          day_finished: boolean
+          id: number
+          measure_day: string
+          source_dwd_station_ids: string[] | null
+          sum_precipitation_mm_per_sqm: number | null
+          sum_sunshine_minutes: number | null
+        }
+        Insert: {
+          avg_cloud_cover_percentage?: number | null
+          avg_dew_point_celcius?: number | null
+          avg_pressure_msl?: number | null
+          avg_relative_humidity_percentage?: number | null
+          avg_temperature_celsius?: number | null
+          avg_visibility_m?: number | null
+          avg_wind_direction_deg?: number | null
+          avg_wind_gust_direction_deg?: number | null
+          avg_wind_gust_speed_kmh?: number | null
+          avg_wind_speed_kmh?: number | null
+          created_at?: string
+          day_finished?: boolean
+          id?: number
+          measure_day: string
+          source_dwd_station_ids?: string[] | null
+          sum_precipitation_mm_per_sqm?: number | null
+          sum_sunshine_minutes?: number | null
+        }
+        Update: {
+          avg_cloud_cover_percentage?: number | null
+          avg_dew_point_celcius?: number | null
+          avg_pressure_msl?: number | null
+          avg_relative_humidity_percentage?: number | null
+          avg_temperature_celsius?: number | null
+          avg_visibility_m?: number | null
+          avg_wind_direction_deg?: number | null
+          avg_wind_gust_direction_deg?: number | null
+          avg_wind_gust_speed_kmh?: number | null
+          avg_wind_speed_kmh?: number | null
+          created_at?: string
+          day_finished?: boolean
+          id?: number
+          measure_day?: string
+          source_dwd_station_ids?: string[] | null
+          sum_precipitation_mm_per_sqm?: number | null
+          sum_sunshine_minutes?: number | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           id: string
@@ -269,12 +371,56 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      accumulated_weather_per_month: {
+        Args: {
+          limit_monts: number
+        }
+        Returns: {
+          measure_day: string
+          sum_precipitation_mm_per_sqm: number
+          avg_temperature_celsius: number
+          avg_pressure_msl: number
+          sum_sunshine_minutes: number
+          avg_wind_direction_deg: number
+          avg_wind_speed_kmh: number
+          avg_cloud_cover_percentage: number
+          avg_dew_point_celcius: number
+          avg_relative_humidity_percentage: number
+          avg_visibility_m: number
+          avg_wind_gust_direction_deg: number
+          avg_wind_gust_speed_kmh: number
+        }[]
+      }
+      calculate_avg_waterings_per_month: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          month: string
+          watering_count: number
+          avg_amount_per_watering: number
+        }[]
+      }
+      calculate_top_tree_species: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          gattung_deutsch: string
+          percentage: number
+        }[]
+      }
       count_by_age: {
         Args: {
           start_year: number
           end_year: number
         }
         Returns: number
+      }
+      get_user_data_for_id: {
+        Args: {
+          u_id: string
+        }
+        Returns: {
+          id: string
+          email: string
+        }[]
       }
       get_watered_and_adopted: {
         Args: Record<PropertyKey, never>

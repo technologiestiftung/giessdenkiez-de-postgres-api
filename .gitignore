@@ -61,7 +61,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .rts2_cache_cjs/
 .rts2_cache_es/
 .rts2_cache_umd/
-.env.test
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 # Next.js build output
