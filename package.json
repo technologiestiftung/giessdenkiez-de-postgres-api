@@ -11,7 +11,7 @@
 		"supabase:types:local": "supabase gen types --local > src/database.ts"
 	},
 	"engines": {
-		"node": ">=18"
+		"node": ">=20"
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "2.43.5"
