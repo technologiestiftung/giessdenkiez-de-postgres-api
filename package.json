@@ -6,7 +6,9 @@
 	"scripts": {
 		"test": "jest --runInBand",
 		"lint": "eslint ./**/*.ts ",
-		"format": "prettier ./**/*.ts --write"
+		"format": "prettier ./**/*.ts --write",
+		"dev:supabase:functions": "supabase functions serve --env-file .env",
+		"supabase:types:local": "supabase gen types --local > src/database.ts"
 	},
 	"engines": {
 		"node": ">=18"
