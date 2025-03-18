@@ -7,7 +7,7 @@
 		"test": "jest --runInBand",
 		"lint": "eslint ./**/*.ts ",
 		"format": "prettier ./**/*.ts --write",
-		"dev:supabase:functions": "supabase functions serve --env-file .env",
+		"dev:supabase:functions": "supabase functions serve --no-verify-jwt --env-file supabase/.env",
 		"supabase:types:local": "supabase gen types --local > src/database.ts"
 	},
 	"engines": {
