@@ -34,22 +34,7 @@ export type Database = {
           id?: string
           user_id?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "contact_requests_contact_id_fkey"
-            columns: ["contact_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "contact_requests_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       daily_weather_data: {
         Row: {
@@ -124,15 +109,7 @@ export type Database = {
           id?: string
           username?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "fk_users_profiles"
-            columns: ["id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       radolan_data: {
         Row: {
@@ -368,7 +345,25 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      most_frequent_tree_species: {
+        Row: {
+          gattung_deutsch: string | null
+          percentage: number | null
+        }
+        Relationships: []
+      }
+      total_tree_species_count: {
+        Row: {
+          count: number | null
+        }
+        Relationships: []
+      }
+      trees_count: {
+        Row: {
+          count: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       accumulated_weather_per_month: {
@@ -391,12 +386,20 @@ export type Database = {
           avg_wind_gust_speed_kmh: number
         }[]
       }
+      calculate_adoptions: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          total_adoptions: number
+          very_thirsty_adoptions: number
+        }[]
+      }
       calculate_avg_waterings_per_month: {
         Args: Record<PropertyKey, never>
         Returns: {
           month: string
           watering_count: number
           avg_amount_per_watering: number
+          total_sum: number
         }[]
       }
       calculate_top_tree_species: {
@@ -412,6 +415,15 @@ export type Database = {
           end_year: number
         }
         Returns: number
+      }
+      get_monthly_weather: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          month: string
+          avg_temperature_celsius: number
+          max_temperature_celsius: number
+          total_rainfall_liters: number
+        }[]
       }
       get_user_data_for_id: {
         Args: {
@@ -429,6 +441,22 @@ export type Database = {
           adopted: number
           watered: number
         }[]
+      }
+      get_waterings_with_location: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          lat: number
+          lng: number
+          amount: number
+          timestamp: string
+        }[]
+      }
+      is_username_taken: {
+        Args: {
+          given_username: string
+        }
+        Returns: boolean
       }
       remove_account: {
         Args: Record<PropertyKey, never>
@@ -555,5 +583,20 @@ export type Enums<
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
   : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
     ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof PublicSchema["CompositeTypes"]
+    | { schema: keyof Database },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof Database
+  }
+    ? keyof Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof PublicSchema["CompositeTypes"]
+    ? PublicSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 

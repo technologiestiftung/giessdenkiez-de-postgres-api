@@ -5,6 +5,9 @@ export enum ErrorTypes {
 	GdkStatsAdoption = "gdk_stats_adoptions",
 	GdkStatsTreeSpecie = "gdk_stats_tree_species",
 	GdkStatsWeather = "gdk_stats_weather",
+	GdkStatsTreeCount = "gdk_stats_tree_count",
+	GdkStatsTreeSpeciesCount = "gdk_stats_tree_species_count",
+	GdkStatsMostFrequentTreeSpecies = "gdk_stats_most_frequent_tree_species",
 }
 
 export class GdkError extends Error {
