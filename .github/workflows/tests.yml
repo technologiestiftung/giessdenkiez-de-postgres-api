@@ -3,6 +3,9 @@
 
 # TODO: adjust ci workflow to use new testing setup (vercel and supabase)
 name: Node.js CI
+permissions:
+  contents: write
+  packages: write
 env:
   CI: "true"
   NODE_ENV: "test"
@@ -40,7 +43,7 @@ jobs:
           node-version-file: ".nvmrc"
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.142.2
+          version: 2.20.3
       - run: supabase start
       - run: npm ci
       - run: npm run build --if-present
