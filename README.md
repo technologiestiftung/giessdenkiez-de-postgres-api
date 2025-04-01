@@ -168,6 +168,40 @@ npm test
 
 On CI the Supabase is started automagically. See [.github/workflows/tests.yml](.github/workflows/tests.yml)
 
+
+## Database Caveats
+
+To not hardcode values in the edge functions we are using materialized views.
+
+- `most_frequent_tree_species`
+- `total_tree_species_count`
+- `waterings_with_location`
+
+In case you need to restore the data from a backup you need to disable the triggers first.
+
+```sql
+ALTER TABLE trees DISABLE TRIGGER tg_refresh_trees_count_mv;
+ALTER TABLE trees DISABLE TRIGGER tg_refresh_most_frequent_tree_species_mv;
+ALTER TABLE trees DISABLE TRIGGER tg_refresh_total_tree_species_count_mv;
+```
+
+After restore is done, refresh the materialized views and re-enable our specific triggers.
+
+```sql
+-- Manually refresh all materialized views
+REFRESH MATERIALIZED VIEW CONCURRENTLY total_tree_species_count;
+REFRESH MATERIALIZED VIEW CONCURRENTLY most_frequent_tree_species;
+REFRESH MATERIALIZED VIEW CONCURRENTLY trees_count;
+
+-- Re-enable our specific triggers
+ALTER TABLE trees ENABLE TRIGGER tg_refresh_trees_count_mv;
+ALTER TABLE trees ENABLE TRIGGER tg_refresh_most_frequent_tree_species_mv;
+ALTER TABLE trees ENABLE TRIGGER tg_refresh_total_tree_species_count_mv;
+```
+
+
+
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

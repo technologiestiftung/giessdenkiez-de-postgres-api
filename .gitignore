@@ -281,3 +281,6 @@ cython_debug/
 sql/trees_trees_2022-11-09T12-28-18.sql
 sql/trees_bezirk_mitte_table_2022-11-08T16-32-58.sql
 sql/*.dump
+# user specific cursor rules
+.cursor/rules/*
+.cursor/mcp.json

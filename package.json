@@ -6,10 +6,12 @@
 	"scripts": {
 		"test": "jest --runInBand",
 		"lint": "eslint ./**/*.ts ",
-		"format": "prettier ./**/*.ts --write"
+		"format": "prettier ./**/*.ts --write",
+		"dev:supabase:functions": "supabase functions serve --no-verify-jwt --env-file supabase/.env",
+		"supabase:types:local": "supabase gen types --local > src/database.ts"
 	},
 	"engines": {
-		"node": ">=18"
+		"node": ">=20"
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "2.43.5"
