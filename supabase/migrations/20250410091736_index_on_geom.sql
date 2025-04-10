@@ -1,0 +1,1 @@
+CREATE INDEX trees_geom_idx ON public.trees USING gist (geom);
