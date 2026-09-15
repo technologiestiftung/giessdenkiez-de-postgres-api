@@ -284,3 +284,4 @@ sql/*.dump
 # user specific cursor rules
 .cursor/rules/*
 .cursor/mcp.json
+.idea
