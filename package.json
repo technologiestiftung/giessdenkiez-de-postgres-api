@@ -14,7 +14,8 @@
 		"node": ">=20"
 	},
 	"dependencies": {
-		"@supabase/supabase-js": "2.43.5"
+		"@supabase/supabase-js": "2.43.5",
+		"dotenv": "17.4.2"
 	},
 	"devDependencies": {
 		"@saithodev/semantic-release-backmerge": "4.0.1",
